@@ -13,10 +13,16 @@
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
     "react-native": "0.71.8",
+<<<<<<< Updated upstream
     "react-native-maps": "^1.7.1",
     "react-native-swiper": "^1.6.0",
     "react-native-swiper-flatlist": "^3.2.3",
     "react-native-vector-icons": "^9.2.0"
+=======
+    "react-native-reanimated": "~2.14.4",
+    "react-native-svg": "13.4.0",
+    "react-native-video": "^5.2.1"
+>>>>>>> Stashed changes
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
