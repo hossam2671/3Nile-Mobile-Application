@@ -1,4 +1,10 @@
 import React, { useState } from "react";
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+import { RadioButton } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
+import { register , login } from '../../redux/slices/UserSlice';
+import { useSelector } from "react-redux";
 import {
   StyleSheet,
   Text,
@@ -21,7 +27,9 @@ import Animated, {
   withSequence,
   withSpring,
 } from "react-native-reanimated";
-const LoginSignUp = () => {
+const LoginSignUp = (props) => {
+  const { user } = useSelector(state => state.UserSlice)
+  const { boatOwner } = useSelector(state => state.UserSlice)
   const { height, width } = Dimensions.get("window");
   const imagePosition = useSharedValue(1);
   const formButtonScale = useSharedValue(1);
@@ -80,14 +88,80 @@ const LoginSignUp = () => {
       runOnJS(setIsRegistering)(false);
     }
   };
-
+  const dispatch = useDispatch();
   const registerHandler = () => {
     imagePosition.value = 0;
     if (!isRegistering) {
       runOnJS(setIsRegistering)(true);
     }
   };
+  const [checked, setChecked] = React.useState('user');
 
+  // // register
+  // let signUpSchema = Yup.object().shape({
+  //   email: Yup.string()
+  //     .min(10, 'must be moro than 10')
+  //     .email()
+  //     .required('must be required'),
+  //   password: Yup.string().min(8, 'must be lower then 20').required('must be lower then 20'),
+  //   name: Yup.string().min(3, 'at least 20 caracter').required('must be more then 3'),
+  //   // username: Yup.string().min(3, "must be moro than 10").required("must be more then 3"),
+  //   // password: Yup.string().min(8, "must be lower then 20").
+  //   // required("must be lower then 20 & more than 8"),
+  // });
+
+  // const regFormik = useFormik({
+  //   initialValues: {
+  //     email: '',
+  //     password: '',
+  //     name: '',
+  //     // username:"",
+  //     // password:"",
+  //   },
+  //   validationSchema: signUpSchema,
+  //   onSubmit: (values) => {
+  //     console.log("Submitting form:", values);
+    
+  //     if (Object.keys(regFormik.errors).length > 0) {
+  //       console.log("Validation errors:", regFormik.errors);
+  //     } else {
+  //       console.log("Dispatching register action:", { ...values, radiovalue: checked });
+  //       dispatch(register({ ...values, radiovalue: checked }));
+  //     }
+  //   },
+  // });
+  const [regName , setRegName] =useState("")
+  const [regEmail , setRegEmail] =useState("")
+  const [regPassword , setRegPassword] =useState("")
+  const [logPassword , setLogPassword] =useState("")
+  const [logEmail , setLogEmail] =useState("")
+  function registerr(){
+    console.log(regEmail)
+    dispatch(register({radiovalue:checked , email:regEmail , name:regName , password:regPassword})).then(() => {
+      setRegEmail("")
+      setRegName("")
+      setRegPassword("")
+    })
+    imagePosition.value = 0;
+    if (isRegistering) {
+      runOnJS(setIsRegistering)(false);
+    }
+  }
+  function loginn(){
+    console.log(logEmail,logPassword)
+    dispatch(login({email:logEmail,password:logPassword})).then(()=>{
+      setLogEmail("")
+      setLogPassword("")
+      if(user){
+        props.navigation.navigate('HomeCards')
+      }
+      else if(boatOwner){
+        props.navigation.navigate('BoatOwnerProfile')
+
+      }
+      
+    })
+  }
   return (
     <Animated.View style={styles.container}>
       <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
@@ -130,37 +204,96 @@ const LoginSignUp = () => {
           </Pressable>
         </Animated.View>
         <Animated.View style={[styles.formInputContainer, formAnimatedStyle]}>
-          <TextInput
+        {!isRegistering && (
+        <TextInput
             placeholder="Email"
             placeholderTextColor="black"
             style={styles.textInput}
+            onChangeText={(e) => setLogEmail(e)}
+              value={logEmail}
           />
+        )}
+        {!isRegistering && (
+        <TextInput
+            placeholder="Password"
+            placeholderTextColor="black"
+            style={styles.textInput}
+            onChangeText={(e) => setLogPassword(e)}
+              value={logPassword}
+          />
+        )}
+        
+        {isRegistering && (
+ <TextInput
+  placeholder="Email"
+  placeholderTextColor="black"
+  style={styles.textInput}
+  name="email"
+  onChangeText={(e) => setRegEmail(e)}
+      value={regEmail}
+/>
+        )}
           {isRegistering && (
             <TextInput
               placeholder="Full Name"
               placeholderTextColor="black"
               style={styles.textInput}
+              name="name"
+              onChangeText={(e) => setRegName(e)}
+               value={regName}
             />
           )}
+          {isRegistering && (
           <TextInput
-            
+          name="password"
             placeholder="Password"
             placeholderTextColor="black"
             style={styles.textInput}
+            onChangeText={(e) =>{setRegPassword(e)}}
+            value={regPassword}
           />
+          )}
+
+{isRegistering && (
+<View style={styles.radios}>
+   <Text>User</Text>
+      <RadioButton
+        value="user"
+        status={ checked === 'user' ? 'checked' : 'unchecked' }
+        onPress={() => setChecked('user')}
+        />
+         <Text>Boat Owner</Text>
+      <RadioButton
+        value="boatOwner"
+        status={ checked === 'boatOwner' ? 'checked' : 'unchecked' }
+        onPress={() => setChecked('boatOwner')}
+      />
+    </View>
+)}
           <Animated.View style={[styles.formButton, formButtonAnimatedStyle]}>
+          {isRegistering && (
+  <Pressable
+    onPress={() => {
+      registerr() // Call handleSubmit as a function
+     formButtonScale.value = withSequence(withSpring(1), withSpring(1));
+    }}
+  >
+    <Text style={styles.buttonText}>REGISTER</Text>
+  </Pressable>
+)}
+          {!isRegistering && (
             <Pressable
-              onPress={() =>
-                (formButtonScale.value = withSequence(
-                  withSpring(1),
-                  withSpring(1)
-                ))
+              onPress={() =>{
+                loginn()
+                formButtonScale.value = withSequence(withSpring(1), withSpring(1));
               }
+            }
             >
               <Text style={styles.buttonText}>
-                {isRegistering ? "REGISTER" : "LOG IN"}
+                 LOG IN
               </Text>
             </Pressable>
+          )}
           </Animated.View>
         </Animated.View>
       </View>

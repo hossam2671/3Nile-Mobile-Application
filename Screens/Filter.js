@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
-import { Text, View, ScrollView, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, ScrollView, StyleSheet, Image, TouchableOpacity , FlatList} from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { Chip, Searchbar } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import { MultipleSelectList } from 'react-native-dropdown-select-list';
 import Slider from '@react-native-community/slider';
+import { useRoute } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategoryOne , getCategoryTwo , filter } from '../redux/slices/UserSlice';
+
 const data = [
   { key: '1', value: 'shra3',},
   { key: '2', value: 'shra3 2' },
@@ -16,6 +20,21 @@ const data = [
 ];
 
 export default function Filter() {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    // dispatch(getAllBoats());
+    dispatch(getCategoryOne())
+    dispatch(getCategoryTwo())
+    // dispatch(getCategoryThree())
+    // dispatch(getSwvl())
+
+
+  }, [])
+  const { filteredcategoryOne } = useSelector(state => state.UserSlice)
+  const { filteredcategoryTwo } = useSelector(state => state.UserSlice)
+  const { filteredswvl } = useSelector(state => state.UserSlice)
+  const route = useRoute();
+  const { num } = route.params;
   const [visibleModal, setVisibleModal] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedItems1, setSelectedItems1] = useState([]);
@@ -102,12 +121,12 @@ onSelect={(e) => alert(selectedItems1)}
     
 
 
-      {renderButton('Apply', () => setVisibleModal(null))}
+      {renderButton('Apply', () =>{ dispatch(filter(selectedItems , selectedItems1 , sliderValue , sliderValue1 ));console.log(selectedItems  , selectedItems1 , sliderValue , sliderValue1); setVisibleModal(null)})}
     </View>
   );
   
   return (
-      <ScrollView>
+      
       <View style={styles.container}>
      
    {/* modal */}
@@ -134,7 +153,7 @@ onSelect={(e) => alert(selectedItems1)}
         <View style={styles.chips_con}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <Chip  style={styles.chisp} selectedColor={'#114B5F'}  onPress={() => console.log("closeIcon" )}>
-              Right Icon Chip
+              {/* {filteredcategoryOne[0].name} */}
             </Chip>
             <Chip  style={styles.chisp} selectedColor={'#114B5F'}  onPress={() => console.log('Pressed')}>
               Icon Chip
@@ -154,7 +173,86 @@ onSelect={(e) => alert(selectedItems1)}
 
  {/* cards */}
         <View style={styles.cards}>
-          <View style={styles.card_con}>
+        {
+  num === 1 && (
+    <FlatList
+      data={filteredcategoryOne}
+      renderItem={({ item }) => (
+        <View style={styles.card_con}>
+          <Image
+            width={170}
+            height={170}
+            source={{
+              uri:
+                'https://i.insider.com/5d3a0c24454a3908467e0f37?width=750&format=jpeg&auto=webp',
+            }}
+          />
+          <View style={styles.card_con_after}></View>
+          <View style={styles.card_con_info}>
+            <View style={styles.card_con_info_row}>
+              <Text> Boat Name:</Text>
+              <Text> {item.name}</Text>
+            </View>
+            <View style={styles.card_con_info_row}>
+              <Text> Price:</Text>
+              <Text> {item.price} $</Text>
+            </View>
+            <View style={styles.card_con_info_row}>
+              <Text> TYPE:</Text>
+              <Text> {item.type}</Text>
+            </View>
+            <View style={styles.card_con_info_row}>
+              <Text> port:</Text>
+              <Text> {item.portName}</Text>
+            </View>
+          </View>
+        </View>
+      )}
+      keyExtractor={(item) => item._id}
+    />
+  )
+}
+{
+  num === 2 && (
+    <FlatList
+      data={filteredcategoryTwo}
+      renderItem={({ item }) => (
+        <View style={styles.card_con}>
+          <Image
+            width={170}
+            height={170}
+            source={{
+              uri:
+                'https://i.insider.com/5d3a0c24454a3908467e0f37?width=750&format=jpeg&auto=webp',
+            }}
+          />
+          <View style={styles.card_con_after}></View>
+          <View style={styles.card_con_info}>
+            <View style={styles.card_con_info_row}>
+              <Text> Boat Name:</Text>
+              <Text> {item.name}</Text>
+            </View>
+            <View style={styles.card_con_info_row}>
+              <Text> Price:</Text>
+              <Text> {item.price} $</Text>
+            </View>
+            <View style={styles.card_con_info_row}>
+              <Text> TYPE:</Text>
+              <Text> {item.type}</Text>
+            </View>
+            <View style={styles.card_con_info_row}>
+              <Text> port:</Text>
+              <Text> {item.portName}</Text>
+            </View>
+          </View>
+        </View>
+      )}
+      keyExtractor={(item) => item._id}
+    />
+  )
+}
+
+          {/* <View style={styles.card_con}>
             <Image
               width={170}
               height={170}
@@ -240,7 +338,6 @@ onSelect={(e) => alert(selectedItems1)}
               </View>
             </View>
           </View>
-
           <View style={styles.card_con}>
             <Image
               width={170}
@@ -326,12 +423,12 @@ onSelect={(e) => alert(selectedItems1)}
                 <Text> port:</Text>
               </View>
             </View>
-          </View>
+          </View> */}
     </View>
      {/* cards */}
   
 </View>
-  </ScrollView>
+  
 )}
 
 const styles = StyleSheet.create({

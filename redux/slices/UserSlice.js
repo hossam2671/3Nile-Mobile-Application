@@ -1,16 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-// 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Cookies from "js-cookie";
-// 
-import { useNavigate } from 'react-router-dom';
-import { date } from "yup";
+
+
+
 
 
 // هنا بدات ندي :)
 export const register =createAsyncThunk("nada/register", async (payload) => {
 console.log(payload)
-axios.post(`http://localhost:5000/${payload.radiovalue}/register`, {
+axios.post(`http://192.168.220.1:5000/${payload.radiovalue}/register`, {
   
     name: payload.name,
     password: payload.password,
@@ -22,45 +22,43 @@ axios.post(`http://localhost:5000/${payload.radiovalue}/register`, {
   })
 })
 
-export const login = createAsyncThunk("allUser/login", async (payload,{ getState, dispatch }) => {
-   try{
-  const response= await axios.post('http://localhost:5000/login', {
-        password: payload.password,
-        email: payload.email
-    })
-    const data = response.data;
-   
-        
-      if(data.user==='user'){
-        
-        const token = data.userData._id;
-        Cookies.remove("boatOwnerId");
-        Cookies.set("userId", token, { expires: 7 })
-        dispatch({ type: "user", payload: data.userData });
+export const login = createAsyncThunk("allUser/login", async (payload) => {
+  try {
+    const response = await axios.post('http://192.168.220.1:5000/login', {
+      password: payload.password,
+      email: payload.email
+    });
 
-            return response;
-      }
-      else if(data.boatOwner==='boatOwner'){
-        const token =data.boatOwnerData._id;
-        Cookies.remove("userId");
-        Cookies.set("boatOwnerId", token, { expires: 7 });
-        dispatch({ type: "owner", payload: data.boatOwnerData });
+    const { data, headers } = response; // Extract data and headers from the response
 
-            return response;
-      }
-        else{
-             alert("Login failed");
+    // Serialize the headers object
+    const serializedHeaders = JSON.stringify(headers);
 
-               return false;
-        }
+    // console.log(data);
 
+    if (data.user === 'user') {
+      // console.log(data.userData);
+      AsyncStorage.setItem("user", data.userData._id)
+      // const token = data.userData._id;
+      // Cookies.remove("boatOwnerId");
+      // Cookies.set("userId", token, { expires: 7 })
+      // dispatch({ type: "user", payload: data.userData });
 
-      }catch (err) {
-        alert(err);
-        return false;
+        return data;
+    } else if (data.boatOwner === 'boatOwner') {
+      // console.log(data)
+        AsyncStorage.setItem("boatOwner", data.boatOwnerData._id)
+        return data;
+      //return { data, serializedHeaders }; // Return both data and serializedHeaders
+    } else {
+      alert("Login failed");
+      return false;
     }
-     
-})
+  } catch (err) {
+    alert(err);
+    return false;
+  }
+});
 
 export const editUserInfo= createAsyncThunk ("/editUserInfo", async(payload )=>{
 console.log(payload,"Payload")
@@ -167,8 +165,9 @@ export const getAllBoats = createAsyncThunk("user/boats", async (payload) => {
 
 })
 export const getCategoryOne = createAsyncThunk("user/category/3nile/boats", async (payload) => {
+
     try {
-        let res = await axios.get('http://localhost:5000/user/category/3nile/boats');
+        let res = await axios.get('http://192.168.220.1:5000/user/category/3nile/boats');
         console.log(res.data , "3nile")
        
         return res.data;
@@ -180,7 +179,7 @@ export const getCategoryOne = createAsyncThunk("user/category/3nile/boats", asyn
 })
 export const getCategoryTwo = createAsyncThunk("user/category/3nileplus/boats", async (payload) => {
     try {
-        let res = await axios.get('http://localhost:5000/user/category/3nileplus/boats');
+        let res = await axios.get('http://192.168.220.1:5000/user/category/3nileplus/boats');
         console.log(res.data , "3nilePlus")
         return res;
     }
@@ -333,6 +332,10 @@ const UserSlice = createSlice({
     
 
     reducers:{
+
+       filter(state,action){
+        console.log(action.payload)
+       },
       logoutt(state,action){
         Cookies.remove("userId");
 
@@ -459,6 +462,7 @@ const UserSlice = createSlice({
     extraReducers: {
        [ register.fulfilled]:(state,action)=>{
         console.log("fulfilled")
+        console.log("first")
         
        },
        [login.pending]:(state,action)=>{
@@ -467,14 +471,21 @@ const UserSlice = createSlice({
       
        } ,
        [login.fulfilled]: (state, action) => {
-         
-        state.anyUser = action.payload;
-      
-        if(state.anyUser.data.user){
-          state.user=state.anyUser.data
-        }else{
-          state.boatOwner=state.anyUser.data
+        //  console.log(action.payload)
+         if(action.payload.boatOwnerData){
+            state.boatOwner=action.payload.boatOwnerData
+            console.log(state.boatOwner)
+          }
+          else{
+            state.user=action.payload.userData
+            console.log(state.user)
         }
+        // state.anyUser = action.payload;
+      
+        // if(state.anyUser.data.user){
+        //   state.user=state.anyUser.data
+        // }else{
+        // }
   
     },
     [getOwnerBoats.fulfilled]:(state,action)=>{
@@ -524,7 +535,7 @@ const UserSlice = createSlice({
 
               // Get Categories Start
         [getCategoryOne.fulfilled]: (state, action) => {
-            // console.log(action.payload);
+             console.log(action.payload);
             
            
             state.categoryOne = action.payload;
@@ -585,7 +596,7 @@ const UserSlice = createSlice({
 })
 
 
-export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt} = UserSlice.actions;
+export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt , filter} = UserSlice.actions;
 
 export default UserSlice.reducer;
 
