@@ -7,6 +7,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
+import {Discreption} from './Screens/Discreption'
+// import OnboardingScreen from './Screens/OnboardingScreen';
+import LoginSignUp from './Screens/LoginSignUpScreen/LoginSignUp';
+import Filter from './Screens/Filter';
+import OnboardingScreen from './Screens/OnboardingScreen';
+
+
 export default function App() {
   return (
 
@@ -33,5 +40,4 @@ export default function App() {
   </NavigationContainer>
   )
 }
-
 
