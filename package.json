@@ -9,10 +9,15 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.13.4",
+    "@react-native-community/slider": "^4.4.2",
     "expo": "~48.0.18",
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
     "react-native": "0.71.8",
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     "react-native-maps": "^1.7.1",
     "react-native-swiper": "^1.6.0",
@@ -22,6 +27,16 @@
     "react-native-reanimated": "~2.14.4",
     "react-native-svg": "13.4.0",
     "react-native-video": "^5.2.1"
+>>>>>>> Stashed changes
+=======
+    "react-native-dropdown-select-list": "^2.0.4",
+    "react-native-linear-gradient": "^2.6.2",
+    "react-native-modal": "^13.0.1",
+    "react-native-paper": "^5.8.0",
+    "react-native-range-slider": "^0.1.2",
+    "react-native-vector-icons": "^9.2.0",
+    "resuite": "^0.0.2",
+    "rn-range-slider": "^2.2.2"
 >>>>>>> Stashed changes
   },
   "devDependencies": {
