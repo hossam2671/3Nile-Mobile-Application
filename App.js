@@ -6,23 +6,30 @@ import {Discreption} from './Screens/Discreption'
 import LoginSignUp from './Screens/LoginSignUpScreen/LoginSignUp';
 import Filter from './Screens/Filter';
 import OnboardingScreen from './Screens/OnboardingScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { NavigationContainer } from '@react-navigation/native';
+import BoatOwnerProfile from './Screens/BoatOwnerProfile';
+import ContactUs from './Screens/ContactUs';
 
 
 export default function App() {
   return (
-    
-<>    
-      {/* <OnboardingScreen/> */}
-{/* <View> */}
+      <Provider store={Store}>
+            <NavigationContainer>
+            <Stack.Navigator screenOptions={{
+        headerStyle: { backgroundColor: '#72039a' },
 
-      {/* <Discreption/> */}
-{/* </View> */}
-      {/* <LoginSignUp/> */}
-      <Filter/>
-      {/* <StatusBar style="auto" /> */}
-
-{/* <StatusBar style="auto" /> */}
-</>
+      }}>
+            <Stack.Screen name='OnboardingScreen' component={OnboardingScreen} />
+            <Stack.Screen name='BoatOwnerProfile' component={BoatOwnerProfile} />
+            <Stack.Screen name='ContactUs' component={ContactUs} />
+            <Stack.Screen name='Descreption' component={Discreption} />
+            <Stack.Screen name='Filter' component={Filter} />
+            <Stack.Screen name='BoatOwnerProfile' component={BoatOwnerProfile} />
+            </Stack.Navigator>
+            <StatusBar style='light' />
+            </NavigationContainer>
+      </Provider>
 
   );
 }
