@@ -19,7 +19,7 @@ export const Discreption = () => {
 
   return (
     
-    <View>
+    <View style={styles.container}>
       <Swiper
         style={styles.wrapper}
         renderPagination={renderPagination}
@@ -31,7 +31,7 @@ export const Discreption = () => {
 
         <View
           style={styles.slide}>
-          <Image style={styles.image} source={require('../assets/boat2.jpeg')} />
+          <Image style={styles.image} source={require('../assets/boat.jpg')} />
         </View>
       </Swiper>
 
@@ -99,10 +99,14 @@ export const Discreption = () => {
 
 
 const styles = StyleSheet.create({
+  container:{
+flex:1,
+backgroundColor:'#fff'
+  },
   wrapper: {},
   slide: {
-    // height: 10,
-    // top:80,
+    height: 10,
+    top:140,
     marginTop: 35,
     justifyContent: 'center',
     alignItems: 'center',
