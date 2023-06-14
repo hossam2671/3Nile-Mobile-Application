@@ -21,7 +21,7 @@ const ContactUs = () => {
         <Text style={styles.paragraph}>Keep track and grow your relationship with us</Text>
       </View>
       <View style={styles.card}>
-        <Image  style={styles.image} resizeMode="contain" source={require('../assets/contact.jpg')} />
+        <Image  style={styles.image} resizeMode="contain" source={require('../assets/boat2.jpeg')} />
         <Text style={{top:-60,left:30,color:"white"}}>Name</Text>
         <Text style={{top:-50,left:30,color:"white"}}>Email</Text>
         <Text style={{textAlign: 'center',fontSize:20,top:-20}}>Leave your message</Text>

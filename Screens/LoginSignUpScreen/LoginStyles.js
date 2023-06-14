@@ -75,6 +75,10 @@ const styles = StyleSheet.create({
     
     borderRadius: 20,
     top: -40
+  },
+  radios:{
+    flexDirection:"row",
+    marginLeft:30
   }
 });
 
