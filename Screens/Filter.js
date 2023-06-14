@@ -7,7 +7,7 @@ import { MultipleSelectList } from 'react-native-dropdown-select-list';
 import Slider from '@react-native-community/slider';
 import { useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategoryOne , getCategoryTwo , filter , filter2 , getSwvl} from '../redux/slices/UserSlice';
+import { getCategoryOne , getCategoryTwo , filter , filter2 , getSwvl, search} from '../redux/slices/UserSlice';
 import Icon from "react-native-vector-icons/FontAwesome"
 
 const data = [
@@ -23,6 +23,8 @@ const data2 = [
 
 
 export default function Filter() {
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const onChangeSearch = query => {setSearchQuery(query); dispatch(search(query));console.log(query)};
   const dispatch = useDispatch()
   useEffect(() => {
     // dispatch(getAllBoats());
@@ -141,7 +143,13 @@ onSelect={(e) => alert(selectedItems1)}
       <View style={styles.container}>
      
    {/* modal */}
-    {  num == 1 || num == 2 &&   
+    {   num == 2 &&   
+   <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
+    
+        {renderModalContent()}
+      </Modal>
+}
+{  num == 1 &&   
    <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
     
         {renderModalContent()}
@@ -150,7 +158,7 @@ onSelect={(e) => alert(selectedItems1)}
       {/* modal */}
 
       {/* filter icon */}
-      {  num == 1 || num == 2 &&
+      {   num == 2 &&
         <View style={styles.filter_input_con}>
           <IconButton
             icon="filter"
@@ -163,9 +171,32 @@ onSelect={(e) => alert(selectedItems1)}
           />
         </View>
 }
+{  num == 1 &&
+        <View style={styles.filter_input_con}>
+          <IconButton
+            icon="filter"
+            iconColor={'#114B5F'}
+            size={20}
+            isVisible={visibleModal === 1}
+            style={styles.bottomModal}
+            onPress={() => 
+              {setVisibleModal(1) ; setSelectedItems([]);setSelectedItems1([]) ; setSliderValue(1000) ; setSliderValue1(1000) }}
+          />
+        </View>
+}
+{
+  num == 3 && 
+  <Searchbar
+      placeholder="Target Place"
+      onChangeText={onChangeSearch}
+      value={searchQuery}
+    />
+}
   {/* filter icon */}
 
         {/* chips */}
+        {
+          num == 1 &&
         <View style={styles.chips_con}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <Chip  style={styles.chisp} selectedColor={'#114B5F'}  onPress={() => console.log("closeIcon" )}>
@@ -185,6 +216,29 @@ onSelect={(e) => alert(selectedItems1)}
             </Chip>
           </ScrollView>
         </View>
+}
+{
+          num == 2 &&
+        <View style={styles.chips_con}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <Chip  style={styles.chisp} selectedColor={'#114B5F'}  onPress={() => console.log("closeIcon" )}>
+              {/* {filteredcategoryOne[0].name} */}
+            </Chip>
+            <Chip  style={styles.chisp} selectedColor={'#114B5F'}  onPress={() => console.log('Pressed')}>
+              Icon Chip
+            </Chip>
+            <Chip style={styles.chisp} selectedColor={'#114B5F'}  onPress={() => console.log('Pressed')}>
+              Chip
+            </Chip>
+            <Chip style={styles.chisp} selectedColor={'#114B5F'}  onPress={() => console.log('Pressed')}>
+              Right Icon Chip
+            </Chip>
+            <Chip style={styles.chisp} selectedColor={'#114B5F'}  onPress={() => console.log('Pressed')}>
+              Right
+            </Chip>
+          </ScrollView>
+        </View>
+}
  {/* chips */}
 
  {/* cards */}
@@ -290,11 +344,12 @@ onSelect={(e) => alert(selectedItems1)}
        
               </View>
               <View style={styles.card_con_info_row}>
-                <Text style={styles.card_con_info_row_port}>{item.targetPlace}</Text>
+                <Text style={styles.card_con_info_row_port}>{item.date.slice(0,10)}</Text>
               </View>
               <View style={styles.card_con_info_row}>
-               <Icon  name='anchor' size={18} color={'#166582'} />
-                <Text style={styles.card_con_info_row_type}> item.portName </Text>
+               {/* <Icon  name='anchor' size={18} color={'#166582'} /> */}
+                <Text style={styles.card_con_info_row_type}> {item.time} </Text>
+                <Text style={styles.card_con_info_row_type}> {item.targetPlace} </Text>
              
               </View>
             </View>

@@ -343,6 +343,19 @@ const UserSlice = createSlice({
     
 
     reducers:{
+      search(state, action) {
+        const searchQuery = action.payload.toLowerCase(); 
+        const filteredSwvl = state.swvl.filter((item) =>
+          item.targetPlace.toLowerCase().includes(searchQuery)
+        );
+      
+        state.filteredswvl = filteredSwvl;
+        console.log(state.filteredswvl);
+      
+        if (searchQuery === "") {
+          state.filteredswvl = [...state.swvl];
+        }
+      },
         // filter cat one
       filter(state, action) {
         // console.log(action.payload);
@@ -662,7 +675,7 @@ const UserSlice = createSlice({
 })
 
 
-export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt , filter , filter2} = UserSlice.actions;
+export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt , filter , filter2 , search} = UserSlice.actions;
 
 export default UserSlice.reducer;
 
