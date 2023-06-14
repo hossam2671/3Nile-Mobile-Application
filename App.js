@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import UserProfile from './Screens/UserProfile'
-import BoatOwnerProfile from './Screens/BoatOwnerProfile';
-import { NavigationContainer } from '@react-navigation/native';
+
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
@@ -19,7 +19,7 @@ import {Discreption} from './Screens/Discreption'
 import LoginSignUp from './Screens/LoginSignUpScreen/LoginSignUp';
 import Filter from './Screens/Filter';
 import OnboardingScreen from './Screens/OnboardingScreen';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import { NavigationContainer } from '@react-navigation/native';
 import BoatOwnerProfile from './Screens/BoatOwnerProfile';
 import ContactUs from './Screens/ContactUs';
@@ -55,7 +55,7 @@ export default function App() {
             <Stack.Screen name='ContactUs' component={ContactUs} />
             <Stack.Screen name='Descreption' component={Discreption} />
             <Stack.Screen name='Filter' component={Filter} />
-            <Stack.Screen name='HomeCards' component={HomeCards} />
+            <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
             <Stack.Screen name='LoginSignUp' component={LoginSignUp} />
             </Stack.Navigator>
             <StatusBar style='light' />
