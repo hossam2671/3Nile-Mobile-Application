@@ -1,13 +1,26 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
-import bk from '../assets/ice-3_cleanupp_auto_x2.jpg'
-import boat from '../assets/ice-3-removebg-preview.png'
+// import bk from '../assets/ice-3_cleanupp_auto_x2.jpg'
+// import boat from '../assets/ice-3-removebg-preview.png'
+import bkk from '../assets/bkk.jpeg'
+import boatt from '../assets/boatt.png'
 
 const HomeCards = (props) => {
   function hello(){
     props.navigation.navigate('Filter')
   }
   return (
+    
+    <View style={styles.container}>
+      {/* <View style={styles.home__cards}>
+        <Image source={bk} style={styles.bk__style} />
+      </View>
+      <View style={styles.card__content}>
+        <Text style={styles.card__text}>Hi this is my category, Hi this is my category, Hi this is my category</Text>
+        <TouchableOpacity onPress={() => {
+
+        }}>
+          <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View style={styles.container}>
         
@@ -31,6 +44,21 @@ const HomeCards = (props) => {
       </View>
 
       <View>
+        <Image source={boat} resizeMode='contain' style={styles.boat__style} />
+      </View> */}
+      <View style={styles.home__cards}>
+        <Image source={bkk} style={styles.bk__style} />
+      </View>
+      <View style={styles.card__content}>
+        <Text style={styles.card__text}>Hi this is my category, Hi this is my category, Hi this is my category</Text>
+        <TouchableOpacity onPress={() => {
+
+        }}>
+          <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
+        </TouchableOpacity>
+      </View>
+      <View>
+        <Image source={boatt} resizeMode='contain' style={styles.boat__style} />
         <View style={styles.home__cards}>
           <Image source={bk} style={styles.bk__style} />
         </View>
@@ -66,7 +94,7 @@ const HomeCards = (props) => {
 
 
       </View>
-    </ScrollView>
+    </View>
   )
 }
 
@@ -91,7 +119,7 @@ const styles = StyleSheet.create({
   boat__style: {
     width: 430,
     top: -420,
-    left: 25,
+    left: 20,
   },
   card__content: {
     backgroundColor: 'rgba(25, 25, 25, 0.162)',
@@ -108,7 +136,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
     fontSize: 17,
-    top: -15
+    top: -10
   },
   card__button: {
     width: 80,
@@ -117,7 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    top: -5,
+    top: 2,
   },
   card__botton__text: {
     textAlign: 'center',

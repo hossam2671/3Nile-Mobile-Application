@@ -233,67 +233,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
   },
-  // card__style: {
-  //   width: 370,
-  //   height: 170,
-  //   backgroundColor: 'gray',
-  //   marginBottom: 45,
-  //   borderRadius: 15,
-  //   top: -10,
-  // },
-  // card__text__details: {
-  //   textAlign: 'center',
-  //   display: 'flex',
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  //   paddingHorizontal: 100,
-  //   paddingVertical: 3,
-  //   bottom: 150,
-  //   left: 50,
-  // },
-  // card__trip__details: {
-  //   fontSize: 14,
-  //   bottom: 145,
-  //   left: 153,
-  //   lineHeight: 30,
-  // },
-  // card__image__style: {
-  //   width: 140,
-  //   height: 170,
-  // },
-  // boat__name__price: {
-  //   fontSize: 20,
-  //   fontWeight: 600,
-  // },
-  // peoples__details: {
-  //   bottom: 150,
-  //   left: 30,
-  // },
-  // date__icon: {
-  //   bottom: 135,
-  //   left: 150,
-  // },
-  // location__icon: {
-  //   bottom: 120,
-  //   left: 150,
-  // },
-  // date__text: {
-  //   bottom: 168,
-  //   left: 175,
-  // },
-  // location__text: {
-  //   bottom: 157,
-  //   left: 175,
-  // },
-  // border__bottom__dooted: {
-  //   borderBottomColor: '#e6e6e6',
-  //   borderBottomWidth: 2,
-  //   borderStyle: 'dashed',
-  //   width: '48%',
-  //   alignItems: 'center',
-  //   bottom: 145,
-  //   left: 153,
-  // },
+  
 });
 
 export default BoatOwnerProfile;
