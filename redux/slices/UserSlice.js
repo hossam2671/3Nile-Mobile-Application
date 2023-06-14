@@ -544,14 +544,14 @@ const UserSlice = createSlice({
       
        } ,
        [login.fulfilled]: (state, action) => {
-        //  console.log(action.payload)
-         if(action.payload.boatOwnerData){
+          console.log(action.payload.boatOwner)
+         if(action.payload.boatOwner){
             state.boatOwner=action.payload.boatOwnerData
             console.log(state.boatOwner)
           }
           else{
             state.user=action.payload.userData
-            console.log(state.user)
+             console.log(state.user)
         }
         // state.anyUser = action.payload;
       
