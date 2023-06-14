@@ -61,7 +61,7 @@ export const login = createAsyncThunk("allUser/login", async (payload) => {
 });
 
 export const editUserInfo= createAsyncThunk ("/editUserInfo", async(payload )=>{
-console.log(payload,"Payload")
+// console.log(payload,"Payload")
 console.log(payload.img)
 // console.log(payload.userData._id)
 axios.put(`http://localhost:5000/user/editUserinfo/${payload.id}`,{
@@ -168,7 +168,7 @@ export const getCategoryOne = createAsyncThunk("user/category/3nile/boats", asyn
 
     try {
         let res = await axios.get('http://192.168.220.1:5000/user/category/3nile/boats');
-        console.log(res.data , "3nile")
+        // console.log(res.data , "3nile")
        
         return res.data;
     }
@@ -180,7 +180,7 @@ export const getCategoryOne = createAsyncThunk("user/category/3nile/boats", asyn
 export const getCategoryTwo = createAsyncThunk("user/category/3nileplus/boats", async (payload) => {
     try {
         let res = await axios.get('http://192.168.220.1:5000/user/category/3nileplus/boats');
-        console.log(res.data , "3nilePlus")
+        // console.log(res.data , "3nilePlus")
         return res;
     }
     catch (err) {
@@ -190,7 +190,7 @@ export const getCategoryTwo = createAsyncThunk("user/category/3nileplus/boats", 
 })
 export const getCategoryThree = createAsyncThunk("user/category/3nilevip/boats", async (payload) => {
     try {
-        let res = await axios.get('http://localhost:5000/user/category/3nilevip/boats');
+        let res = await axios.get('http://192.168.220.1:5000/user/category/3nilevip/boats');
         return res;
     }
     catch (err) {
@@ -198,8 +198,19 @@ export const getCategoryThree = createAsyncThunk("user/category/3nilevip/boats",
     }
 
 })
+export const getSwvl = createAsyncThunk("swvl/swvlTrips", async (payload) => {
+  try {
+      let res = await axios.get('http://192.168.220.1:5000/swvl/swvlTrips');
+      console.log(res)
+      return res;
+  }
+  catch (err) {
+
+  }
+
+})
 export const getOwnerBoats = createAsyncThunk("boatOwner/Boats", async (payload) => {
-  console.log(payload);
+  // console.log(payload);
   
     try {
   
@@ -216,7 +227,7 @@ export const getOwnerPreviousTrips = createAsyncThunk("boatOwner/Boats", async (
     try {
   
         let res = await axios.get(`http://localhost:5000/boatOwner/getAllFinishedTrips/${payload}`);
-        console.log(res);
+        // console.log(res);
         return res;
     }
     catch (err) {
@@ -229,7 +240,7 @@ export const getOwnerRequests = createAsyncThunk("boatOwner/Boats", async (paylo
     try {
   
         let res = await axios.get(`http://localhost:5000/boatOwner/getAllPendingTrips/${payload}`);
-        console.log(res);
+        // console.log(res);
 
         return res;
     }
@@ -243,7 +254,7 @@ export const getOwnerCurrentTrips = createAsyncThunk("boatOwner/Boats/current", 
     try {
   
         let res = await axios.get(`http://localhost:5000/boatOwner/getAllCurrentTrips/${payload}`);
-        console.log(res);
+        // console.log(res);
 
         return res;
     }
@@ -320,7 +331,7 @@ const UserSlice = createSlice({
         loading: false
         ,error: null,
        err:false,
-        user:null
+        user:null,filteredswvl:[],swvl:[]
     
       ,ownerBoatsNum:null,pending:[],finished:[],accepted:[]
       ,filteredcategoryOne : [] ,filteredcategoryTwo : [],
@@ -332,10 +343,59 @@ const UserSlice = createSlice({
     
 
     reducers:{
-
-       filter(state,action){
-        console.log(action.payload)
-       },
+        // filter cat one
+      filter(state, action) {
+        // console.log(action.payload);
+        let filtered = [...state.categoryOne];
+        let filteredByPort = [...state.categoryOne];
+      
+        if (action.payload.port.length !== 0) {
+          filteredByPort = filteredByPort.filter(obj => action.payload.port.includes(obj.portName));
+        }
+      
+        if (action.payload.type.length !== 0) {
+          filtered = filteredByPort.filter(obj => action.payload.type.includes(obj.type));
+        } else {
+          filtered = [...filteredByPort];
+        }
+      
+        if (action.payload.price !== undefined) {
+          filtered = filtered.filter(obj => obj.price < action.payload.price);
+        }
+        if (action.payload.numOfPeople !== undefined) {
+          filtered = filtered.filter(obj => obj.numberOfpeople < action.payload.numOfPeople);
+        }
+      
+        state.filteredcategoryOne = filtered;
+    
+      },
+       // filter cat two
+       filter2(state, action) {
+        // console.log(action.payload);
+        let filtered = [...state.categoryTwo];
+        let filteredByPort = [...state.categoryTwo];
+      
+        if (action.payload.port.length !== 0) {
+          filteredByPort = filteredByPort.filter(obj => action.payload.port.includes(obj.portName));
+        }
+      
+        if (action.payload.type.length !== 0) {
+          filtered = filteredByPort.filter(obj => action.payload.type.includes(obj.type));
+        } else {
+          filtered = [...filteredByPort];
+        }
+      
+        if (action.payload.price !== undefined) {
+          filtered = filtered.filter(obj => obj.price < action.payload.price);
+        }
+        if (action.payload.numOfPeople !== undefined) {
+          filtered = filtered.filter(obj => obj.numberOfpeople < action.payload.numOfPeople);
+        }
+      
+        state.filteredcategoryTwo = filtered;
+    
+      },
+      
       logoutt(state,action){
         Cookies.remove("userId");
 
@@ -560,6 +620,12 @@ const UserSlice = createSlice({
            state.categoryThree = action.payload.data;
            state.filteredcategoryThree = action.payload.data
         },
+        [getSwvl.fulfilled]:(state,action) =>{
+          state.swvl = action.payload.data;
+          state.filteredswvl = action.payload.data;
+           console.log(state.swvl , "ghfdfdh")
+          // state.filteredcategoryThree = action.payload.data
+        },
 // /////////////////////////////////////////////////////////
         [finishedTrips.fulfilled]:(state,action) => {
           state.finished = action.payload.data
@@ -596,7 +662,7 @@ const UserSlice = createSlice({
 })
 
 
-export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt , filter} = UserSlice.actions;
+export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt , filter , filter2} = UserSlice.actions;
 
 export default UserSlice.reducer;
 

@@ -7,17 +7,20 @@ import { MultipleSelectList } from 'react-native-dropdown-select-list';
 import Slider from '@react-native-community/slider';
 import { useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategoryOne , getCategoryTwo , filter } from '../redux/slices/UserSlice';
+import { getCategoryOne , getCategoryTwo , filter , filter2 , getSwvl} from '../redux/slices/UserSlice';
+import Icon from "react-native-vector-icons/FontAwesome"
 
 const data = [
-  { key: '1', value: 'shra3',},
+  { key: '1', value: 'KFC'},
   { key: '2', value: 'shra3 2' },
   { key: '3', value: 'Cameras' },
-  { key: '4', value: 'Computers', disabled: true },
-  { key: '5', value: 'Vegetables' },
-  { key: '6', value: 'Diary Products' },
-  { key: '7', value: 'Drinks' },
 ];
+const data2 = [
+  { key: '1', value: 'shera3'},
+  { key: '2', value: 'shra3 2' },
+  { key: '3', value: 'Cameras' },
+];
+
 
 export default function Filter() {
   const dispatch = useDispatch()
@@ -26,7 +29,7 @@ export default function Filter() {
     dispatch(getCategoryOne())
     dispatch(getCategoryTwo())
     // dispatch(getCategoryThree())
-    // dispatch(getSwvl())
+     dispatch(getSwvl())
 
 
   }, [])
@@ -98,7 +101,7 @@ boxStyles={{borderBottomColor:"#dddedf",borderRadius:0,borderBottomWidth:1,borde
 badgeTextStyles={{color:"#114B5F",fontSize:18}}
 badgeStyles={{borderRadius:0,backgroundColor:'#fff'}}
 setSelected={(val) => setSelectedItems1(val)}
-data={data}
+data={data2}
 save="value"
 onSelect={(e) => alert(selectedItems1)}
         // inputStyles={{}}
@@ -121,7 +124,15 @@ onSelect={(e) => alert(selectedItems1)}
     
 
 
-      {renderButton('Apply', () =>{ dispatch(filter(selectedItems , selectedItems1 , sliderValue , sliderValue1 ));console.log(selectedItems  , selectedItems1 , sliderValue , sliderValue1); setVisibleModal(null)})}
+      {renderButton('Apply', () =>{
+        if(num === 1){
+        dispatch(filter({type: selectedItems1 ,port: selectedItems , numOFPeople: sliderValue , price: sliderValue1} ))
+      }
+      else if(num === 2){
+          dispatch(filter2({type: selectedItems1 ,port: selectedItems , numOFPeople: sliderValue , price: sliderValue1} ))
+        }
+        ; setVisibleModal(null)})}
+        
     </View>
   );
   
@@ -130,13 +141,16 @@ onSelect={(e) => alert(selectedItems1)}
       <View style={styles.container}>
      
    {/* modal */}
-         
+    {  num == 1 || num == 2 &&   
    <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
+    
         {renderModalContent()}
       </Modal>
+}
       {/* modal */}
 
       {/* filter icon */}
+      {  num == 1 || num == 2 &&
         <View style={styles.filter_input_con}>
           <IconButton
             icon="filter"
@@ -144,9 +158,11 @@ onSelect={(e) => alert(selectedItems1)}
             size={20}
             isVisible={visibleModal === 1}
             style={styles.bottomModal}
-            onPress={() => setVisibleModal(1)}
+            onPress={() => 
+              {setVisibleModal(1) ; setSelectedItems([]);setSelectedItems1([]) ; setSliderValue(1000) ; setSliderValue1(1000) }}
           />
         </View>
+}
   {/* filter icon */}
 
         {/* chips */}
@@ -176,37 +192,37 @@ onSelect={(e) => alert(selectedItems1)}
         {
   num === 1 && (
     <FlatList
+    style={styles.FlatList}
       data={filteredcategoryOne}
       renderItem={({ item }) => (
         <View style={styles.card_con}>
-          <Image
-            width={170}
-            height={170}
-            source={{
-              uri:
-                'https://i.insider.com/5d3a0c24454a3908467e0f37?width=750&format=jpeg&auto=webp',
-            }}
-          />
-          <View style={styles.card_con_after}></View>
-          <View style={styles.card_con_info}>
-            <View style={styles.card_con_info_row}>
-              <Text> Boat Name:</Text>
-              <Text> {item.name}</Text>
-            </View>
-            <View style={styles.card_con_info_row}>
-              <Text> Price:</Text>
-              <Text> {item.price} $</Text>
-            </View>
-            <View style={styles.card_con_info_row}>
-              <Text> TYPE:</Text>
-              <Text> {item.type}</Text>
-            </View>
-            <View style={styles.card_con_info_row}>
-              <Text> port:</Text>
-              <Text> {item.portName}</Text>
+            <Image
+            style={styles.card_con_img}
+              width={170}
+              height={170}
+              source={{
+                uri: 'https://i.insider.com/5d3a0c24454a3908467e0f37?width=750&format=jpeg&auto=webp',
+              }}
+            />
+
+            <View style={styles.card_con_info}>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_name}>{item.name}</Text>
+              </View>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_price}>{item.price} per Hour</Text>
+       
+              </View>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_port}>{item.type}</Text>
+              </View>
+              <View style={styles.card_con_info_row}>
+               <Icon  name='anchor' size={18} color={'#166582'} />
+                <Text style={styles.card_con_info_row_type}> {item.portName} </Text>
+             
+              </View>
             </View>
           </View>
-        </View>
       )}
       keyExtractor={(item) => item._id}
     />
@@ -218,39 +234,77 @@ onSelect={(e) => alert(selectedItems1)}
       data={filteredcategoryTwo}
       renderItem={({ item }) => (
         <View style={styles.card_con}>
-          <Image
-            width={170}
-            height={170}
-            source={{
-              uri:
-                'https://i.insider.com/5d3a0c24454a3908467e0f37?width=750&format=jpeg&auto=webp',
-            }}
-          />
-          <View style={styles.card_con_after}></View>
-          <View style={styles.card_con_info}>
-            <View style={styles.card_con_info_row}>
-              <Text> Boat Name:</Text>
-              <Text> {item.name}</Text>
-            </View>
-            <View style={styles.card_con_info_row}>
-              <Text> Price:</Text>
-              <Text> {item.price} $</Text>
-            </View>
-            <View style={styles.card_con_info_row}>
-              <Text> TYPE:</Text>
-              <Text> {item.type}</Text>
-            </View>
-            <View style={styles.card_con_info_row}>
-              <Text> port:</Text>
-              <Text> {item.portName}</Text>
+            <Image
+            style={styles.card_con_img}
+              width={170}
+              height={170}
+              source={{
+                uri: 'https://i.insider.com/5d3a0c24454a3908467e0f37?width=750&format=jpeg&auto=webp',
+              }}
+            />
+
+            <View style={styles.card_con_info}>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_name}>{item.name}</Text>
+              </View>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_price}>{item.price} per Hour</Text>
+       
+              </View>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_port}>{item.type}</Text>
+              </View>
+              <View style={styles.card_con_info_row}>
+               <Icon  name='anchor' size={18} color={'#166582'} />
+                <Text style={styles.card_con_info_row_type}> {item.portName} </Text>
+             
+              </View>
             </View>
           </View>
-        </View>
       )}
       keyExtractor={(item) => item._id}
     />
   )
 }
+{
+  num === 3 && (
+    <FlatList
+      data={filteredswvl}
+      renderItem={({ item }) => (
+        <View style={styles.card_con}>
+            <Image
+            style={styles.card_con_img}
+              width={170}
+              height={170}
+              source={{
+                uri: 'https://i.insider.com/5d3a0c24454a3908467e0f37?width=750&format=jpeg&auto=webp',
+              }}
+            />
+
+            <View style={styles.card_con_info}>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_name}>{item.boat.name}</Text>
+              </View>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_price}>{item.priceForTrip} per Hour</Text>
+       
+              </View>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_port}>{item.targetPlace}</Text>
+              </View>
+              <View style={styles.card_con_info_row}>
+               <Icon  name='anchor' size={18} color={'#166582'} />
+                <Text style={styles.card_con_info_row_type}> item.portName </Text>
+             
+              </View>
+            </View>
+          </View>
+      )}
+      keyExtractor={(item) => item._id}
+    />
+  )
+}
+
 
           {/* <View style={styles.card_con}>
             <Image
@@ -433,111 +487,143 @@ onSelect={(e) => alert(selectedItems1)}
 
 const styles = StyleSheet.create({
 
-        container: {
-        
-        marginTop:40,
-        },
-        filter_input_con:{
-       
-        borderColor:'black',
-        borderWidth:1,
-        margin:20,
-   
-        
-    
-        
-        },
-        chips_con:{
-        width:450,
-        },
-        
-        chisp:{
-        margin:10,
-        backgroundColor:'#fff',
-        borderRadius:20,
-        borderWidth:1,
-        },
-        card_con:{
-        backgroundColor:'#ffffff',
-        width:410,
-        paddingTop:5,
-        paddingBottom:5,
-        borderWidth:1,
-        margin:20,
-        display: 'flex',
-        flexDirection:'row',
-        borderRadius:7,
-        },
-        
-        card_con_after:{
-        borderWidth:.5,
-        borderColor:'#114B5F' ,
-        margin:5,
-        marginLeft:10,
-        },
-        card_con_info:{
-        display: 'flex',
-        flexDirection:'column',
-        marginTop:20,
-        },
-        card_con_info_row:{
-        width:200,
-        display: 'flex',
-        flexDirection:'row',
-        justifyContent:'space-between',
-        padding:8,
-        paddingLeft:30,
-        },
-        button: {
-        padding: 10,
-        margin: 16,
-        justifyContent: 'center',
-        alignItems: 'center',
-        color:'#ffffff',
-        backgroundColor: '#d0d0d0',
-        borderRadius:2
-        },
-        modalContent: {
-        backgroundColor: '#ffffff',
-        padding: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderTopRightRadius:60,
-        borderTopLeftRadius:60,
-        },
-        bottomModal: {
-        justifyContent: 'flex-end',
-        margin: 0,
-     
-        },
-    
-   
-        Header_filter:{
-          textAlign:'center',
-          fontSize:30,
-          color:"#ec7200",
-          paddingBottom:10,
-          marginLeft:130,
-          borderBottomColor:'#000000',
-          borderBottomWidth:.5,
-          width:100
-        },
-        Header_filter_catrgories:{
-          paddingBottom:10,
-          paddingTop:20,
-          color:"#cc6300",
-          fontSize:20,
-        },
-        Header_filter_type:{
-          paddingBottom:10,
-          color:"#cc6300",
-          fontSize:20,
-        },
-        Header_filter_price_lapel:{
-          paddingTop:10,
-          color:"#114B5F",
-          paddingLeft:10
-        },
+  container: {
+  
+  marginTop:40,
+  },
+  
+  cards:{
+    marginBottom:60
+  },
+  filter_input_con:{
+ 
+  borderColor:'black',
+  borderWidth:1,
+  margin:20,
+  
+  },
+  chips_con:{
+  width:450,
+  },
 
-        
-        })
+
+  card_con_img:{
+  // margin:20,
+borderTopLeftRadius:20,
+borderBottomLeftRadius:20,  
+ height:150,
+    width:160,
+  },
+
+  chisp:{
+  margin:10,
+  backgroundColor:'#fff',
+  borderRadius:20,
+  borderWidth:1,
+  },
+  card_con:{
+  
+  width:410,
+  paddingTop:5,
+  paddingBottom:5,
+  // borderWidth:1,
+  margin:20,
+  display: 'flex',
+  flexDirection:'row',
+  borderRadius:7,
+  justifyContent:"center",
+  },
+  card_con_info:{
+  shadowOffset:{width: -2, height: 4},  
+  shadowColor:'#e0d6d6',  
+  shadowOpacity:0.9,  
+  shadowRadius:10,  
+  borderTopRightRadius:20,
+  borderBottomRightRadius:20,
+  borderTopWidth:1,
+  borderTopColor:'#c8c8c8',
+  borderBottomWidth:1,
+  borderBottomColor:'#c8c8c8',
+  borderRightWidth:1,
+  borderRightColor:'#c8c8c8',
+  },
+  card_con_info_row_name:{
+    fontSize:20,
+    color:'#1c5d73',
+    paddingTop:6,
+  },
+  card_con_info_row_price:{
+    fontSize:14,
+    color:'#979797',
+  
+  },
+  card_con_info_row_port:{
+    fontSize:17,
+    color:'#8a8a8a',
+  },
+  card_con_info_row_type:{
+    paddingLeft:20,
+    fontSize:14,
+   
+  },
+  card_con_info_row:{
+  width:200,
+  display: 'flex',
+  flexDirection:'row',
+paddingTop:10,
+  
+  paddingLeft:30,
+  },
+  button: {
+  padding: 10,
+  margin: 16,
+  justifyContent: 'center',
+  alignItems: 'center',
+  color:'#ffffff',
+  backgroundColor: '#d0d0d0',
+  borderRadius:2
+  },
+  modalContent: {
+  backgroundColor: '#ffffff',
+  padding: 10,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderTopRightRadius:60,
+  borderTopLeftRadius:60,
+  },
+  bottomModal: {
+  justifyContent: 'flex-end',
+  margin: 0,
+
+  },
+
+
+  Header_filter:{
+    textAlign:'center',
+    fontSize:30,
+    color:"#ec7200",
+    paddingBottom:10,
+    marginLeft:130,
+    borderBottomColor:'#000000',
+    borderBottomWidth:.5,
+    width:100
+  },
+  Header_filter_catrgories:{
+    paddingBottom:10,
+    paddingTop:20,
+    color:"#cc6300",
+    fontSize:20,
+  },
+  Header_filter_type:{
+    paddingBottom:10,
+    color:"#cc6300",
+    fontSize:20,
+  },
+  Header_filter_price_lapel:{
+    paddingTop:10,
+    color:"#114B5F",
+    paddingLeft:10
+  },
+
+  
+  })

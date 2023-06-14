@@ -53,7 +53,9 @@ const HomeCards = (props) => {
         </View>
         <View style={styles.card__content}>
           <Text style={styles.card__text}>Hi this is my category, Hi this is my category, Hi this is my category</Text>
-          <TouchableOpacity onPress={hello}>
+          <TouchableOpacity onPressIn={() => {
+            props.navigation.navigate('Filter' , { num:3})
+          }}>
             <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
           </TouchableOpacity>
         </View>
