@@ -255,7 +255,7 @@ onSelect={(e) => alert(selectedItems1)}
               width={170}
               height={170}
               source={{
-                uri: 'https://i.insider.com/5d3a0c24454a3908467e0f37?width=750&format=jpeg&auto=webp',
+                uri: `http://192.168.220.1:5000/${item.images[0]}`,
               }}
             />
 
@@ -293,7 +293,7 @@ onSelect={(e) => alert(selectedItems1)}
               width={170}
               height={170}
               source={{
-                uri: 'https://i.insider.com/5d3a0c24454a3908467e0f37?width=750&format=jpeg&auto=webp',
+                uri: `http://192.168.220.1:5000/${item.images[0]}`,
               }}
             />
 
@@ -331,7 +331,7 @@ onSelect={(e) => alert(selectedItems1)}
               width={170}
               height={170}
               source={{
-                uri: 'https://i.insider.com/5d3a0c24454a3908467e0f37?width=750&format=jpeg&auto=webp',
+                uri: `http://192.168.220.1:5000/${item.boat.images[0]}`,
               }}
             />
 
