@@ -23,6 +23,7 @@
     "async": "^3.2.4",
     "axios": "^1.4.0",
     "expo": "~48.0.18",
+    "expo-av": "~13.2.1",
     "expo-status-bar": "~1.4.4",
     "formik": "^2.4.1",
     "install": "^0.13.0",
@@ -39,6 +40,7 @@
     "react-native-maps": "^1.7.1",
     "react-native-modal": "^13.0.1",
     "react-native-paper": "^5.8.0",
+    "react-native-paper-dates": "^0.18.1",
     "react-native-range-slider": "^0.1.2",
     "react-native-ratings": "^8.1.0",
     "react-native-reanimated": "~2.14.4",
@@ -51,10 +53,10 @@
     "react-native-vector-icons": "^9.2.0",
     "react-native-video": "^5.2.1",
     "react-number-format": "^5.2.2",
+    "react-redux": "^8.1.0",
     "resuite": "^0.0.2",
     "rn-range-slider": "^2.2.2",
     "strip-json-comments": "^5.0.0",
-    "react-redux": "^8.1.0",
     "yup": "^1.2.0"
   },
   "devDependencies": {

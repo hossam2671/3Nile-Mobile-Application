@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCategoryOne , getCategoryTwo , filter , filter2 , getSwvl, search} from '../redux/slices/UserSlice';
 import Icon from "react-native-vector-icons/FontAwesome"
 
+
 const data = [
   { key: '1', value: 'KFC'},
   { key: '2', value: 'shra3 2' },
@@ -22,7 +23,7 @@ const data2 = [
 ];
 
 
-export default function Filter() {
+export default function Filter(props) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => {setSearchQuery(query); dispatch(search(query));console.log(query)};
   const dispatch = useDispatch()
@@ -249,13 +250,18 @@ onSelect={(e) => alert(selectedItems1)}
     style={styles.FlatList}
       data={filteredcategoryOne}
       renderItem={({ item }) => (
+        <TouchableOpacity onPressIn={() => {
+          console.log("first");
+          props.navigation.navigate('Discreption', { data : item});
+        }}>
+        
         <View style={styles.card_con}>
             <Image
             style={styles.card_con_img}
               width={170}
               height={170}
               source={{
-                uri: `http://192.168.220.1:5000/${item.images[0]}`,
+                uri: `http://10.171.240.66:5000/${item.images[0]}`,
               }}
             />
 
@@ -277,6 +283,7 @@ onSelect={(e) => alert(selectedItems1)}
               </View>
             </View>
           </View>
+          </TouchableOpacity>
       )}
       keyExtractor={(item) => item._id}
     />
@@ -293,7 +300,7 @@ onSelect={(e) => alert(selectedItems1)}
               width={170}
               height={170}
               source={{
-                uri: `http://192.168.220.1:5000/${item.images[0]}`,
+                uri: `http://10.171.240.66:5000/${item.images[0]}`,
               }}
             />
 
@@ -317,6 +324,7 @@ onSelect={(e) => alert(selectedItems1)}
           </View>
       )}
       keyExtractor={(item) => item._id}
+
     />
   )
 }
@@ -331,7 +339,7 @@ onSelect={(e) => alert(selectedItems1)}
               width={170}
               height={170}
               source={{
-                uri: `http://192.168.220.1:5000/${item.boat.images[0]}`,
+                uri: `http://10.171.240.66:5000/${item.boat.images[0]}`,
               }}
             />
 

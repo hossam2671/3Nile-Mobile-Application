@@ -53,7 +53,7 @@ export default function App() {
             <Stack.Screen name='OnboardingScreen' component={OnboardingScreen} />
             <Stack.Screen name='BoatOwnerProfile' component={BoatOwnerProfile} />
             <Stack.Screen name='ContactUs' component={ContactUs} />
-            <Stack.Screen name='Descreption' component={Discreption} />
+            <Stack.Screen name='Discreption' component={Discreption} />
             <Stack.Screen name='Filter' component={Filter} />
             <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
             <Stack.Screen name='LoginSignUp' component={LoginSignUp} />

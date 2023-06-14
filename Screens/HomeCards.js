@@ -1,16 +1,46 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react';
 import bk from '../assets/ice-3_cleanupp_auto_x2.jpg'
 import boat from '../assets/ice-3-removebg-preview.png'
+import { Video } from 'expo-av'
+import * as Animatable from 'react-native-animatable';
 
 const HomeCards = (props) => {
-  function hello(){
+  const vid = React.useRef(null);
+  let [viewed, setViewed] = useState(false)
+  function hello() {
     props.navigation.navigate('Filter')
   }
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View style={styles.container}>
-        
+
+
+        <Video
+          ref={vid}
+          resizeMode="contain"
+          shouldPlay
+          isMuted
+          onLoad={() => {
+            setTimeout(() => {
+              setViewed(true)
+              console.log("first")
+            }, 5000)
+          }}
+          isLooping
+          source={require('../assets/homeV.mp4')
+          }
+
+          style={{ height: 700, backgroundColor: 'red' }}
+        />
+        {viewed &&
+
+          <Animatable.Text iterationDelay={5} style={styles.homeVBtn} animation="slideInDown" iterationCount={Infinity} direction="alternate">go!</Animatable.Text>
+
+        }
+
+
+
         <View style={styles.home__cards}>
           <Image source={bk} style={styles.bk__style} />
         </View>
@@ -19,11 +49,11 @@ const HomeCards = (props) => {
           <TouchableOpacity onPressIn={() => {
             console.log("first");
             props.navigation.navigate('Filter', { num: 1 });
-            }}>
-          <View style={styles.card__button}>
-          <Text style={styles.card__button__text}>See more</Text>
-          </View>
-        </TouchableOpacity>
+          }}>
+            <View style={styles.card__button}>
+              <Text style={styles.card__button__text}>See more</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <View>
           <Image source={boat} resizeMode='contain' style={styles.boat__style} />
@@ -37,7 +67,7 @@ const HomeCards = (props) => {
         <View style={styles.card__content}>
           <Text style={styles.card__text}>Hi this is my category, Hi this is my category, Hi this is my category</Text>
           <TouchableOpacity onPressIn={() => {
-            props.navigation.navigate('Filter' , { num:2})
+            props.navigation.navigate('Filter', { num: 2 })
           }}>
             <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
           </TouchableOpacity>
@@ -54,7 +84,7 @@ const HomeCards = (props) => {
         <View style={styles.card__content}>
           <Text style={styles.card__text}>Hi this is my category, Hi this is my category, Hi this is my category</Text>
           <TouchableOpacity onPressIn={() => {
-            props.navigation.navigate('Filter' , { num:3})
+            props.navigation.navigate('Filter', { num: 3 })
           }}>
             <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
           </TouchableOpacity>
@@ -121,6 +151,10 @@ const styles = StyleSheet.create({
   },
   card__botton__text: {
     textAlign: 'center',
+  },
+  homeVBtn: {
+    color: 'red', top: -100, left: 200, fontSize: 30
+
   }
 
 })
