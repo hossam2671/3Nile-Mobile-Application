@@ -8,6 +8,7 @@ import IIcon from 'react-native-vector-icons/Ionicons';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
 import {addReview , canceltrip , pendingTrips , finishedTrips} from '../redux/slices/UserSlice'
+import ip from '../config'
 
 
 
@@ -52,7 +53,7 @@ export const UserProfile = () => {
         <Image source={coverImage} style={styles.profile__cover__image} />
       </View>
       <View>
-        <Image source={`http://192.168.220.1:5000/${user.img}`} style={styles.profile__user__image} />
+        <Image source={`http://${ip}:5000/${user.img}`} style={styles.profile__user__image} />
       </View>
 
       <View style={styles.user__profile__info__left}>

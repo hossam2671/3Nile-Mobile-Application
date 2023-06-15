@@ -9,6 +9,7 @@ import { useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategoryOne , getCategoryTwo , filter , filter2 , getSwvl, search} from '../redux/slices/UserSlice';
 import Icon from "react-native-vector-icons/FontAwesome"
+import ip from '../config'
 
 
 const data = [
@@ -28,9 +29,12 @@ export default function Filter(props) {
   const onChangeSearch = query => {setSearchQuery(query); dispatch(search(query));console.log(query)};
   const dispatch = useDispatch()
   useEffect(() => {
+    console.log("FFFFF")
     // dispatch(getAllBoats());
     dispatch(getCategoryOne())
-    dispatch(getCategoryTwo())
+    dispatch(getCategoryTwo()).then((res)=>{
+      console.log(res.data)
+    })
     // dispatch(getCategoryThree())
      dispatch(getSwvl())
 
@@ -250,18 +254,14 @@ onSelect={(e) => alert(selectedItems1)}
     style={styles.FlatList}
       data={filteredcategoryOne}
       renderItem={({ item }) => (
-        <TouchableOpacity onPressIn={() => {
-          console.log("first");
-          props.navigation.navigate('Discreption', { data : item});
-        }}>
-        
+       
         <View style={styles.card_con}>
             <Image
             style={styles.card_con_img}
               width={170}
               height={170}
               source={{
-                uri: `http://10.171.240.66:5000/${item.images[0]}`,
+                uri: `http://${ip}:5000/${item.images[0]}`,
               }}
             />
 
@@ -282,8 +282,13 @@ onSelect={(e) => alert(selectedItems1)}
              
               </View>
             </View>
-          </View>
+            <TouchableOpacity onPressIn={() => {
+          console.log("first");
+          props.navigation.navigate('Discreption', { data : item});
+        }}> 
+            <Text >See Details</Text>
           </TouchableOpacity>
+          </View>
       )}
       keyExtractor={(item) => item._id}
     />
@@ -294,13 +299,14 @@ onSelect={(e) => alert(selectedItems1)}
     <FlatList
       data={filteredcategoryTwo}
       renderItem={({ item }) => (
+       
         <View style={styles.card_con}>
             <Image
             style={styles.card_con_img}
               width={170}
               height={170}
               source={{
-                uri: `http://10.171.240.66:5000/${item.images[0]}`,
+                uri: `http://${ip}:5000/${item.images[0]}`,
               }}
             />
 
@@ -318,10 +324,18 @@ onSelect={(e) => alert(selectedItems1)}
               <View style={styles.card_con_info_row}>
                <Icon  name='anchor' size={18} color={'#166582'} />
                 <Text style={styles.card_con_info_row_type}> {item.portName} </Text>
-             
+
               </View>
             </View>
+
+                <TouchableOpacity onPressIn={() => {
+          console.log("first");
+          props.navigation.navigate('Discreption', { data : item});
+        }}> 
+            <Text >See Details</Text>
+          </TouchableOpacity>
           </View>
+
       )}
       keyExtractor={(item) => item._id}
 
@@ -339,7 +353,7 @@ onSelect={(e) => alert(selectedItems1)}
               width={170}
               height={170}
               source={{
-                uri: `http://10.171.240.66:5000/${item.boat.images[0]}`,
+                uri: `http://${ip}:5000/${item.boat.images[0]}`,
               }}
             />
 

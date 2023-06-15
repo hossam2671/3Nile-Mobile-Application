@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Cookies from "js-cookie";
-
+import ip from '../../config'
 
 
 
@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 // هنا بدات ندي :)
 export const register =createAsyncThunk("nada/register", async (payload) => {
 console.log(payload)
-axios.post(`http://10.171.240.66:5000/${payload.radiovalue}/register`, {
+axios.post(`http://${ip}:5000/${payload.radiovalue}/register`, {
   
     name: payload.name,
     password: payload.password,
@@ -24,7 +24,7 @@ axios.post(`http://10.171.240.66:5000/${payload.radiovalue}/register`, {
 
 export const login = createAsyncThunk("allUser/login", async (payload) => {
   try {
-    const response = await axios.post('http://10.171.240.66:5000/login', {
+    const response = await axios.post(`http://${ip}:5000/login`, {
       password: payload.password,
       email: payload.email
     });
@@ -64,7 +64,7 @@ export const editUserInfo= createAsyncThunk ("/editUserInfo", async(payload )=>{
 // console.log(payload,"Payload")
 console.log(payload.img)
 // console.log(payload.userData._id)
-axios.put(`http://10.171.240.66:5000/user/editUserinfo/${payload.id}`,{
+axios.put(`http://${ip}:5000/user/editUserinfo/${payload.id}`,{
 
 name: payload.name,
 address:payload.address,
@@ -83,7 +83,7 @@ img:payload.img,
 export const addReview= createAsyncThunk ("/addReview", async(payload )=>{
   console.log(payload,"Payload")
 
-   const res = axios.post(`http://10.171.240.66:5000/user/addReview`,{
+   const res = axios.post(`http://${ip}:5000/user/addReview`,{
   
   boatId: payload.boatId,
   clientId:payload.clientId,
@@ -98,7 +98,7 @@ export const addReview= createAsyncThunk ("/addReview", async(payload )=>{
 export const canceltrip= createAsyncThunk ("/cancelTrip", async(payload )=>{
   console.log(payload,"Payload")
 
-  let res =axios.put(`http://10.171.240.66:5000/user/cancelTrip`,{
+  let res =axios.put(`http://${ip}:5000/user/cancelTrip`,{
   
   id: payload,
 
@@ -112,7 +112,7 @@ export const OwnerdeleteBoat = createAsyncThunk("boatOwner/Boats", async (payloa
   
   try {
 
-      let res = await axios.delete(`http://10.171.240.66:5000/boatOwner/deleteBoat/${payload.id}/${payload.ownerId}`);
+      let res = await axios.delete(`http://${ip}:5000/boatOwner/deleteBoat/${payload.id}/${payload.ownerId}`);
       console.log(res.data,"DATA AFTER");
       return res.data;
   }
@@ -125,7 +125,7 @@ export const OwnerdeleteBoat = createAsyncThunk("boatOwner/Boats", async (payloa
 // get user pending trips
 export const pendingTrips = createAsyncThunk("user/pendingTrips", async (payload) => {
   try {
-      let res = await axios.get(`http://10.171.240.66:5000/user/userTrips/pending/${payload.id}`);
+      let res = await axios.get(`http://${ip}:5000/user/userTrips/pending/${payload.id}`);
       return res;
   }
   catch (err) {
@@ -136,7 +136,7 @@ export const pendingTrips = createAsyncThunk("user/pendingTrips", async (payload
 // get user accepted trips
 export const acceptedTrips = createAsyncThunk("user/acceptedTrips", async (payload) => {
   try {
-      let res = await axios.get(`http://10.171.240.66:5000/user/userTrips/accepted/${payload.id}`);
+      let res = await axios.get(`http://${ip}:5000/user/userTrips/accepted/${payload.id}`);
       return res;
   }
   catch (err) {
@@ -146,7 +146,7 @@ export const acceptedTrips = createAsyncThunk("user/acceptedTrips", async (paylo
 // get user finished trips
 export const finishedTrips = createAsyncThunk("user/finishedTrips", async (payload) => {
   try {
-      let res = await axios.get(`http://10.171.240.66:5000/user/userTrips/finished/${payload.id}`);
+      let res = await axios.get(`http://${ip}:5000/user/userTrips/finished/${payload.id}`);
       return res;
   }
   catch (err) {
@@ -156,7 +156,7 @@ export const finishedTrips = createAsyncThunk("user/finishedTrips", async (paylo
 // hossam بدا هنا البشمهندس
 export const getAllBoats = createAsyncThunk("user/boats", async (payload) => {
     try {
-        let res = await axios.get('http://10.171.240.66:5000/user/boats');
+        let res = await axios.get(`http://${ip}:5000/user/boats`);
         return res;
     }
     catch (err) {
@@ -167,9 +167,9 @@ export const getAllBoats = createAsyncThunk("user/boats", async (payload) => {
 export const getCategoryOne = createAsyncThunk("user/category/3nile/boats", async (payload) => {
 
     try {
-        let res = await axios.get('http://10.171.240.66:5000/user/category/3nile/boats');
+        let res = await axios.get(`http://${ip}:5000/user/category/3nile/boats`);
         // console.log(res.data , "3nile")
-       
+          console.log(ip)
         return res.data;
     }
     catch (err) {
@@ -179,7 +179,7 @@ export const getCategoryOne = createAsyncThunk("user/category/3nile/boats", asyn
 })
 export const getCategoryTwo = createAsyncThunk("user/category/3nileplus/boats", async (payload) => {
     try {
-        let res = await axios.get('http://10.171.240.66:5000/user/category/3nileplus/boats');
+        let res = await axios.get(`http://${ip}:5000/user/category/3nileplus/boats`);
         // console.log(res.data , "3nilePlus")
         return res;
     }
@@ -190,7 +190,7 @@ export const getCategoryTwo = createAsyncThunk("user/category/3nileplus/boats", 
 })
 export const getCategoryThree = createAsyncThunk("user/category/3nilevip/boats", async (payload) => {
     try {
-        let res = await axios.get('http://10.171.240.66:5000/user/category/3nilevip/boats');
+        let res = await axios.get(`http://${ip}:5000/user/category/3nilevip/boats`);
         return res;
     }
     catch (err) {
@@ -200,7 +200,7 @@ export const getCategoryThree = createAsyncThunk("user/category/3nilevip/boats",
 })
 export const getSwvl = createAsyncThunk("swvl/swvlTrips", async (payload) => {
   try {
-      let res = await axios.get('http://10.171.240.66:5000/swvl/swvlTrips');
+      let res = await axios.get(`http://${ip}:5000/swvl/swvlTrips`);
       console.log(res)
       return res;
   }
@@ -214,7 +214,7 @@ export const getOwnerBoats = createAsyncThunk("boatOwner/Boats", async (payload)
   
     try {
   
-        let res = await axios.get(`http://10.171.240.66:5000/boatOwner/getAllBoats/${payload}`);
+        let res = await axios.get(`http://${ip}:5000/boatOwner/getAllBoats/${payload}`);
         return res;
     }
     catch (err) {
@@ -226,7 +226,7 @@ export const getOwnerPreviousTrips = createAsyncThunk("boatOwner/Boats", async (
   
     try {
   
-        let res = await axios.get(`http://10.171.240.66:5000/boatOwner/getAllFinishedTrips/${payload}`);
+        let res = await axios.get(`http://${ip}:5000/boatOwner/getAllFinishedTrips/${payload}`);
         // console.log(res);
         return res;
     }
@@ -239,7 +239,7 @@ export const getOwnerRequests = createAsyncThunk("boatOwner/Boats", async (paylo
   
     try {
   
-        let res = await axios.get(`http://10.171.240.66:5000/boatOwner/getAllPendingTrips/${payload}`);
+        let res = await axios.get(`http://${ip}:5000/boatOwner/getAllPendingTrips/${payload}`);
         // console.log(res);
 
         return res;
@@ -253,7 +253,7 @@ export const getOwnerCurrentTrips = createAsyncThunk("boatOwner/Boats/current", 
   
     try {
   
-        let res = await axios.get(`http://10.171.240.66:5000/boatOwner/getAllCurrentTrips/${payload}`);
+        let res = await axios.get(`http://${ip}:5000/boatOwner/getAllCurrentTrips/${payload}`);
         // console.log(res);
 
         return res;
@@ -268,7 +268,7 @@ export const getOwnerCurrentTrips = createAsyncThunk("boatOwner/Boats/current", 
 
 export const getBoatData = createAsyncThunk("getBoat", async (payload) => {
     try {
-        let Data = await axios.get(`http://10.171.240.66:5000/user/boat/${payload}`);
+        let Data = await axios.get(`http://${ip}:5000/user/boat/${payload}`);
       
         return Data.data;
     }
@@ -289,7 +289,7 @@ export const addTrip = createAsyncThunk("fatma/addTrip", async (payload) => {
  console.log(dateOnly)
  const timeOnly=payload.startTime.toString().split("T")[1].split(" ")[4]
  console.log(payload.startTime)
-  const response = await axios.post(`http://10.171.240.66:5000/user/addTrip/${payload.boatId}/${payload.id}`, {
+  const response = await axios.post(`http://${ip}:5000/user/addTrip/${payload.boatId}/${payload.id}`, {
     date: dateOnly, 
     startTime:timeOnly,
     hours:payload.hours,
@@ -304,7 +304,7 @@ export const ownerUpdateInfo= createAsyncThunk ("/editOwnerInfo", async(payload 
   console.log(payload,"Payload")
   console.log(payload.img)
   // console.log(payload.userData._id)
-  await axios.put(`http://10.171.240.66:5000/boatOwner/updateData/${payload.boatOwnerId}`,{
+  await axios.put(`http://${ip}:5000/boatOwner/updateData/${payload.boatOwnerId}`,{
   
   name: payload.name,
   address:payload.address,
@@ -336,7 +336,9 @@ const UserSlice = createSlice({
       ,ownerBoatsNum:null,pending:[],finished:[],accepted:[]
       ,filteredcategoryOne : [] ,filteredcategoryTwo : [],
         filteredcategoryThree : [],
-      radioButtonValue:"",boatOwner:null,anyUser:null,ownerBoats:[]
+      radioButtonValue:"",boatOwner:null,anyUser:null,ownerBoats:[],
+
+      ip:"192.168.220.1"
     },
 
 

@@ -17,6 +17,10 @@ import { DatePickerModal } from 'react-native-paper-dates';
 
 import { TimePickerModal } from 'react-native-paper-dates';
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useSelector } from 'react-redux';
+
+import ip from '../config'
+
 const renderPagination = (index, total, context) => {
     return (
         <View style={styles.paginationStyle}>
@@ -173,7 +177,7 @@ export const Discreption = () => {
                         console.log("first");
                         return (
                             <View style={styles.slide} key={item}>
-                                <Image style={styles.image} source={{ uri: `http://10.171.240.66:5000/${item}` }} />
+                                <Image style={styles.image} source={{ uri: `http://${ip}:5000/${item}` }} />
                             </View>
                         );
                     })}

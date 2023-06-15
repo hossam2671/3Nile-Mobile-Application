@@ -148,8 +148,9 @@ const LoginSignUp = (props) => {
     }
   }
   function loginn(){
-    console.log(logEmail,logPassword)
-    dispatch(login({email:logEmail,password:logPassword})).then(()=>{
+    // console.log(logEmail,logPassword)
+    dispatch(login({email:logEmail,password:logPassword})).then((res)=>{
+      console.log(res.status)
       setLogEmail("")
       setLogPassword("")
       if(user){

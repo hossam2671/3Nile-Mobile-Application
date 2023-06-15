@@ -1,17 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native';
 import UserProfile from './Screens/UserProfile'
-<<<<<<< Updated upstream
 
 
-=======
->>>>>>> Stashed changes
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import BottomNavigatTab from './Screens/BottomNavigatTab';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
 
-
+import {createNativeStackNavigator} from "@react-navigation/native-stack"
 import HomeCards from './Screens/HomeCards';
 
 
@@ -56,11 +53,7 @@ export default function App() {
             <Stack.Screen name='ContactUs' component={ContactUs} />
             <Stack.Screen name='Discreption' component={Discreption} />
             <Stack.Screen name='Filter' component={Filter} />
-<<<<<<< Updated upstream
-            <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
-=======
             {/* <Stack.Screen name='HomeCards' component={HomeCards} /> */}
->>>>>>> Stashed changes
             <Stack.Screen name='LoginSignUp' component={LoginSignUp} />
             <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
 

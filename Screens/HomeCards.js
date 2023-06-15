@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useState } from 'react';
-import bk from '../assets/ice-3_cleanupp_auto_x2.jpg'
-import boat from '../assets/ice-3-removebg-preview.png'
-import { Video } from 'expo-av'
+
+
+import { ResizeMode, Video } from 'expo-av'
 import * as Animatable from 'react-native-animatable';
 
 // import bk from '../assets/ice-3_cleanupp_auto_x2.jpg'
@@ -24,7 +24,7 @@ const HomeCards = (props) => {
 
         <Video
           ref={vid}
-          resizeMode="contain"
+          resizeMode={ResizeMode.COVER}
           shouldPlay
           isMuted
           onLoad={() => {
@@ -37,14 +37,21 @@ const HomeCards = (props) => {
           source={require('../assets/homeV.mp4')
           }
 
-          style={{ height: 700, backgroundColor: 'red' }}
+          style={{ height: 700 }}
         />
-        {viewed &&
+        {/* {viewed &&
 
           <Animatable.Text iterationDelay={5} style={styles.homeVBtn} animation="slideInDown" iterationCount={Infinity} direction="alternate">go!</Animatable.Text>
 
-        }
-
+        } */}
+   <TouchableOpacity onPressIn={() => {
+            console.log("first");
+            props.navigation.navigate('Filter', { num: 1 });
+          }}>
+            <View style={styles.card__button}>
+              <Text style={styles.card__button__text}>See more</Text>
+            </View>
+          </TouchableOpacity>
 
 
         <View style={styles.home__cards}>
@@ -68,12 +75,12 @@ const HomeCards = (props) => {
 
       <View>
         <Image source={boat} resizeMode='contain' style={styles.boat__style} />
-      </View> */
+      </View> 
       <View style={styles.home__cards}>
         <Image source={bk} style={styles.bk__style} />
       </View>
       <View style={styles.card__content}>
-        <Text style={styles.card__text}>Hi this is my category, Hi this is my category, Hi this is my category</Text>
+        <Text style={styles.card__text}>Hi tdsadsadsa is my category, Hi this is my category, Hi this is my category</Text>
         <TouchableOpacity onPress={() => {
 
         }}>
@@ -86,7 +93,7 @@ const HomeCards = (props) => {
           <Image source={bk} style={styles.bk__style} />
         </View>
         <View style={styles.card__content}>
-          <Text style={styles.card__text}>Hi this is my category, Hi this is my category, Hi this is my category</Text>
+          <Text style={styles.card__text}>Hi this 22222ory, Hi this is my category, Hi this is my category</Text>
           <TouchableOpacity onPressIn={() => {
             props.navigation.navigate('Filter', { num: 2 })
           }}>
