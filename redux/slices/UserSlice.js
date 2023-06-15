@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 // هنا بدات ندي :)
 export const register =createAsyncThunk("nada/register", async (payload) => {
 console.log(payload)
-axios.post(`http://192.168.220.1:5000/${payload.radiovalue}/register`, {
+axios.post(`http://10.171.240.172:5000/${payload.radiovalue}/register`, {
   
     name: payload.name,
     password: payload.password,
@@ -24,7 +24,7 @@ axios.post(`http://192.168.220.1:5000/${payload.radiovalue}/register`, {
 
 export const login = createAsyncThunk("allUser/login", async (payload) => {
   try {
-    const response = await axios.post('http://192.168.220.1:5000/login', {
+    const response = await axios.post('http://10.171.240.172:5000/login', {
       password: payload.password,
       email: payload.email
     });
@@ -544,14 +544,14 @@ const UserSlice = createSlice({
       
        } ,
        [login.fulfilled]: (state, action) => {
-        //  console.log(action.payload)
-         if(action.payload.boatOwnerData){
+          console.log(action.payload.boatOwner)
+         if(action.payload.boatOwner){
             state.boatOwner=action.payload.boatOwnerData
             console.log(state.boatOwner)
           }
           else{
             state.user=action.payload.userData
-            console.log(state.user)
+             console.log(state.user)
         }
         // state.anyUser = action.payload;
       

@@ -1,7 +1,14 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
+<<<<<<< Updated upstream
 import bk from '../assets/ice-3_cleanupp_auto_x2.jpg'
 import boat from '../assets/ice-3-removebg-preview.png'
+=======
+// import bk from '../assets/ice-3_cleanupp_auto_x2.jpg'
+// import boat from '../assets/ice-3-removebg-preview.png'
+import bk from '../assets/bkk.jpeg'
+import boat from '../assets/boatt.png'
+>>>>>>> Stashed changes
 
 const HomeCards = (props) => {
   function hello(){
@@ -31,6 +38,24 @@ const HomeCards = (props) => {
       </View>
 
       <View>
+<<<<<<< Updated upstream
+=======
+        <Image source={boat} resizeMode='contain' style={styles.boat__style} />
+      </View> */}
+      <View style={styles.home__cards}>
+        <Image source={bk} style={styles.bk__style} />
+      </View>
+      <View style={styles.card__content}>
+        <Text style={styles.card__text}>Hi this is my category, Hi this is my category, Hi this is my category</Text>
+        <TouchableOpacity onPress={() => {
+
+        }}>
+          <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
+        </TouchableOpacity>
+      </View>
+      <View>
+        <Image source={boat} resizeMode='contain' style={styles.boat__style} />
+>>>>>>> Stashed changes
         <View style={styles.home__cards}>
           <Image source={bk} style={styles.bk__style} />
         </View>

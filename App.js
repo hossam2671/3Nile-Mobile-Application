@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
 import UserProfile from './Screens/UserProfile'
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import BottomNavigatTab from './Screens/BottomNavigatTab';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -26,7 +28,6 @@ import ContactUs from './Screens/ContactUs';
 import { Provider } from 'react-redux'
 import { Store } from './redux/Store';
 
-const Stack = createNativeStackNavigator();
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -55,8 +56,14 @@ export default function App() {
             <Stack.Screen name='ContactUs' component={ContactUs} />
             <Stack.Screen name='Descreption' component={Discreption} />
             <Stack.Screen name='Filter' component={Filter} />
+<<<<<<< Updated upstream
             <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
+=======
+            {/* <Stack.Screen name='HomeCards' component={HomeCards} /> */}
+>>>>>>> Stashed changes
             <Stack.Screen name='LoginSignUp' component={LoginSignUp} />
+            <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
+
             </Stack.Navigator>
             <StatusBar style='light' />
             </NavigationContainer>
