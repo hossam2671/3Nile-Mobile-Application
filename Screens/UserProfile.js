@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import React, { Component, useEffect, useState } from 'react';
 import coverImage from '../assets/cover.jpg';
 import userProfile from '../assets/userimage.jpg';
@@ -7,8 +7,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import IIcon from 'react-native-vector-icons/Ionicons';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
-import {addReview , canceltrip , pendingTrips , finishedTrips} from '../redux/slices/UserSlice'
-import ip from '../config'
+import { addReview, canceltrip, pendingTrips, finishedTrips, editUserInfo } from '../redux/slices/UserSlice';
+import Modal from "react-native-modal";
+import * as ImagePicker from 'expo-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
+
 
 
 
@@ -20,79 +23,225 @@ export const UserProfile = () => {
   const dispatch = useDispatch();
 
   //get trips
-  // const [tap, setTap] = useState("accepted")
+  const [tap, setTap] = useState("accepted")
   // const { accepted } = useSelector(state => state.UserSlice)
-  // const { finished } = useSelector(state => state.UserSlice)
+  const { finished } = useSelector(state => state.UserSlice)
   // const { pending } = useSelector(state => state.UserSlice)
-  // useEffect(() => {
-  //   //console.log(user);
-  //   // console.log(editUserInfo);
-  //   dispatch(finishedTrips({ id: user.userData._id }))
-  //   dispatch(acceptedTrips({ id: user.userData._id }))
-  //   dispatch(pendingTrips({ id: user.userData._id }))
 
-  // }, []);
+  useEffect(() => {
+   
+    //console.log(user);
+    // console.log(editUserInfo);
 
-  // function pend() {
-  //   setTap("pending")
-  //   console.log(pending)
-  // }
-  // function accep() {
-  //   setTap("accepted")
-  // }
-  // function prev() {
-  //   setTap("finished")
-  // }
+    // dispatch(finishedTrips({ id: user._id }))
+    // dispatch(acceptedTrips({ id: user._id }))
+    // dispatch(pendingTrips({ id: user._id }))
+  }, []);
+
+  function pend() {
+    setTap("pending")
+    // console.log(pending)
+  }
+  function accep() {
+    setTap("accepted")
+  }
+  function prev() {
+    setTap("finished")
+  }
+
+  //modal
+  const [visibleModal, setVisibleModal] = useState(false);
+  const [name, setName] = useState("")
+  const [phone, setPhone] = useState("")
+  const [address, setAddress] = useState("")
+  const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    await getLibraryPermission();
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      console.log(image)
+    }
+  };
+
+  const getLibraryPermission = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      console.log('Permission denied');
+    }
+  };
+
+
+  const renderButton = (text, onPress) => (
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.button}>
+        <Text >{text}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
+  const renderModalContent = () => (
+    <View style={styles.modalContent}>
+      <View style={styles.select}>
+
+        <Text style={styles.edit__text}>Edit your Details</Text>
+
+
+        <TextInput style={styles.modal__profile__input}
+          placeholder={user.name}
+          placeholderTextColor="black"
+          onChangeText={(e) => setName(e)}
+        />
+        <TextInput style={styles.modal__profile__input}
+          placeholder={user.phone}
+          placeholderTextColor="black"
+          onChangeText={(e) => setPhone(e)}
+
+        />
+
+        <TextInput style={styles.modal__profile__input}
+          placeholder={user.address ? user.address : "Address"}
+          placeholderTextColor="black"
+          onChangeText={(e) => {
+            setAddress(e)
+            console.log(e)
+          }
+          }
+
+
+        />
+
+
+
+        <Button title="Pick an image from camera roll" onPress={pickImage} />
+
+        <TouchableOpacity onPressIn={()=>{
+          setVisibleModal(true)
+            const updatedUser = {
+              name: name ||user.name,
+              phone: phone ||user.phone,
+              address:address ||user.address,
+              id: user._id,
+              img: image || user.img,
+            };
+            console.log(updatedUser)
+            dispatch(editUserInfo({updatedUser})).then((res)=>{
+              
+
+              // console.log(res,"Resssssssssssssss")
+              setVisibleModal(false)
+  
+            })
+        }}><Text>Push</Text></TouchableOpacity>
+
+
+      </View>
+
+      
+    </View>
+  );
+
+  
+
 
 
 
 
   return (
     <ScrollView contentContainerStyle={styles.profile__container}>
+
+      <Modal isVisible={visibleModal} style={styles.bottomModal}>
+
+        {renderModalContent()}
+
+
+    
+      </Modal>
+
+
+
+
       <View>
         <Image source={coverImage} style={styles.profile__cover__image} />
       </View>
       <View>
-        <Image source={`http://${ip}:5000/${user.img}`} style={styles.profile__user__image} />
+        <Image source={`http://10.171.240.172:5000/${user.img}`} style={styles.profile__user__image} />
       </View>
 
       <View style={styles.user__profile__info__left}>
         <Text style={styles.text__align__center}>{user.name}</Text>
-        <Text style={styles.text__align__center}>{user.email}</Text>
+        <Text style={styles.text__align__center}>{user.phone}</Text>
       </View>
       <View style={styles.user__profile__info__right}>
-        <Button
-          title="Edit Profile"
-          onPress={() => {
-            // Handle button press
-          }}
+        <TouchableOpacity
+          isVisible={visibleModal === 1}
           style={styles.button}
-        />
+          onPress={() => {
+            setVisibleModal(1);
+          }}
+        >
+          <Text style={styles.buttonText}>Edit Profile</Text>
+        </TouchableOpacity>
       </View>
+
       <View style={styles.border__bottom}>
       </View>
       <View style={styles.profile__tabs}>
-        {/* <TouchableOpacity onPress={() => { accep }}>
+        <TouchableOpacity onPressIn={() => { accep }}>
           <View style={styles.tabs__button}><Text style={styles.tabs__font__style}>Preovious Trips</Text></View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => { pend }}>
+        <TouchableOpacity onPressIn={() => { pend }}>
           <View style={styles.tabs__button}><Text style={styles.tabs__font__style}>Pending Trips</Text></View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => { prev }}>
+        <TouchableOpacity onPressIn={() => { prev }}>
           <View style={styles.tabs__button}><Text style={styles.tabs__font__style}>Finished Trips</Text></View>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         {/* <TouchableOpacity onPress={() => {
 
         }}>
           <View style={styles.tabs__button}><Text style={styles.tabs__font__style}>Finished Trips</Text></View>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
-
-
-      {/* <View style={styles.profile__cards}>
-      {tap === 'pending' &&
+      <View style={styles.profile__cards}>
+      {/* {tap === 'pending' &&
         pending.map((item) => {
-          return <View style={styles.card}>
+          return <View style={styles.card} key={item.id} data={{...item,tap:tap}}>
+          <Image source={card} style={styles.profile__card__image} />
+          <View style={styles.card__content}>
+            <Text style={styles.card__text}>
+              {item.name}
+            </Text>
+            <Text style={styles.card__text}>
+              {item.email}
+            </Text>
+          </View>
+
+          <View style={styles.stars__rating}>
+            <Icon name="star" size={10} color='yellow' />
+            <Icon name="star" size={10} color='yellow' />
+            <Icon name="star" size={10} color='yellow' />
+            <Icon name="star" size={10} color='yellow' />
+            <Icon name="star" size={10} color='yellow' />
+          </View>
+          <View style={styles.boat__loc}>
+            <IIcon style={styles.icon__loc} name='location' size={10} />
+            <Text style={styles.text__loc}>Port: El-Mahata</Text>
+          </View>
+        </View> ;
+        })}
+
+      {tap === 'accepted' &&
+        accepted.map((item) => {
+          return <View style={styles.card} key={item.id} data={{...item,tap:tap}}>
           <Image source={card} style={styles.profile__card__image} />
           <View style={styles.card__content}>
             <Text style={styles.card__text}>
@@ -117,8 +266,37 @@ export const UserProfile = () => {
         </View> ;
         })} */}
 
-        
-<View style={styles.profile__cards}>
+        {tap === 'finished' &&
+          finished.map((item) => {
+            return <View style={styles.card} key={item.id} data={{ ...item, tap: tap }}>
+              <Image source={card} style={styles.profile__card__image} />
+              <View style={styles.card__content}>
+                <Text style={styles.card__text}>
+                  {item.name}
+                </Text>
+                <Text style={styles.card__text}>
+                  {item.hours}
+                </Text>
+              </View>
+
+              <View style={styles.stars__rating}>
+                <Icon name="star" size={10} color='yellow' />
+                <Icon name="star" size={10} color='yellow' />
+                <Icon name="star" size={10} color='yellow' />
+                <Icon name="star" size={10} color='yellow' />
+                <Icon name="star" size={10} color='yellow' />
+              </View>
+              <View style={styles.boat__loc}>
+                <IIcon style={styles.icon__loc} name='location' size={10} />
+                <Text style={styles.text__loc}>{item.status}</Text>
+              </View>
+            </View>;
+          })}
+
+
+
+
+        {/* <View style={styles.profile__cards}>
         <View style={styles.card}>
           <Image source={card} style={styles.profile__card__image} />
           <View style={styles.card__content}>
@@ -213,7 +391,7 @@ export const UserProfile = () => {
             <IIcon style={styles.icon__loc} name='location' size={10} />
             <Text style={styles.text__loc}>Port: El-Mahata</Text>
           </View>
-        </View>
+        </View> */}
 
 
       </View>
@@ -341,6 +519,41 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     top: -70,
     right: -5,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modal__profile__input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    width: '100%',
+    marginBottom: 20,
+    width: 270,
+    height: 40,
+    padding: 5,
+  },
+  button: {
+    backgroundColor: '#d94242',
+    borderRadius: 5,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  edit__text: {
+    fontSize: 20,
+    fontWeight: 600,
+    padding: 10,
+    textAlign: 'center',
   },
 
 });

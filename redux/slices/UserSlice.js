@@ -62,21 +62,18 @@ export const login = createAsyncThunk("allUser/login", async (payload) => {
 
 export const editUserInfo= createAsyncThunk ("/editUserInfo", async(payload )=>{
 // console.log(payload,"Payload")
-console.log(payload.img)
+console.log(payload,"payload")
 // console.log(payload.userData._id)
-axios.put(`http://${ip}:5000/user/editUserinfo/${payload.id}`,{
-
-name: payload.name,
-address:payload.address,
-phone: payload.phone,
-img:payload.img,
+const result =   axios.put(`http://${ip}:5000/user/editUserinfo/${payload.updatedUser.id}`,{
+for
 },{
   headers:{
     'Content-Type':'multipart/form-data' 
   } 
-}).then(res => {
-  console.log(res);
 })
+return result
+
+
 })
 
 // add review 
@@ -535,6 +532,9 @@ const UserSlice = createSlice({
     },
     // 
     extraReducers: {
+      [editUserInfo.fulfilled]:(state,action) =>{
+          state.user = action.payload.data
+      },
        [ register.fulfilled]:(state,action)=>{
         console.log("fulfilled")
         console.log("first")
