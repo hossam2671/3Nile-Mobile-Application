@@ -24,6 +24,8 @@ import BoatOwnerProfile from './Screens/BoatOwnerProfile';
 import ContactUs from './Screens/ContactUs';
 import { Provider } from 'react-redux'
 import { Store } from './redux/Store';
+import { Modals } from  './Screens/modals/Modals';
+import Swvl from './Screens/Swvl';
 
 
 export default function App() {
@@ -45,20 +47,23 @@ export default function App() {
       <Provider store={Store}>
             <NavigationContainer>
             <Stack.Navigator screenOptions={{
-        headerStyle: { backgroundColor: '#72039a' },
+        headerStyle: { backgroundColor: '#f6f6f6' },
 
       }}>
-            <Stack.Screen name='OnboardingScreen' component={OnboardingScreen} />
-            <Stack.Screen name='BoatOwnerProfile' component={BoatOwnerProfile} />
-            <Stack.Screen name='ContactUs' component={ContactUs} />
-            <Stack.Screen name='Discreption' component={Discreption} />
-            <Stack.Screen name='Filter' component={Filter} />
+            
+            <Stack.Screen name='OnboardingScreen 'options={{ headerShown: false }} component={OnboardingScreen} />
+
+            <Stack.Screen name='BoatOwnerProfile' options={{ headerShown: true }} component={BoatOwnerProfile} />
+            <Stack.Screen name='ContactUs' options={{ headerShown: true }} component={ContactUs} />
+            <Stack.Screen name='Discreption'  options={{ headerShown: true }}component={Discreption} />
+            <Stack.Screen name='Filter' options={{ headerShown: true }} component={Filter} />
             {/* <Stack.Screen name='HomeCards' component={HomeCards} /> */}
-            <Stack.Screen name='LoginSignUp' component={LoginSignUp} />
+            <Stack.Screen name='LoginSignUp'  options={{ headerShown: false }} component={LoginSignUp} />
+            <Stack.Screen name='swvl'  component={Swvl} />
             <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
 
             </Stack.Navigator>
-            <StatusBar style='light' />
+            <StatusBar style='dark' />
             </NavigationContainer>
       </Provider>
 
