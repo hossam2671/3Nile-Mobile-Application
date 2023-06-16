@@ -84,6 +84,7 @@ const OnboardingScreen = ({navigation}) => {
           justifyContent: 'space-between',
           paddingHorizontal: 20,
         }}>
+          
         {/* Indicator container */}
         <View
           style={{
@@ -163,6 +164,7 @@ const OnboardingScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.primary}}>
       <StatusBar backgroundColor={COLORS.primary} />
+      
       <FlatList
         ref={ref}
         onMomentumScrollEnd={updateCurrentSlideIndex}
@@ -173,6 +175,9 @@ const OnboardingScreen = ({navigation}) => {
         pagingEnabled
         renderItem={({item}) => <Slide item={item} />}
       />
+
+
+
       <Footer />
     </SafeAreaView>
   );

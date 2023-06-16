@@ -567,7 +567,7 @@ const UserSlice = createSlice({
           }
           else{
             state.user=action.payload.userData
-             console.log(state.user)
+             console.log(state.user,"User Data From Slice")
         }
         // state.anyUser = action.payload;
       

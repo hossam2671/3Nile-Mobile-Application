@@ -12,6 +12,7 @@ import {
   Dimensions,
   TextInput,
   Pressable,
+  Touchable,
 } from "react-native";
 import Video from 'react-native-video';
 import video from './boat.mp4';
@@ -27,7 +28,13 @@ import Animated, {
   withSequence,
   withSpring,
 } from "react-native-reanimated";
+
+
+
+
 const LoginSignUp = (props) => {
+  const [loggedIn, setLoggedIn] = useState(false);
+
   const { user } = useSelector(state => state.UserSlice)
   const { boatOwner } = useSelector(state => state.UserSlice)
   const { height, width } = Dimensions.get("window");
@@ -137,7 +144,7 @@ const LoginSignUp = (props) => {
   const [logEmail , setLogEmail] =useState("")
   function registerr(){
     console.log(regEmail)
-    dispatch(register({radiovalue:checked , email:regEmail , name:regName , password:regPassword})).then(() => {
+    dispatch(register({radiovalue:checked , email:regEmail , name:regName , password:regPassword})).then((res) => {
       setRegEmail("")
       setRegName("")
       setRegPassword("")
@@ -148,23 +155,37 @@ const LoginSignUp = (props) => {
     }
   }
   function loginn(){
+        
     // console.log(logEmail,logPassword)
-    dispatch(login({email:logEmail,password:logPassword})).then((res)=>{
-      console.log(res.status)
-      setLogEmail("")
-      setLogPassword("")
-      if(user){
-        props.navigation.navigate('HomeCards')
-      }
-      else if(boatOwner){
-        props.navigation.navigate('BoatOwnerProfile')
+    dispatch(login({email:logEmail,password:logPassword}))
+    .then((res)=>{
+   
+        if(res.payload){
 
-      }
-      
+          setTimeout(()=>{
+            if(res.payload.user){
+              setLoggedIn(true)
+              props.navigation.navigate('HomeCards')
+            }
+            else if(res.payload.boatOwner){
+              props.navigation.navigate('BoatOwnerProfile')
+              
+            }
+            
+            
+          },2000)
+        }
+  
+    }).catch((error)=>{
+      console.log(error);
     })
   }
   return (
-    <Animated.View style={styles.container}>
+
+      <>
+ 
+
+    <Animated.View  style={styles.container}>
       <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
         <Svg height={height + 100} width={width}>
           <ClipPath id="clipPathId">
@@ -295,10 +316,12 @@ const LoginSignUp = (props) => {
               </Text>
             </Pressable>
           )}
+           
           </Animated.View>
         </Animated.View>
       </View>
     </Animated.View>
+    </>
   );
 };
 
