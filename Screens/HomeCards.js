@@ -7,7 +7,7 @@ import * as Animatable from 'react-native-animatable';
 
 // import bk from '../assets/ice-3_cleanupp_auto_x2.jpg'
 // import boat from '../assets/ice-3-removebg-preview.png'
-import bk from '../assets/bkk.jpeg'
+import bk from '../assets/homecardimg.png'
 import boat from '../assets/boatt.png'
 
 
@@ -19,9 +19,9 @@ const HomeCards = (props) => {
   }
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
-      <View style={styles.container}>
-
-
+     
+   
+<View style={styles.vidio_con}>
         <Video
           ref={vid}
           resizeMode={ResizeMode.COVER}
@@ -31,30 +31,25 @@ const HomeCards = (props) => {
             setTimeout(() => {
               setViewed(true)
               console.log("first")
+              
             }, 5000)
           }}
           isLooping
           source={require('../assets/homeV.mp4')
           }
 
-          style={{ height: 700 }}
+          style={{ height: 700,}}
         />
+        </View>
         {/* {viewed &&
 
           <Animatable.Text iterationDelay={5} style={styles.homeVBtn} animation="slideInDown" iterationCount={Infinity} direction="alternate">go!</Animatable.Text>
 
         } */}
-   <TouchableOpacity onPressIn={() => {
-            console.log("first");
-            props.navigation.navigate('Filter', { num: 1 });
-          }}>
-            <View style={styles.card__button}>
-              <Text style={styles.card__button__text}>See more</Text>
-            </View>
-          </TouchableOpacity>
+ 
 
 
-        <View style={styles.home__cards}>
+        {/* <View style={styles.home__cards}>
           <Image source={bk} style={styles.bk__style} />
         </View>
         <View style={styles.card__content}>
@@ -70,26 +65,35 @@ const HomeCards = (props) => {
         </View>
         <View>
           <Image source={boat} resizeMode='contain' style={styles.boat__style} />
-        </View>
-      </View>
+        </View> */}
+     
 
-      <View>
-        <Image source={boat} resizeMode='contain' style={styles.boat__style} />
-      </View> 
+
+
+
+     <View style={styles.container}>
+        <View>
       <View style={styles.home__cards}>
-        <Image source={bk} style={styles.bk__style} />
-      </View>
-      <View style={styles.card__content}>
-        <Text style={styles.card__text}>Hi tdsadsadsa is my category, Hi this is my category, Hi this is my category</Text>
-        <TouchableOpacity onPress={() => {
+          <Image source={bk} style={styles.bk__style} />
+        </View>
+        <View style={styles.card__content}>
+          <Text style={styles.card__text}>Hi this 22222ory, Hi this is my category, Hi this is my category</Text>
+          <TouchableOpacity onPressIn={() => {
+             props.navigation.navigate('Filter', { num: 1 });
+          }}>
+            <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
+          </TouchableOpacity>
+        </View>
 
-        }}>
-          <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
-        </TouchableOpacity>
       </View>
+
+    
+
+{/* nnnnnnnnnnnnnnnnnnnnnnnnnn */}
+   
+
       <View>
-        <Image source={boat} resizeMode='contain' style={styles.boat__style} />
-        <View style={styles.home__cards}>
+      <View style={styles.home__cards}>
           <Image source={bk} style={styles.bk__style} />
         </View>
         <View style={styles.card__content}>
@@ -100,15 +104,18 @@ const HomeCards = (props) => {
             <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
           </TouchableOpacity>
         </View>
-        <View>
-          <Image source={boat} resizeMode='contain' style={styles.boat__style} />
-        </View>
+     
       </View>
 
+
+
+{/* 22222222222222222222222 */}
       <View>
-        <View style={styles.home__cards}>
+      <View style={styles.home__cards}>
           <Image source={bk} style={styles.bk__style} />
+       
         </View>
+
         <View style={styles.card__content}>
           <Text style={styles.card__text}>Hi this is my category, Hi this is my category, Hi this is my category</Text>
           <TouchableOpacity onPressIn={() => {
@@ -117,12 +124,14 @@ const HomeCards = (props) => {
             <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
           </TouchableOpacity>
         </View>
+       
         <View>
-          <Image source={boat} resizeMode='contain' style={styles.boat__style} />
+         
         </View>
 
 
 
+      </View>
       </View>
     </ScrollView>
   )
@@ -133,29 +142,43 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flexGrow: 1,
     justifyContent: 'flex-start',
-    alignItems: 'center',
   },
-  home__cards: {
-    marginTop: 200,
-    width: 350,
-    height: 180,
-  },
-  bk__style: {
-    width: 355,
-    height: 180,
+  vidio_con:{
+    // width:200,
+    height:700,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
+  container:{
+    alignItems: 'center',
+    paddingBottom:20,
+  },
+  home__cards: {
+    marginTop: 50,
+    width: 350,
+    height: 180,
+    marginLeft:20,
+
+  },
+  bk__style: {
+    width: 355,
+    height: 210,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    
+  },
   boat__style: {
     width: 430,
-    top: -420,
-    left: 25,
+    left: 10,
+    // bottom:-410,
+    // top: 300,
+   
   },
   card__content: {
     backgroundColor: 'rgba(25, 25, 25, 0.162)',
     width: 355,
-    height: 120,
-    left: 3,
+    height: 150,
+    left: 20,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
     justifyContent: 'center',
@@ -166,7 +189,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
     fontSize: 17,
-    top: -15
+    // top: -,
   },
   card__button: {
     width: 80,
@@ -175,13 +198,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    top: -5,
+    top: 19,
+    color:"white",
   },
   card__botton__text: {
     textAlign: 'center',
+    color:"white",
   },
   homeVBtn: {
-    color: 'red', top: -100, left: 200, fontSize: 30
+    color: 'red',
+     top: -100, 
+     left: 200,
+      fontSize: 30
 
   }
 

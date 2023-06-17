@@ -375,6 +375,12 @@ onSelect={(e) => alert(selectedItems1)}
              
               </View>
             </View>
+            <TouchableOpacity onPressIn={() => {
+          console.log("first");
+          props.navigation.navigate('swvl', { data : item});
+        }}> 
+            <Text >See Details</Text>
+          </TouchableOpacity>
           </View>
       )}
       keyExtractor={(item) => item._id}
