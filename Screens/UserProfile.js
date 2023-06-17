@@ -10,7 +10,8 @@ import { useSelector } from "react-redux";
 import { addReview, canceltrip, pendingTrips, finishedTrips, editUserInfo } from '../redux/slices/UserSlice';
 import Modal from "react-native-modal";
 import * as ImagePicker from 'expo-image-picker';
-import { launchImageLibrary } from 'react-native-image-picker';
+import ip from '../config'
+
 
 
 
@@ -20,6 +21,7 @@ export const UserProfile = () => {
 
   //get user data
   const { user } = useSelector(state => state.UserSlice)
+
   const dispatch = useDispatch();
 
   //get trips
@@ -29,13 +31,16 @@ export const UserProfile = () => {
   // const { pending } = useSelector(state => state.UserSlice)
 
   useEffect(() => {
-   
+
     //console.log(user);
     // console.log(editUserInfo);
 
-    // dispatch(finishedTrips({ id: user._id }))
+    dispatch(finishedTrips({ id: user._id }))
+    // dispatch(editUserInfo({ id: user._id }))
+
     // dispatch(acceptedTrips({ id: user._id }))
     // dispatch(pendingTrips({ id: user._id }))
+
   }, []);
 
   function pend() {
@@ -50,35 +55,10 @@ export const UserProfile = () => {
   }
 
   //modal
-  const [visibleModal, setVisibleModal] = useState(false);
-  const [name, setName] = useState("")
-  const [phone, setPhone] = useState("")
-  const [address, setAddress] = useState("")
-  const [image, setImage] = useState(null);
-
-  const pickImage = async () => {
-    await getLibraryPermission();
-
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      console.log(image)
-    }
-  };
-
-  const getLibraryPermission = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      console.log('Permission denied');
-    }
-  };
+  const [visibleModal, setVisibleModal] = useState(null);
+  const [editName, setName] = useState("")
+  const [editPhone, setPhone] = useState("")
+  const [image, setImage] = useState(`http://${ip}:5000/${user.img}`);
 
 
   const renderButton = (text, onPress) => (
@@ -112,11 +92,9 @@ export const UserProfile = () => {
           placeholder={user.address ? user.address : "Address"}
           placeholderTextColor="black"
           onChangeText={(e) => {
-            setAddress(e)
             console.log(e)
           }
           }
-
 
         />
 
@@ -124,33 +102,44 @@ export const UserProfile = () => {
 
         <Button title="Pick an image from camera roll" onPress={pickImage} />
 
-        <TouchableOpacity onPressIn={()=>{
-          setVisibleModal(true)
-            const updatedUser = {
-              name: name ||user.name,
-              phone: phone ||user.phone,
-              address:address ||user.address,
-              id: user._id,
-              img: image || user.img,
-            };
-            console.log(updatedUser)
-            dispatch(editUserInfo({updatedUser})).then((res)=>{
-              
-
-              // console.log(res,"Resssssssssssssss")
-              setVisibleModal(false)
-  
-            })
-        }}><Text>Push</Text></TouchableOpacity>
 
 
       </View>
 
-      
+
+
+
+      {renderButton('Apply', () => {
+           const updatedUser = {
+            name: editName || user.name,
+            phone: editPhone || user.phone,
+            address: user.address,
+            img: image || user.img,
+          };
+    
+          dispatch(editUserInfo(updatedUser));
+          setVisibleModal(null);
+          ; setVisibleModal(null)
+      })}
+
     </View>
   );
 
-  
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
 
 
@@ -159,12 +148,9 @@ export const UserProfile = () => {
   return (
     <ScrollView contentContainerStyle={styles.profile__container}>
 
-      <Modal isVisible={visibleModal} style={styles.bottomModal}>
+      <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
 
         {renderModalContent()}
-
-
-    
       </Modal>
 
 
@@ -174,7 +160,7 @@ export const UserProfile = () => {
         <Image source={coverImage} style={styles.profile__cover__image} />
       </View>
       <View>
-        <Image source={`http://10.171.240.172:5000/${user.img}`} style={styles.profile__user__image} />
+        <Image source={{ uri:image}} style={styles.profile__user__image} />
       </View>
 
       <View style={styles.user__profile__info__left}>
@@ -196,13 +182,13 @@ export const UserProfile = () => {
       <View style={styles.border__bottom}>
       </View>
       <View style={styles.profile__tabs}>
-        <TouchableOpacity onPressIn={() => { accep }}>
+        <TouchableOpacity onPress={() => { accep }}>
           <View style={styles.tabs__button}><Text style={styles.tabs__font__style}>Preovious Trips</Text></View>
         </TouchableOpacity>
-        <TouchableOpacity onPressIn={() => { pend }}>
+        <TouchableOpacity onPress={() => { pend }}>
           <View style={styles.tabs__button}><Text style={styles.tabs__font__style}>Pending Trips</Text></View>
         </TouchableOpacity>
-        <TouchableOpacity onPressIn={() => { prev }}>
+        <TouchableOpacity onPress={() => { prev }}>
           <View style={styles.tabs__button}><Text style={styles.tabs__font__style}>Finished Trips</Text></View>
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={() => {

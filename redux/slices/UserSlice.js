@@ -65,15 +65,16 @@ export const editUserInfo= createAsyncThunk ("/editUserInfo", async(payload )=>{
 console.log(payload,"payload")
 // console.log(payload.userData._id)
 const result =   axios.put(`http://${ip}:5000/user/editUserinfo/${payload.updatedUser.id}`,{
-for
+      name: payload.updatedUser.name,
+      address:payload.updatedUser.address,
+      phone:payload.updatedUser.phone,
+      img:payload.updatedUser.img
 },{
   headers:{
     'Content-Type':'multipart/form-data' 
   } 
 })
 return result
-
-
 })
 
 // add review 
