@@ -1,26 +1,26 @@
-import { ScrollView, StyleSheet, Text, View, Dimensions, Image, Button, Alert, TouchableOpacity, FlatList, TextInput, TIME } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Dimensions, Image, Button, Alert, TouchableOpacity, FlatList, TIME } from 'react-native';
 import Swiper from 'react-native-swiper'
 const { width } = Dimensions.get('window')
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Modal from 'react-native-modal';
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRoute } from '@react-navigation/native';
 
-// import { MaterialDatetimePickerAndroid } from 'react-native-material-datetime-picker'; import DatePicker from 'react-native-modern-datepicker'
-// import { getToday, getFormatedDate } from 'react-native-modern-datepicker'
 
-
-// LASSSSS
+// Modal Data
 
 import { DatePickerModal } from 'react-native-paper-dates';
 
 import { TimePickerModal } from 'react-native-paper-dates';
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useSelector } from 'react-redux';
+import { TextInput } from 'react-native-paper';
 
 import ip from '../config'
-
+import { bookTrip } from '../redux/slices/UserSlice';
+import { Root, Popup } from 'popup-ui'
+import { PopupDialog } from 'react-native-popup-dialog';
 const renderPagination = (index, total, context) => {
     return (
         <View style={styles.paginationStyle}>
@@ -32,16 +32,16 @@ const renderPagination = (index, total, context) => {
 };
 
 
-// hours
-// price
-// startTime
-// date
 
 export const Discreption = () => {
+    const dispatch = useDispatch()
+    const { user } = useSelector(state => state.UserSlice)
+    const [isPopupVisible, setPopupVisible] = useState(false);
 
 
     // Timer Picker
     const [visible, setVisible] = React.useState(false)
+    const [time, setTime] = React.useState({})
     const onDismiss = React.useCallback(() => {
         setVisible(false)
     }, [setVisible])
@@ -50,6 +50,7 @@ export const Discreption = () => {
         ({ hours, minutes }) => {
             setVisible(false);
             console.log({ hours, minutes });
+            setTime({hours:hours,minutes:minutes})
         },
         [setVisible]
     );
@@ -71,16 +72,12 @@ export const Discreption = () => {
         [setOpen, setDate]
     );
 
-    // 
+    // hours Picker
+    const [text, setText] = React.useState("");
+
 
     const [visibleModal, setVisibleModal] = useState(null);
-    // const [number, onChangeNumber] = React.useState('');
 
-    // const [date, setDate] = useState(new Date())
-    // const Today = new Date()
-    // const startedDate = getFormatedDate(Today.setDate(Today.getDate(), 'YYYY/MM/DD'))
-
-    // const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -112,15 +109,50 @@ export const Discreption = () => {
         </TouchableOpacity>
     );
 
+    const handleSubmit = () => {
+        console.log('time:', time);
+        console.log('Date:', date);
+        console.log('hour:', text);
+
+        dispatch(bookTrip({
+            time: time,
+            date: date,
+            hours: text,
+            boatId: data._id,
+            clientId: user._id,
+        }))
+
+        // setPopupVisible(true);
+        alert(`Your Trip has been booked Successfully .. Boat Owner will a2ccept it SOON , Keep Update :)`
+         )
+        //  Day: ${date} 
+        //  Start Hour: ${time.hours}:${time.minutes}
+        //  Number Of Hours: ${text}
+      };
+
     const renderModalContent = () => (
         <View style={styles.modalContent}>
             <View style={styles.select}>
                 <Text style={styles.Header_filter}>Submit You Trip</Text>
             </View>
+            <View style={styles.modalBtn}>
 
+                <Button onPress={() => setVisible(true)} uppercase={false} mode="outlined" title='Pick Time' style={styles.timeBtn} />
 
-            <Button onPress={() => setVisible(true)} uppercase={false} mode="outlined" title='Pick Trip Time' />
+                <Button onPress={() => setOpen(true)} uppercase={false} mode="outlined" title='Pick Date' style={styles.dataBtn} />
+            {/* Hours Picker */}
+
+                <TextInput
+                    label="Hours"
+                    value={text}
+                    style={styles.hoursBtn}
+                    onChangeText={text => setText(text)}
+                />
+            {/* Hours Picker  End */}
+            </View>
+
             {/* Time Picker  */}
+            {/* </TouchableOpacity> */}
             <SafeAreaProvider>
                 <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
 
@@ -137,10 +169,11 @@ export const Discreption = () => {
                 </View>
             </SafeAreaProvider>
             {/* Time Picker  End*/}
+
             {/* Date Picker  */}
             <SafeAreaProvider>
                 <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
-                    <Button onPress={() => setOpen(true)} uppercase={false} mode="outlined" title='Pick Date' />
+
                     <DatePickerModal
                         locale="en"
                         mode="single"
@@ -153,7 +186,10 @@ export const Discreption = () => {
             </SafeAreaProvider>
             {/* Date Picker  End */}
 
-            {renderButton('Apply', () => setVisibleModal(null))}
+
+            <Button onPress={handleSubmit} title="Submit" />
+
+            {/* {renderButton('Apply', () => setVisibleModal(null))} */}
             {renderButton('Cancel', () => setVisibleModal(null))}
         </View>
     );
@@ -174,7 +210,6 @@ export const Discreption = () => {
                 loop={false}>
                 {
                     data.images.map((item) => {
-                        console.log("first");
                         return (
                             <View style={styles.slide} key={item}>
                                 <Image style={styles.image} source={{ uri: `http://${ip}:5000/${item}` }} />
@@ -182,15 +217,6 @@ export const Discreption = () => {
                         );
                     })}
 
-
-                {/* <View style={styles.slide}>
-                    <Image style={styles.image} source={{
-                        uri: `http://10.171.240.66:5000/${data.images[0]}`
-                    }} />
-                </View>
-                <View style={styles.slide}>
-                    <Image style={styles.image} source={require('../assets/boat2.jpeg')} />
-                </View> */}
             </Swiper>
 
             <View style={styles.card}>
@@ -277,7 +303,7 @@ const styles = StyleSheet.create({
     },
     card: {
         height: 265,
-        width:415,
+        width: 415,
         position: "absolute",
         marginHorizontal: 20,
         // marginVertical: 10,
@@ -416,7 +442,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        height: 700,
+        height: 500,
         borderColor: 'rgba(0, 0, 0, 0.1)',
     },
     select: {
@@ -433,6 +459,33 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
     },
+    hoursBtn: {
+        width: 200,
+        height: 50,
+
+    },
+    timeBtn: {
+        width: 100,
+        height: 80,
+        // button:50,
+        // bottom:50,
+        // paddingTop:80,
+        backgroundColor: 'red',
+        color: '#000',
+        fontSize: 20,
+        // top:50,
+        // button:50,
+
+    },
+    dataBtn: {
+        // top: 100,
+        // left: -369,
+        paddingTop: 200
+    },
+    modalBtn:{
+        height:200,
+        width:200,
+    }
 });
 
 export default Discreption;

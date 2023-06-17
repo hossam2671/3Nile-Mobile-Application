@@ -295,6 +295,20 @@ export const addTrip = createAsyncThunk("fatma/addTrip", async (payload) => {
   return data;
 });
 
+// BookTrip
+export const bookTrip = createAsyncThunk("user/bookTrip", async (payload) => {
+ 
+  console.log(payload)
+
+  const response = await axios.post(`http://${ip}:5000/user/addTrip/${payload.boatId}/${payload.clientId}`, {
+    date: payload.date, 
+    startTime:`${payload.time.hours}:${payload.time.minutes}`,
+    hours:payload.hours,
+  });
+  const data = response.data; 
+  return data;
+});
+
 // Boat Owner Edit Info 
 export const ownerUpdateInfo= createAsyncThunk ("/editOwnerInfo", async(payload )=>{
   let owner;
@@ -670,6 +684,12 @@ const UserSlice = createSlice({
           console.log( state.boatOwner,"Old");
             console.log(action.payload);
           state.boatOwner = action.payload;
+          // console.log( state.boatOwner,"Gold");
+       },
+
+
+        [bookTrip.fulfilled]: (state, action) => {
+          console.log("Old");
           // console.log( state.boatOwner,"Gold");
        },
     }
