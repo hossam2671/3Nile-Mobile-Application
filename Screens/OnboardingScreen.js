@@ -13,35 +13,35 @@ import {
 
 const {width, height} = Dimensions.get('window');
 
-const COLORS = {primary: '#114B5F', white: '#fff'};
+const COLORS = {primary: '#ffffffff', black: '#fff'};
 
 const slides = [
   {
     id: '1',
-    image: require('../assets/image1.png'),
-    title: 'Best Digital Solution',
-    subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    image: require('../assets/image3.jpg'),
+    title: '3Nile',
+    subtitle: 'watercraft of a large range of types and sizes, but generally smaller than a ship.',
   },
   {
     id: '2',
-    image: require('../assets/image2.png'),
-    title: 'Achieve Your Goals',
-    subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    image: require('../assets/vipp.jpg'),
+    title: '3Nile VIP',
+    subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit watercraft of a.',
   },
   {
     id: '3',
-    image: require('../assets/image3.png'),
+    image: require('../assets/top.jpg'),
     title: 'Increase Your Value',
-    subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    subtitle: ' a large range of types and sizes, but generally smaller than a ship.',
   },
 ];
 
 const Slide = ({item}) => {
   return (
-    <View style={{alignItems: 'center'}}>
+    <View style={{alignItems: 'center',}}>
       <Image
         source={item?.image}
-        style={{height: '75%', width, resizeMode: 'contain'}}
+        style={{height: '95%', width, resizeMode: 'contain'}}
       />
       <View>
         <Text style={styles.title}>{item?.title}</Text>
@@ -82,7 +82,7 @@ const OnboardingScreen = ({navigation}) => {
         style={{
           height: height * 0.25,
           justifyContent: 'space-between',
-          paddingHorizontal: 20,
+          paddingHorizontal: 30,
         }}>
           
         {/* Indicator container */}
@@ -99,7 +99,7 @@ const OnboardingScreen = ({navigation}) => {
               style={[
                 styles.indicator,
                 currentSlideIndex == index && {
-                  backgroundColor: COLORS.white,
+                  backgroundColor: "#020101",
                   width: 25,
                 },
               ]}
@@ -110,11 +110,11 @@ const OnboardingScreen = ({navigation}) => {
         {/* Render buttons */}
         <View style={{marginBottom: 45}}>
           {currentSlideIndex == slides.length - 1 ? (
-            <View style={{height: 40}}>
+            <View style={{height: 50,borderRadios:0}}>
               <TouchableOpacity
                 style={styles.btn}
                 onPress={() => navigation.replace('LoginSignUp')}>
-                <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                <Text style={{fontWeight: 'bold', fontSize: 15,color:"#ffffffff",}}>
                   GET STARTED
                 </Text>
               </TouchableOpacity>
@@ -126,7 +126,7 @@ const OnboardingScreen = ({navigation}) => {
                 style={[
                   styles.btn,
                   {
-                    borderColor: COLORS.white,
+                    borderColor:"#1665c0",
                     borderWidth: 1,
                     backgroundColor: 'transparent',
                   },
@@ -136,11 +136,12 @@ const OnboardingScreen = ({navigation}) => {
                   style={{
                     fontWeight: 'bold',
                     fontSize: 15,
-                    color: COLORS.white,
+                    color:"#135fd1be"
+                    // borderWidth:1,
                   }}>
                   SKIP
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity >
               <View style={{width: 20}} />
               <TouchableOpacity
                 activeOpacity={0.8}
@@ -150,6 +151,7 @@ const OnboardingScreen = ({navigation}) => {
                   style={{
                     fontWeight: 'bold',
                     fontSize: 15,
+                    color:"white",
                   }}>
                   NEXT
                 </Text>
@@ -191,13 +193,15 @@ const styles = StyleSheet.create({
     maxWidth: '70%',
     textAlign: 'center',
     lineHeight: 23,
+    bottom:70,
   },
   title: {
     color: COLORS.white,
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: 'bold',
     marginTop: 20,
     textAlign: 'center',
+    bottom:80,
   },
   image: {
     height: '100%',
@@ -215,9 +219,10 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 50,
     borderRadius: 5,
-    backgroundColor: '#fff',
+    backgroundColor: '#0151ad',
     justifyContent: 'center',
     alignItems: 'center',
+    color:"white"
   },
 });
 export default OnboardingScreen;
