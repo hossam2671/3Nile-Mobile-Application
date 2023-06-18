@@ -193,9 +193,9 @@ const LoginSignUp = (props) => {
           </ClipPath>
           {/* Image  */}
       <Image
-          href={require("./GST.jpg")}
-          width={width+10}
-          height={height +100}
+          href={require("./loginnnn.png")}
+          width={width}
+          height={height +120}
           preserveAspectRatio="xMidYMid slice"
           clipPath="url(#clipPathId)"
           /> 
@@ -229,7 +229,7 @@ const LoginSignUp = (props) => {
         {!isRegistering && (
         <TextInput
             placeholder="Email"
-            placeholderTextColor="black"
+            placeholderTextColor="#b6b6b6"
             style={styles.textInput}
             onChangeText={(e) => setLogEmail(e)}
               value={logEmail}
@@ -238,58 +238,65 @@ const LoginSignUp = (props) => {
         {!isRegistering && (
         <TextInput
             placeholder="Password"
-            placeholderTextColor="black"
+            placeholderTextColor="#b6b6b6"
             style={styles.textInput}
             onChangeText={(e) => setLogPassword(e)}
               value={logPassword}
           />
         )}
-        
-        {isRegistering && (
- <TextInput
-  placeholder="Email"
-  placeholderTextColor="black"
-  style={styles.textInput}
-  name="email"
-  onChangeText={(e) => setRegEmail(e)}
-      value={regEmail}
-/>
-        )}
-          {isRegistering && (
+               {isRegistering && (
             <TextInput
               placeholder="Full Name"
-              placeholderTextColor="black"
+              placeholderTextColor="#b6b6b6"
               style={styles.textInput}
               name="name"
               onChangeText={(e) => setRegName(e)}
                value={regName}
             />
           )}
-          {isRegistering && (
+        {isRegistering && (
+ <TextInput
+  placeholder="Email"
+  placeholderTextColor="#b6b6b6"
+  style={styles.textInput}
+  name="email"
+  onChangeText={(e) => setRegEmail(e)}
+      value={regEmail}
+/>
+
+        )}
+              {isRegistering && (
           <TextInput
           name="password"
             placeholder="Password"
-            placeholderTextColor="black"
+            placeholderTextColor="#b6b6b6"
             style={styles.textInput}
             onChangeText={(e) =>{setRegPassword(e)}}
             value={regPassword}
           />
           )}
+   
+    
 
 {isRegistering && (
 <View style={styles.radios}>
-   <Text>User</Text>
+  <View  style={styles.radios_user}>
+   <Text style={styles.radios_user_text}>User</Text>
       <RadioButton
         value="user"
         status={ checked === 'user' ? 'checked' : 'unchecked' }
         onPress={() => setChecked('user')}
         />
-         <Text>Boat Owner</Text>
+        </View  >
+        <View style={styles.radios_owner}>
+         <Text style={styles.radios_user_text}>Boat Owner</Text>
       <RadioButton
+      
         value="boatOwner"
         status={ checked === 'boatOwner' ? 'checked' : 'unchecked' }
         onPress={() => setChecked('boatOwner')}
       />
+    </View>
     </View>
 )}
           <Animated.View style={[styles.formButton, formButtonAnimatedStyle]}>

@@ -92,7 +92,7 @@ dropdownStyles={{borderRadius:0,borderBottomWidth:1}}
         maximumValue={1000}
         minimumTrackTintColor="#185271"
         maximumTrackTintColor="#114B5F"
-        thumbTintColor="#cc6300"
+        thumbTintColor="#0c8df7"
         onValueChange={handleSliderChange}
         step={10}
       />
@@ -122,23 +122,29 @@ onSelect={(e) => alert(selectedItems1)}
         maximumValue={1000}
         minimumTrackTintColor="#114B5F"
         maximumTrackTintColor="#114B5F"
-        thumbTintColor="#cc6300"
+        thumbTintColor="#0c8df7"
         onValueChange={handleSliderChange1}
         step={10}
       />
-</View>
+
 
     
+<View style={styles.book_fixToText}>
+                <TouchableOpacity style={styles.book_bookBtn} onPress={()=>{
+                  if(num === 1){
+                    dispatch(filter({type: selectedItems1 ,port: selectedItems , numOFPeople: sliderValue , price: sliderValue1} ))
+                  }
+                  else if(num === 2){
+                      dispatch(filter2({type: selectedItems1 ,port: selectedItems , numOFPeople: sliderValue , price: sliderValue1} ))
+                    }
+                    ; setVisibleModal(null)
+                }}>
+                    <Text style={styles.book_btn}>{'filter '}</Text>
+                    <Icon name="arrow-right" color={'#000'} size={20} style={styles.book_arrow} />
+                </TouchableOpacity>
+            </View> 
 
-
-      {renderButton('Apply', () =>{
-        if(num === 1){
-        dispatch(filter({type: selectedItems1 ,port: selectedItems , numOFPeople: sliderValue , price: sliderValue1} ))
-      }
-      else if(num === 2){
-          dispatch(filter2({type: selectedItems1 ,port: selectedItems , numOFPeople: sliderValue , price: sliderValue1} ))
-        }
-        ; setVisibleModal(null)})}
+            </View>
         
     </View>
   );
@@ -684,7 +690,7 @@ paddingTop:10,
   Header_filter:{
     textAlign:'center',
     fontSize:30,
-    color:"#ec7200",
+    color:"#0c8df7",
     paddingBottom:10,
     marginLeft:130,
     borderBottomColor:'#000000',
@@ -708,5 +714,41 @@ paddingTop:10,
     paddingLeft:10
   },
 
-  
+  book_fixToText: {
+    height: 65,
+    width: 405,
+    fontSize: 15,
+    fontWeight: 'bold',
+    backgroundColor: '#0c8df7',
+    borderRadius: 55,
+  marginTop:30,
+ 
+ 
+},
+book_bookBtn: {
+  justifyContent: "space-between",
+ 
+  flexDirection: 'row',
+  alignItems: 'center',
+  width: 380,
+  height: 50,
+  paddingTop: 15,
+},
+book_btn: {
+  color: '#ffffff',
+  fontWeight: 'bold',
+  fontSize: 25,
+  height:40,
+  paddingLeft: 20,
+  marginTop:10,
+},
+book_arrow: {
+  color: '#000000',
+  backgroundColor:"#fff",
+  borderRadius:50,
+  width:40,
+  height:40,
+  padding:10,
+  marginTop:10,
+},
   })
