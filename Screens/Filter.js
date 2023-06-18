@@ -37,7 +37,7 @@ export default function Filter(props) {
     })
     // dispatch(getCategoryThree())
      dispatch(getSwvl())
-
+    console.log(filteredcategoryOne)
 
   }, [])
   const { filteredcategoryOne } = useSelector(state => state.UserSlice)

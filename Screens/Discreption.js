@@ -120,11 +120,12 @@ export const Discreption = () => {
             hours: text,
             boatId: data._id,
             clientId: user._id,
-        }))
+        })).then((res)=>{
+            console.log(res)
+            alert(`Your Trip has been booked Successfully .. Boat Owner will a2ccept it SOON , Keep Update :)`)
+            setVisibleModal(null)        })
 
         // setPopupVisible(true);
-        alert(`Your Trip has been booked Successfully .. Boat Owner will a2ccept it SOON , Keep Update :)`
-         )
         //  Day: ${date} 
         //  Start Hour: ${time.hours}:${time.minutes}
         //  Number Of Hours: ${text}

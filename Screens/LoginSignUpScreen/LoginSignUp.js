@@ -193,9 +193,9 @@ const LoginSignUp = (props) => {
           </ClipPath>
           {/* Image  */}
       <Image
-          href={require("./ound.jpg")}
-          width={width + 100}
-          height={height + 100}
+          href={require("./GST.jpg")}
+          width={width+10}
+          height={height +100}
           preserveAspectRatio="xMidYMid slice"
           clipPath="url(#clipPathId)"
           /> 

@@ -1,16 +1,19 @@
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, TouchableOpacity, ScrollView, TextInput , FlatList, Pressable , SafeAreaView} from 'react-native';
 import React, { Component, useEffect, useState } from 'react';
 import coverImage from '../assets/cover.jpg';
 import userProfile from '../assets/userimage.jpg';
 import card from '../assets/card.jpeg';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import IIcon from 'react-native-vector-icons/Ionicons';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
-import { addReview, canceltrip, pendingTrips, finishedTrips, editUserInfo } from '../redux/slices/UserSlice';
+import { addReview, canceltrip, pendingTrips, finishedTrips, editUserInfo , acceptedTrips } from '../redux/slices/UserSlice';
 import Modal from "react-native-modal";
 import * as ImagePicker from 'expo-image-picker';
 import ip from '../config'
+import LabelContainer from 'rn-range-slider/LabelContainer';
+import { RadioButton } from 'react-native-paper';
+import StarRating from 'react-native-star-rating';
+import RatingSlider from './Rating';
 
 
 
@@ -18,7 +21,41 @@ import ip from '../config'
 
 
 export const UserProfile = () => {
+  const [rating , setRating] = useState(0)
+  const [maxRating , setMaxRating] = useState([1,2,3,4,5])
+  const [hover , setHover] = useState(null)
+  const [disabled,setDisabled] = useState(false)
+  const starImgFilled="https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true"
+  const starImgCorner="https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png"
 
+  const handleRatingChange = (itemId, newRating,boatId) => {
+    console.log('New rating:', newRating);
+    console.log('Item ID:', itemId);
+  
+    // Update the rating for the item in your data source or API
+    // For example, if you have a state variable to store the products:
+    const updatedFinished = finished.map((item) => {
+      if (item._id === itemId) {
+        setRating(newRating)
+        dispatch(addReview({boatId:boatId,clientId:user._id,tripId:itemId,rate:newRating})).then(()=>{
+          dispatch(finishedTrips({id:user._id}))
+        })
+    }})
+  
+    // Update the state with the new rating
+    // setFinished(updatedFinished);
+}  ;
+  
+
+  function rate(boatId,tripId , ratingValue){
+    setRating(ratingValue)
+    console.log("first")
+    dispatch(addReview({boatId:boatId,clientId:user.userData._id,tripId:tripId,rate:ratingValue})).then(()=>{
+      setDisabled(!disabled)
+      dispatch(finishedTrips({id:user.userData._id}))
+    }
+    )
+   }
   //get user data
   const { user } = useSelector(state => state.UserSlice)
 
@@ -26,9 +63,9 @@ export const UserProfile = () => {
 
   //get trips
   const [tap, setTap] = useState("accepted")
-  // const { accepted } = useSelector(state => state.UserSlice)
+  const { accepted } = useSelector(state => state.UserSlice)
   const { finished } = useSelector(state => state.UserSlice)
-  // const { pending } = useSelector(state => state.UserSlice)
+  const { pending } = useSelector(state => state.UserSlice)
 
   useEffect(() => {
 
@@ -38,21 +75,28 @@ export const UserProfile = () => {
     dispatch(finishedTrips({ id: user._id }))
     // dispatch(editUserInfo({ id: user._id }))
 
-    // dispatch(acceptedTrips({ id: user._id }))
-    // dispatch(pendingTrips({ id: user._id }))
+    dispatch(acceptedTrips({ id: user._id }))
+    dispatch(pendingTrips({ id: user._id }))
+    console.log(pending,"Daadasdsadsadsada")
 
   }, []);
 
   function pend() {
     setTap("pending")
-    // console.log(pending)
+     console.log(tap)
   }
   function accep() {
     setTap("accepted")
+    console.log(tap)
   }
   function prev() {
     setTap("finished")
+    console.log(tap)
   }
+  function cancel(id){
+    dispatch(pendingTrips({id:user._id})) 
+    dispatch(canceltrip(id)).then(() =>dispatch(pendingTrips({id:user._id})) )
+   }
 
   //modal
   const [visibleModal, setVisibleModal] = useState(null);
@@ -143,7 +187,17 @@ export const UserProfile = () => {
 
 
 
-
+  function rate(boatId,tripId , ratingValue){
+    console.log(boatId,tripId , ratingValue)
+    setRating(ratingValue)
+    console.log("first")
+    // dispatch(addReview({boatId:boatId,clientId:user._id,tripId:tripId,rate:ratingValue})).then((res)=>{
+    //   console.log(res,"Ddddddddddddddddddddone")
+      setDisabled(!disabled)
+    //   dispatch(finishedTrips({id:user._id}))
+    // }
+    // )
+   }
 
   return (
     <ScrollView contentContainerStyle={styles.profile__container}>
@@ -181,15 +235,15 @@ export const UserProfile = () => {
 
       <View style={styles.border__bottom}>
       </View>
-      <View style={styles.profile__tabs}>
+      <View >
         <TouchableOpacity onPress={() => { accep }}>
-          <View style={styles.tabs__button}><Text style={styles.tabs__font__style}>Preovious Trips</Text></View>
+          <View style={styles.tabs__button}><Text style={styles.tabs__font__style} onPress={accep}>accepted Trips</Text></View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { pend }}>
-          <View style={styles.tabs__button}><Text style={styles.tabs__font__style}>Pending Trips</Text></View>
+          <View style={styles.tabs__button}><Text style={styles.tabs__font__style } onPress={pend}>Pending Trips</Text></View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { prev }}>
-          <View style={styles.tabs__button}><Text style={styles.tabs__font__style}>Finished Trips</Text></View>
+          <View style={styles.tabs__button}><Text style={styles.tabs__font__style} onPress={prev}>Finished Trips</Text></View>
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={() => {
 
@@ -252,7 +306,165 @@ export const UserProfile = () => {
         </View> ;
         })} */}
 
-        {tap === 'finished' &&
+<View style={styles.cards_con}>
+{
+  tap == "pending" && (
+    <FlatList
+      data={pending}
+      renderItem={({ item }) => (
+        <View style={styles.card_con}>
+            <Image
+            style={styles.card_con_img}
+              width={170}
+              height={170}
+              source={{
+                uri: `http://${ip}:5000/${item.boatId.images[0]}`,
+              }}
+            />
+
+            <View style={styles.card_con_info}>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_name}>{item.boatId.name}</Text>
+              </View>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_price}>{item.price}</Text>
+       
+              </View>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_port}>{item.boatId.type}</Text>
+              </View>
+              <View style={styles.card_con_info_row}>
+               <Icon  name='anchor' size={18} color={'#166582'} />
+                <Text style={styles.card_con_info_row_type}> {item.boatId.portName} </Text>
+             
+              </View>
+              <TouchableOpacity
+          isVisible={visibleModal === 1}
+          style={styles.button}
+          onPress={() => {
+            cancel(item._id);
+          }}
+        >
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+            </View>
+            
+          </View>
+      )}
+    />
+  )
+  
+}
+{
+  tap == "accepted" && (
+    <FlatList
+      data={accepted}
+      renderItem={({ item }) => (
+        <View style={styles.card_con}>
+            <Image
+            style={styles.card_con_img}
+              width={170}
+              height={170}
+              source={{
+                uri: `http://${ip}:5000/${item.boatId.images[0]}`,
+              }}
+            />
+
+            <View style={styles.card_con_info}>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_name}>{item.boatId.name}</Text>
+              </View>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_price}>{item.price}</Text>
+       
+              </View>
+              <View style={styles.card_con_info_row}>
+                <Text style={styles.card_con_info_row_port}>{item.boatId.type}</Text>
+              </View>
+              <View style={styles.card_con_info_row}>
+               <Icon  name='anchor' size={18} color={'#166582'} />
+                <Text style={styles.card_con_info_row_type}> {item.boatId.portName} </Text>
+             
+              </View>
+            </View>
+            <View style={styles.stars__rating}>
+            <Icon name="star" size={10} color='yellow' />
+            <Icon name="star" size={10} color='yellow' />
+            <Icon name="star" size={10} color='yellow' />
+            <Icon name="star" size={10} color='yellow' />
+            <Icon name="star" size={10} color='yellow' />
+          </View>
+          </View>
+      )}
+    />
+  )
+  
+}
+{
+  tap === "finished" && (
+    <FlatList
+      data={finished}
+      keyExtractor={(item) => item._id}
+      renderItem={({ item }) => (
+        <View style={styles.card_con}>
+          <Image
+            style={styles.card_con_img}
+            width={170}
+            height={170}
+            source={{
+              uri: `http://${ip}:5000/${item.boatId.images[0]}`,
+            }}
+          />
+
+          <View style={styles.card_con_info}>
+            <View style={styles.card_con_info_row}>
+              <Text style={styles.card_con_info_row_name}>{item.boatId.name}</Text>
+            </View>
+            <View style={styles.card_con_info_row}>
+              <Text style={styles.card_con_info_row_price}>{item.price}</Text>
+            </View>
+            <View style={styles.card_con_info_row}>
+              <Text style={styles.card_con_info_row_port}>{item.boatId.type}</Text>
+            </View>
+            <View style={styles.card_con_info_row}>
+              <Icon name='anchor' size={18} color={'#166582'} />
+              <Text style={styles.card_con_info_row_type}>{item.boatId.portName}</Text>
+            </View>
+            {
+              !item.rate ?
+            <StarRating
+              key={item._id}
+              disabled={false}
+              maxStars={5}
+              rating={item.rating}
+              selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
+              starSize={20}
+              fullStarColor="#ffc107"
+              emptyStarColor="#e4e5e9"
+            /> : <StarRating
+            key={item._id}
+            disabled={false}
+            maxStars={5}
+            rating={item.rate.rating}
+            // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
+            starSize={20}
+            fullStarColor="#ffc107"
+            emptyStarColor="#e4e5e9"
+          />
+            }
+          </View>
+        </View>
+      )}
+    />
+  )
+}
+
+</View>
+
+
+
+
+        {/* {tap === 'finished' &&
           finished.map((item) => {
             return <View style={styles.card} key={item.id} data={{ ...item, tap: tap }}>
               <Image source={card} style={styles.profile__card__image} />
@@ -277,7 +489,7 @@ export const UserProfile = () => {
                 <Text style={styles.text__loc}>{item.status}</Text>
               </View>
             </View>;
-          })}
+          })} */}
 
 
 
@@ -366,13 +578,6 @@ export const UserProfile = () => {
             </Text>
           </View>
 
-          <View style={styles.stars__rating}>
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-          </View>
           <View style={styles.boat__loc}>
             <IIcon style={styles.icon__loc} name='location' size={10} />
             <Text style={styles.text__loc}>Port: El-Mahata</Text>
@@ -388,6 +593,14 @@ export const UserProfile = () => {
 
 
 const styles = StyleSheet.create({
+  
+  radio:{
+    display:"none"
+  },
+  star:{
+    height: 25,
+	width: '100%'
+  },
   card: {
     height: 190
   },
@@ -541,6 +754,120 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: 'center',
   },
+  cards:{
+    marginBottom:60
+  },
+  filter_input_con:{
+ 
+  borderColor:'black',
+  borderWidth:1,
+  margin:20,
+  
+  },
+  chips_con:{
+  width:450,
+  },
+
+
+  card_con_img:{
+  // margin:20,
+borderTopLeftRadius:20,
+borderBottomLeftRadius:20,  
+ height:150,
+    width:160,
+  },
+
+  chisp:{
+  margin:10,
+  backgroundColor:'#fff',
+  borderRadius:20,
+  borderWidth:1,
+  },
+  card_con:{
+  
+  width:410,
+  paddingTop:5,
+  paddingBottom:5,
+  // borderWidth:1,
+  margin:20,
+  display: 'flex',
+  flexDirection:'row',
+  borderRadius:7,
+  justifyContent:"center",
+  },
+  card_con_info:{
+  shadowOffset:{width: -2, height: 4},  
+  shadowColor:'#e0d6d6',  
+  shadowOpacity:0.9,  
+  shadowRadius:10,  
+  borderTopRightRadius:20,
+  borderBottomRightRadius:20,
+  borderTopWidth:1,
+  borderTopColor:'#c8c8c8',
+  borderBottomWidth:1,
+  borderBottomColor:'#c8c8c8',
+  borderRightWidth:1,
+  borderRightColor:'#c8c8c8',
+  },
+  card_con_info_row_name:{
+    fontSize:20,
+    color:'#1c5d73',
+    paddingTop:6,
+  },
+  card_con_info_row_price:{
+    fontSize:14,
+    color:'#979797',
+  
+  },
+  card_con_info_row_port:{
+    fontSize:17,
+    color:'#8a8a8a',
+  },
+  card_con_info_row_type:{
+    paddingLeft:20,
+    fontSize:14,
+   
+  },
+  card_con_info_row:{
+  width:200,
+  display: 'flex',
+  flexDirection:'row',
+paddingTop:10,
+  
+  paddingLeft:30,
+  },
+  button: {
+  padding: 10,
+  margin: 16,
+  justifyContent: 'center',
+  alignItems: 'center',
+  color:'#ffffff',
+  backgroundColor: '#d0d0d0',
+  borderRadius:2
+  },
+  modalContent: {
+  backgroundColor: '#ffffff',
+  padding: 10,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderTopRightRadius:60,
+  borderTopLeftRadius:60,
+  },
+  bottomModal: {
+  justifyContent: 'flex-end',
+  margin: 0,
+
+  },
+  customBarStyle:{
+    justifyContent: 'center',
+    flexDirection:"row",
+    marginTop:30,
+  },
+  starImgFilled:{
+    width:40,
+    height:40,
+    resizeMode:"cover"
+  }
 
 });
 

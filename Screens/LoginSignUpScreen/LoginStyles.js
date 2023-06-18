@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   button: {
-    backgroundColor: '#114B5F',
+    backgroundColor: '#f7fdff',
     height: 55,
     alignItems: 'center',
     justifyContent: 'center',
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     fontWeight: '600',
-    color: 'white',
+    color: '#3a6df7',
     letterSpacing: 0.5
 
 },
