@@ -118,7 +118,7 @@ const renderPagination = (index, total, context) => {
     }
     return (
         <View style={styles.container}>
-        <Video
+        {/* <Video
           ref={vid}
           resizeMode={ResizeMode.COVER}
           shouldPlay
@@ -135,7 +135,7 @@ const renderPagination = (index, total, context) => {
           }
 
           style={styles.container}
-        />
+        /> */}
        <Image source={boatswvl} style={styles.boatswvl}  />
         <Text style={styles.cardItems_name}> {data.boat.name}</Text>
        <Text style={styles.cardItems_date}> {data.date.slice(0,10)}</Text>

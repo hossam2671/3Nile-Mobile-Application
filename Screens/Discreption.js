@@ -245,23 +245,46 @@ export const Discreption = () => {
                 </View>
             </View>
 
+                {
+                    data.portName == "KFC" &&
             <View style={styles.map}>
                 <MapView
                     style={{ flex: 1, height: 180, }}
                     initialRegion={{
-                        latitude: 23.999035,
-                        longitude: 32.855434,
+                        latitude: 24.088328063959082,
+                        longitude: 32.89322136116728,
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}
                 >
                     <Marker
-                        coordinate={{ latitude: 23.999035, longitude: 32.855434 }}
+                        coordinate={{ latitude: 24.088328063959082, longitude: 32.89322136116728 }}
                         title="Marker Title"
                         description="Marker Description"
                     />
                 </MapView>
             </View>
+                }
+                {
+                    data.portName == "MAC" &&
+            <View style={styles.map}>
+                <MapView
+                    style={{ flex: 1, height: 180, }}
+                    initialRegion={{
+                        latitude: 24.09541698251378,
+                        longitude: 32.89688121883719,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                >
+                    <Marker
+                        coordinate={{ latitude: 24.09541698251378, longitude: 32.89688121883719 }}
+                        title="Marker Title"
+                        description="Marker Description"
+                    />
+                </MapView>
+            </View>
+                }
 
             <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
                 {renderModalContent()}
