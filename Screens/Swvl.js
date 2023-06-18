@@ -7,7 +7,7 @@ import Modal from 'react-native-modal';
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
 import bk from '../assets/homecardimg.png'
-import boatSeats from '../assets/Screenshot 2023-06-15 213456.png'
+import boatSeats from '../assets/card.jpeg';
 import { OwnerdeleteBoat, SwvlDetails} from '../redux/slices/UserSlice'
 // import { MaterialDatetimePickerAndroid } from 'react-native-material-datetime-picker'; import DatePicker from 'react-native-modern-datepicker'
 // import { getToday, getFormatedDate } from 'react-native-modern-datepicker'

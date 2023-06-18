@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
       },
     blueFrame:{
         height:400,
-        backgroundColor:"#5412dc",
+        backgroundColor:"#0f29e8",
         borderBottomRightRadius:50,        
         borderBottomLeftRadius:50,
          width:450
