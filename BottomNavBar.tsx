@@ -1,5 +1,5 @@
-import React, { useEffect, useReducer, useRef } from 'react'
-import {Pressable,StatusBar,StyleSheet,View,Text,LayoutChangeEvent} from 'react-native'
+import React, { useEffect, useReducer, useRef } from 'react';
+import { Pressable, StatusBar, StyleSheet, View, Text, LayoutChangeEvent } from 'react-native'
 // navigation
 import { NavigationContainer } from '@react-navigation/native'
 import { BottomTabBarProps, BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -10,13 +10,10 @@ import Svg, { Path } from 'react-native-svg'
 import Animated, { useAnimatedStyle, withTiming, useDerivedValue } from 'react-native-reanimated'
 // lottie
 import Lottie from 'lottie-react-native'
+//components
 import HomeCards from './Screens/HomeCards'
-import BoatOwnerProfile from './Screens/BoatOwnerProfile'
-import ContactUs from './Screens/ContactUs';
-import LoginSignUp from './Screens/LoginSignUpScreen/LoginSignUp'
-import { Provider } from 'react-redux'
-import { Store } from './redux/Store';
-
+import Chat from './Screens/chat/Chat';
+import UserProfile from './Screens/UserProfile';
 
 // ------------------------------------------------------------------
 
@@ -26,52 +23,44 @@ const AnimatedSvg = Animated.createAnimatedComponent(Svg)
 
 // ------------------------------------------------------------------
 
-const Appp = () => {
-  return (
-    <>
-    <Provider store={Store}>
-      <StatusBar barStyle="light-content" />
-      <NavigationContainer>
-        <Tab.Navigator
+const MyBottomNav = () => {
+  return <Tab.Navigator
           tabBar={(props) => <AnimatedTabBar {...props} />}
         >
           <Tab.Screen
-            name="Home"
+            name="home"
             options={{
               // @ts-ignore
               tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/home.icon.json')} style={styles.icon} />,
             }}
             component={HomeCards}
           />
-          <Tab.Screen
-            name="Upload"
+          {/* <Tab.Screen
+            name="search"
             options={{
               // @ts-ignore
-              tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/upload.icon.json')} style={styles.icon} />,
+              tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/search.icon.json')} style={styles.icon} />,
             }}
-            component={BoatOwnerProfile}
-          />
+            component={Filter}
+          /> */}
           <Tab.Screen
-            name="Chat"
+            name="chat"
             options={{
               // @ts-ignore
               tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/chat.icon.json')} style={styles.icon} />,
             }}
-            component={ContactUs}
+            component={Chat}
           />
           <Tab.Screen
-            name="Settings"
+            name="profile"
             options={{
               // @ts-ignore
-              tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/settings.icon.json')} style={styles.icon} />,
+              tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/profile.icon.json')} style={styles.icon} />,
             }}
-            component={LoginSignUp}
+            component={UserProfile}
           />
         </Tab.Navigator>
-      </NavigationContainer>
-      </Provider>
-    </>
-  )
+  
 }
 
 // ------------------------------------------------------------------
@@ -128,7 +117,7 @@ const AnimatedTabBar = ({ state: { index: activeIndex, routes }, navigation, des
       <AnimatedSvg
         width={110}
         height={60}
-        viewBox="0 0 110 60"
+        viewBox="5 0 110 60"
         style={[styles.activeBackground, animatedStyles]}
       >
         <Path
@@ -222,12 +211,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   component: {
-    height: 60,
-    width: 60,
-    marginTop: -10,
+    height: 50,
+    width: 50,
+    marginTop: -7,
   },
   componentCircle: {
     flex: 1,
+    width: 50,
+    height: 50,
     borderRadius: 30,
     backgroundColor: 'white',
   },
@@ -241,9 +232,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   icon: {
-    height: 36,
-    width: 36,
+    height: 28,
+    width: 28,
   }
 })
 
-export default Appp;
+export default MyBottomNav;

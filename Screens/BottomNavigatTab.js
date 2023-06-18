@@ -22,30 +22,38 @@ function BottomNavigatTab() {
     headerShown: false, 
   }}>
 
+<<<<<<< Updated upstream
 <Tab.Screen 
 name='home' 
 component={HomeCards}
 />
+=======
+    <Tab.Screen
+      name='home'
+      component={HomeCards}
+      options={{ tabBarIcon: ({ color }) => <Icon name="home" color={color} size={24} /> }}
+    />
+>>>>>>> Stashed changes
 
-<Tab.Screen 
-name='search' 
-component={Filter}
-options={{ tabBarIcon: ({ color }) => <Icon name="search" color={color} size={24} /> }}
-/>
+    <Tab.Screen
+      name='search'
+      component={Filter}
+      options={{ tabBarIcon: ({ color }) => <Icon name="search" color={color} size={24} /> }}
+    />
 
-<Tab.Screen 
-name='User' 
-component={UserProfile}
-options={{ tabBarIcon: ({ color }) => <Icon name="user" color={color} size={24} /> }}
-/>
+    <Tab.Screen
+      name='User'
+      component={UserProfile}
+      options={{ tabBarIcon: ({ color }) => <Icon name="user" color={color} size={24} /> }}
+    />
 
-<Tab.Screen 
-name='Disc' 
-component={Discreption}
-options={{ tabBarIcon: ({ color }) => <IIcon name="chat" color={color} size={24} /> }}
-/>
+    <Tab.Screen
+      name='Disc'
+      component={Discreption}
+      options={{ tabBarIcon: ({ color }) => <IIcon name="chat" color={color} size={24} /> }}
+    />
 
-</Tab.Navigator>
+  </Tab.Navigator>
 }
 
 export default BottomNavigatTab
