@@ -10,7 +10,7 @@ import Iconnn from 'react-native-vector-icons/Ionicons'
 import Modal from 'react-native-modal';
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
-import boatswvl from '../assets/swvlllll.jpg'
+import boatswvl from '../assets/swvl.png'
 import { OwnerdeleteBoat, SwvlDetails} from '../redux/slices/UserSlice'
 import { ResizeMode, Video } from 'expo-av'
 import { Button } from 'react-native-elements';
@@ -390,11 +390,6 @@ const styles = StyleSheet.create({
        
         flexDirection: 'row',
         alignItems: 'center',
-        // justifyContent: 'center',
-        // paddingVertical: 10,
-        // paddingHorizontal: 20,
-        // borderRadius: 30,
-        // marginRight: 10,
         width: 430,
         height: 50,
         paddingTop: 15,
@@ -403,7 +398,6 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontWeight: 'bold',
         fontSize: 25,
-        // marginRight: 10,
         height:40,
         paddingLeft: 20,
         marginTop:10,

@@ -24,7 +24,7 @@ const slides = [
   },
   {
     id: '2',
-    image: require('../assets/vipp.jpg'),
+    image: require('../assets/nilevip.png'),
     title: '3Nile VIP',
     subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit watercraft of a.',
   },
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     maxWidth: '70%',
     textAlign: 'center',
     lineHeight: 23,
-    bottom:70,
+    bottom:80,
   },
   title: {
     color: COLORS.white,

@@ -12,16 +12,19 @@ import UserProfile from './UserProfile';
 const Tab = createBottomTabNavigator();
 
 function BottomNavigatTab() {
-  return <Tab.Navigator screenOptions={{
+  return <Tab.Navigator 
+  
+ 
+  screenOptions={{
     tabBarInactiveTintColor: '#999696',
     tabBarActiveTintColor: '#00409f',
     tabBarStyle: { backgroundColor: '#ffffff' },
+    headerShown: false, 
   }}>
 
 <Tab.Screen 
 name='home' 
 component={HomeCards}
-options={{ tabBarIcon: ({ color }) => <Icon name="home" color={color} size={24} /> }}
 />
 
 <Tab.Screen 

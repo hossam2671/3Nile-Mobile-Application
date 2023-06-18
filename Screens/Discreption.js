@@ -3,12 +3,13 @@ import Swiper from 'react-native-swiper'
 const { width } = Dimensions.get('window')
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome'
+import { IconButton } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRoute } from '@react-navigation/native';
-
-
+import Iconn from 'react-native-vector-icons/Fontisto'
+import Iconnn from 'react-native-vector-icons/Ionicons'
 // Modal Data
 
 import { DatePickerModal } from 'react-native-paper-dates';
@@ -41,7 +42,10 @@ export const Discreption = () => {
 
     // Timer Picker
     const [visible, setVisible] = React.useState(false)
-    const [time, setTime] = React.useState({})
+    const [timey, setTime] = React.useState({})
+    const [dateOnly, setdateOnly] = React.useState("")
+    const [isPicked, setIsPicked] = React.useState(false)
+    const [DateisPicked, setDateisPicked] = React.useState(false)
     const onDismiss = React.useCallback(() => {
         setVisible(false)
     }, [setVisible])
@@ -50,7 +54,8 @@ export const Discreption = () => {
         ({ hours, minutes }) => {
             setVisible(false);
             console.log({ hours, minutes });
-            setTime({hours:hours,minutes:minutes})
+            
+            setTime({ hours: hours, minutes: minutes })
         },
         [setVisible]
     );
@@ -68,6 +73,11 @@ export const Discreption = () => {
             setOpen(false);
             setDate(params.date);
             console.log(params)
+            setDateisPicked(true)
+            const datepi=[...params.date.toString().split(" ")[1]," ",...params.date.toString().split(" ")[2]," ",...params.date.toString().split(" ")[3]].join("")
+        
+            setdateOnly(datepi)
+
         },
         [setOpen, setDate]
     );
@@ -110,51 +120,91 @@ export const Discreption = () => {
     );
 
     const handleSubmit = () => {
-        console.log('time:', time);
+        console.log('time:', timey);
         console.log('Date:', date);
         console.log('hour:', text);
-
+    
         dispatch(bookTrip({
-            time: time,
+            time: timey,
             date: date,
             hours: text,
             boatId: data._id,
             clientId: user._id,
         }))
-
+            console.log(dateOnly,"d")
         // setPopupVisible(true);
         alert(`Your Trip has been booked Successfully .. Boat Owner will a2ccept it SOON , Keep Update :)`
-         )
+        )
         //  Day: ${date} 
         //  Start Hour: ${time.hours}:${time.minutes}
         //  Number Of Hours: ${text}
-      };
+    };
 
     const renderModalContent = () => (
         <View style={styles.modalContent}>
             <View style={styles.select}>
+            <View style={{flexDirection:"row" , justifyContent:"flex-start" , alignItems:"center"}}>
+            <IconButton
+        icon={() => <Iconnn name="arrow-back" size={24} color="#000" style={{marginLeft:20,zIndex:1000}} />}
+        
+        
+        style={{marginLeft:200}}
+        onPress={() => setVisibleModal(null)}
+      />
                 <Text style={styles.Header_filter}>Submit You Trip</Text>
+                </View>
             </View>
             <View style={styles.modalBtn}>
 
-                <Button onPress={() => setVisible(true)} uppercase={false} mode="outlined" title='Pick Time' style={styles.timeBtn} />
+                <TouchableOpacity onPress={() => 
+                   {
+                       setVisible(true)
+                       setIsPicked(true)
 
-                <Button onPress={() => setOpen(true)} uppercase={false} mode="outlined" title='Pick Date' style={styles.dataBtn} />
-            {/* Hours Picker */}
+                   } 
+                    
+                    
+                    
+                    } uppercase={false} mode="outlined" title='start time' style={styles.timeBtn}>
 
-                <TextInput
-                    label="Hours"
-                    value={text}
-                    style={styles.hoursBtn}
-                    onChangeText={text => setText(text)}
-                />
-            {/* Hours Picker  End */}
+                    {
+                        isPicked ? <Text style={styles.time} >{timey.hours} : {timey.minutes}</Text> : <Text style={styles.time} >Start Time</Text>
+
+                    }
+
+                <Iconnn name="time-outline" color={'#000'} size={20} style={styles.cardItems_time_icon} />
+                </TouchableOpacity>
+                <Iconn name="date" color={'#000'} size={20} style={styles.cardItems_date_icon} />
+                <TouchableOpacity onPress={() => 
+                    {
+                        setOpen(true)
+                      
+
+                    }
+                    
+                    } uppercase={false} mode="outlined" title='Pick Date' style={styles.dataBtn} >
+                          {
+                        DateisPicked ? <Text style={styles.date} >{dateOnly}</Text> : <Text style={styles.date} >Pick Date</Text>
+
+                    }
+                </TouchableOpacity>
+                {/* Hours Picker */}
+
+                {/* Hours Picker  End */}
             </View>
 
+            <TextInput
+
+                value={text}
+                style={styles.hoursBtn}
+                onChangeText={text => setText(text)}
+                placeholderTextColor={"#a4a4a4"}
+                placeholder='Hours'
+            />
             {/* Time Picker  */}
             {/* </TouchableOpacity> */}
             <SafeAreaProvider>
-                <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+                <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center',color:"#fdfdfd" }}>
 
                     <TimePickerModal
                         visible={visible}
@@ -185,12 +235,17 @@ export const Discreption = () => {
                 </View>
             </SafeAreaProvider>
             {/* Date Picker  End */}
+            <View style={styles.book_fixToText}>
+                <TouchableOpacity style={styles.book_bookBtn} onPress={handleSubmit}>
+                    <Text style={styles.book_btn}>{'Book '}</Text>
+                    <Icon name="arrow-right" color={'#000'} size={20} style={styles.book_arrow} />
+                </TouchableOpacity>
+            </View> 
 
-
-            <Button onPress={handleSubmit} title="Submit" />
+         
 
             {/* {renderButton('Apply', () => setVisibleModal(null))} */}
-            {renderButton('Cancel', () => setVisibleModal(null))}
+ 
         </View>
     );
 
@@ -281,6 +336,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+
     wrapper: {},
     slide: {
         // marginTop: 10,
@@ -393,17 +449,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        // paddingVertical: 20,
-        // paddingHorizontal: 20,
-        // shadowColor: '#000',
-        // shadowOffset: {
-        //   width: 0,
-        //   height: -5,
-        // },
-        // shadowOpacity: 0.2,
-        // shadowRadius: 6.68,
-
-        // elevation: 11,
+  
     },
     bookBtn: {
         justifyContent: "space-between",
@@ -436,56 +482,152 @@ const styles = StyleSheet.create({
         margin: 0,
     },
     modalContent: {
-        backgroundColor: 'white',
+        backgroundColor: '#ffffff',
         padding: 22,
         justifyContent: 'center',
         alignItems: 'center',
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
         height: 500,
         borderColor: 'rgba(0, 0, 0, 0.1)',
+
     },
     select: {
         width: '100%',
         alignItems: 'center',
-        marginBottom: 100
+        marginBottom: 20,
+        marginTop: 20,
+        backgroundColor: "#ffffff",
+
     },
     Header_filter: {
         fontWeight: 'bold',
-        fontSize: 22,
-    }, input: {
-        height: 40,
+        fontSize: 25,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(213, 213, 213, 1)',
+        width: 530,
+        paddingLeft: 200,
+        paddingBottom: 20,
+
+    },
+    input: {
+        height: 10,
         margin: 12,
         borderWidth: 1,
         padding: 10,
     },
     hoursBtn: {
-        width: 200,
+        width: 400,
         height: 50,
+        margin: 40,
+        backgroundColor: "white",
 
     },
     timeBtn: {
-        width: 100,
-        height: 80,
-        // button:50,
-        // bottom:50,
-        // paddingTop:80,
-        backgroundColor: 'red',
-        color: '#000',
+        width: 200,
+        height: 40,
+
+
         fontSize: 20,
-        // top:50,
-        // button:50,
+
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+    },
+    time: {
+        width: 140,
+        height: 50,
+        color: '#a6a5a5',
+        borderBottomWidth: 2,
+        borderBottomColor: 'rgba(59, 140, 253, 0.496)',
+        fontSize: 20,
+    },
+    modalBtn: {
+        height: 100,
+        width: 390,
+        paddingTop: 40,
+        display: "flex",
+        flexDirection: "row",
 
     },
-    dataBtn: {
-        // top: 100,
-        // left: -369,
-        paddingTop: 200
+    cardItems_date_icon: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: '#0378ee',
+        top: 30,
+
     },
-    modalBtn:{
-        height:200,
-        width:200,
-    }
+    cardItems_time: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        position: 'absolute',
+        top: 150,
+        left: 20
+    },
+    cardItems_time_icon: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#009dff',
+        left:105 ,
+        // right: 105,
+        bottom: 45,
+    },
+    date: {
+        width: 150,
+        height: 50,
+        color: '#a6a5a5',
+        borderBottomWidth: 2,
+        borderBottomColor: 'rgba(59, 140, 253, 0.496)',
+        fontSize: 19,
+    },
+    cardItems_date_icon: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#009dff',
+        left: 140,
+        bottom: 0,
+    },
+    book_fixToText: {
+    position: 'absolute',
+    height: 65,
+    width: 405,
+    fontSize: 15,
+    fontWeight: 'bold',
+    bottom: 100,
+    
+    // right: 30,
+    backgroundColor: '#0c8df7',
+    borderRadius: 55,
+  
+    top:405,
+    // left:10 ,
+ 
+},
+book_bookBtn: {
+    justifyContent: "space-between",
+   
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: 380,
+    height: 50,
+    paddingTop: 15,
+},
+book_btn: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 25,
+    height:40,
+    paddingLeft: 20,
+    marginTop:10,
+},
+book_arrow: {
+    color: '#000000',
+    backgroundColor:"#fff",
+    borderRadius:50,
+    width:40,
+    height:40,
+    padding:10,
+    marginTop:10,
+},
 });
 
 export default Discreption;

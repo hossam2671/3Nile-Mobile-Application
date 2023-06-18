@@ -26,6 +26,7 @@ import { Provider } from 'react-redux'
 import { Store } from './redux/Store';
 import { Modals } from  './Screens/modals/Modals';
 import Swvl from './Screens/Swvl';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default function App() {
@@ -47,7 +48,9 @@ export default function App() {
       <Provider store={Store}>
             <NavigationContainer>
             <Stack.Navigator screenOptions={{
-        headerStyle: { backgroundColor: '#f6f6f6' },
+        headerStyle: { backgroundColor: '#ffffff' },
+             
+              
 
       }}>
             
@@ -60,7 +63,7 @@ export default function App() {
             {/* <Stack.Screen name='HomeCards' component={HomeCards} /> */}
             <Stack.Screen name='LoginSignUp'  options={{ headerShown: false }} component={LoginSignUp} />
             <Stack.Screen name='swvl'  component={Swvl} />
-            <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
+            <Stack.Screen options={{ headerShown: true }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
 
             </Stack.Navigator>
             <StatusBar style='dark' />

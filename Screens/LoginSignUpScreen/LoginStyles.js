@@ -7,17 +7,18 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   button: {
-    backgroundColor: '#f7fdff',
+    backgroundColor: '#3191eaaf',
     height: 55,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 20,
+    marginHorizontal: 100,
     marginVertical: 10,
+    borderRadius:20,
   },
   buttonText: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#3a6df7',
+    color: '#ffffff',
     letterSpacing: 0.5
 
 },
@@ -28,17 +29,19 @@ const styles = StyleSheet.create({
   textInput: {
     height: 60,
     borderWidth: 1,
-    borderColor: '#114B5F',
+    borderColor: '#a1a1a1ff',
     marginHorizontal: 20,
     marginVertical: 10,
-    paddingLeft: 10
+    paddingLeft: 10,
+    borderRadius:50,
   },
   formButton: {
-    backgroundColor: '#114B5F',
+    borderRadius:30,
+    backgroundColor: '#3191eaff',
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 60,
+    marginHorizontal: 80,
     marginVertical: 30,
     borderColor: 'white',
     shadowColor: "#000",
@@ -51,7 +54,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   formInputContainer: {
-    marginBottom: 70,
+    marginBottom: 100,
     ...StyleSheet.absoluteFill,
     zIndex: -1,
     justifyContent: 'center',
@@ -70,16 +73,34 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
     elevation: 1,
     
-    backgroundColor: '#114B5F',
+    backgroundColor: '#0a79e1fc',
     alignItems: 'center',
     
     borderRadius: 20,
-    top: -40
+    top: -30
   },
   radios:{
     flexDirection:"row",
-    marginLeft:30
-  }
+   justifyContent:"space-between",
+   marginTop:20,
+  },
+  radios_user:{
+    flexDirection:"row",
+    justifyContent:"space-between",
+    width:80,
+    marginLeft:50,
+  },
+  radios_user_text:{
+    marginTop:5,
+    fontSize:18,
+    color:"#6f6f6f"
+  },
+  radios_owner:{
+    flexDirection:"row",
+    justifyContent:"space-between",
+    width:130,
+    marginRight:40,
+  },
 });
 
 export default styles;
