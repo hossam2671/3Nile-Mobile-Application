@@ -35,7 +35,7 @@ const HomeCards = (props) => {
             }, 5000)
           }}
           isLooping
-          source={require('../assets/homeV.mp4')
+          source={require('../assets/home.mp4')
           }
 
           style={{ height: 700,}}

@@ -32,6 +32,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
+
+    <Appp />
+    
     // <HomeCards />
 
   //   <NavigationContainer>
@@ -45,30 +48,28 @@ export default function App() {
   //     </Stack.Navigator>
   // </NavigationContainer>
   
-      <Provider store={Store}>
-            <NavigationContainer>
-            <Stack.Navigator screenOptions={{
-        headerStyle: { backgroundColor: '#ffffff' },
-             
-              
+      // <Provider store={Store}>
+      //       <NavigationContainer>
+      //       <Stack.Navigator screenOptions={{
+      //   headerStyle: { backgroundColor: '#f6f6f6' },
 
-      }}>
+      // }}>
             
-            <Stack.Screen name='OnboardingScreen 'options={{ headerShown: false }} component={OnboardingScreen} />
+      //       <Stack.Screen name='OnboardingScreen 'options={{ headerShown: false }} component={OnboardingScreen} />
 
-            <Stack.Screen name='BoatOwnerProfile' options={{ headerShown: true }} component={BoatOwnerProfile} />
-            <Stack.Screen name='ContactUs' options={{ headerShown: true }} component={ContactUs} />
-            <Stack.Screen name='Discreption'  options={{ headerShown: true }}component={Discreption} />
-            <Stack.Screen name='Filter' options={{ headerShown: true }} component={Filter} />
-            {/* <Stack.Screen name='HomeCards' component={HomeCards} /> */}
-            <Stack.Screen name='LoginSignUp'  options={{ headerShown: false }} component={LoginSignUp} />
-            <Stack.Screen name='swvl'  component={Swvl} />
-            <Stack.Screen options={{ headerShown: true }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
+      //       <Stack.Screen name='BoatOwnerProfile' options={{ headerShown: true }} component={BoatOwnerProfile} />
+      //       <Stack.Screen name='ContactUs' options={{ headerShown: true }} component={ContactUs} />
+      //       <Stack.Screen name='Discreption'  options={{ headerShown: true }}component={Discreption} />
+      //       <Stack.Screen name='Filter' options={{ headerShown: true }} component={Filter} />
+      //       {/* <Stack.Screen name='HomeCards' component={HomeCards} /> */}
+      //       <Stack.Screen name='LoginSignUp'  options={{ headerShown: false }} component={LoginSignUp} />
+      //       <Stack.Screen name='swvl'  component={Swvl} />
+      //       <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
 
-            </Stack.Navigator>
-            <StatusBar style='dark' />
-            </NavigationContainer>
-      </Provider>
+      //       </Stack.Navigator>
+      //       <StatusBar style='dark' />
+      //       </NavigationContainer>
+      // </Provider>
 
   ); 
 }

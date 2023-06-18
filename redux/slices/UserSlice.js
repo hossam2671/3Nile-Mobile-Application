@@ -659,12 +659,13 @@ const UserSlice = createSlice({
 // /////////////////////////////////////////////////////////
         [finishedTrips.fulfilled]:(state,action) => {
           state.finished = action.payload.data
-          console.log(state.finished)
+          // console.log(state.finished)
         },
         [acceptedTrips.fulfilled]:(state,action) => {
           state.accepted = action.payload.data
         },
         [pendingTrips.fulfilled]:(state,action) => {
+          // console.log(action.payload,"PAaaaaaaaaaaaaaaaaaaaay")      
           state.pending = action.payload.data
         },
         [addReview.fulfilled]:(state,action) => {

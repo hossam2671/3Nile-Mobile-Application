@@ -10,7 +10,9 @@ import Iconnn from 'react-native-vector-icons/Ionicons'
 import Modal from 'react-native-modal';
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
-import boatswvl from '../assets/swvl.png'
+import bk from '../assets/homecardimg.png'
+import boatSeats from '../assets/card.jpeg';
+import boatswvl from '../assets/swvlllll.jpg'
 import { OwnerdeleteBoat, SwvlDetails} from '../redux/slices/UserSlice'
 import { ResizeMode, Video } from 'expo-av'
 import { Button } from 'react-native-elements';
