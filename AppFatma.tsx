@@ -14,10 +14,6 @@ import Lottie from 'lottie-react-native'
 import HomeCards from './Screens/HomeCards'
 import Chat from './Screens/chat/Chat';
 import UserProfile from './Screens/UserProfile';
-<<<<<<< Updated upstream
-=======
-import NewUserProfile from './Screens/NewUserProfile';
->>>>>>> Stashed changes
 
 // ------------------------------------------------------------------
 
@@ -60,13 +56,8 @@ const MyBottomNav = () => {
             options={{
               // @ts-ignore
               tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/profile.icon.json')} style={styles.icon} />,
-<<<<<<< Updated upstream
             }}
             component={UserProfile}
-=======
-              tabBarVisible: false}}
-            component={NewUserProfile}
->>>>>>> Stashed changes
           />
         </Tab.Navigator>
   

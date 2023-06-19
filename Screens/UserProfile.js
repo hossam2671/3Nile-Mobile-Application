@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View, Image, Button, TouchableOpacity, ScrollView, TextInput , FlatList, Pressable , SafeAreaView} from 'react-native';
 import React, { Component, useEffect, useState } from 'react';
 import coverImage from '../assets/cover.jpg';
-import userProfile from '../assets/userimage.jpg';
-import card from '../assets/card.jpeg';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
@@ -10,10 +9,9 @@ import { addReview, canceltrip, pendingTrips, finishedTrips, editUserInfo , acce
 import Modal from "react-native-modal";
 import * as ImagePicker from 'expo-image-picker';
 import ip from '../config'
-import LabelContainer from 'rn-range-slider/LabelContainer';
-import { RadioButton } from 'react-native-paper';
+
 import StarRating from 'react-native-star-rating';
-import RatingSlider from './Rating';
+
 
 
 
@@ -22,18 +20,15 @@ import RatingSlider from './Rating';
 
 export const UserProfile = () => {
   const [rating , setRating] = useState(0)
-  const [maxRating , setMaxRating] = useState([1,2,3,4,5])
-  const [hover , setHover] = useState(null)
+
   const [disabled,setDisabled] = useState(false)
-  const starImgFilled="https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true"
-  const starImgCorner="https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png"
+
 
   const handleRatingChange = (itemId, newRating,boatId) => {
     console.log('New rating:', newRating);
     console.log('Item ID:', itemId);
   
-    // Update the rating for the item in your data source or API
-    // For example, if you have a state variable to store the products:
+
     const updatedFinished = finished.map((item) => {
       if (item._id === itemId) {
         setRating(newRating)
@@ -42,20 +37,11 @@ export const UserProfile = () => {
         })
     }})
   
-    // Update the state with the new rating
-    // setFinished(updatedFinished);
+
 }  ;
   
 
-  function rate(boatId,tripId , ratingValue){
-    setRating(ratingValue)
-    console.log("first")
-    dispatch(addReview({boatId:boatId,clientId:user.userData._id,tripId:tripId,rate:ratingValue})).then(()=>{
-      setDisabled(!disabled)
-      dispatch(finishedTrips({id:user.userData._id}))
-    }
-    )
-   }
+
   //get user data
   const { user } = useSelector(state => state.UserSlice)
 
@@ -69,15 +55,14 @@ export const UserProfile = () => {
 
   useEffect(() => {
 
-    //console.log(user);
-    // console.log(editUserInfo);
+
 
     dispatch(finishedTrips({ id: user._id }))
-    // dispatch(editUserInfo({ id: user._id }))
+
 
     dispatch(acceptedTrips({ id: user._id }))
     dispatch(pendingTrips({ id: user._id }))
-    console.log(pending,"Daadasdsadsadsada")
+
 
   }, []);
 
@@ -143,8 +128,7 @@ export const UserProfile = () => {
         />
 
 
-
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
+     <Button title="Pick an image from camera roll" onPress={pickImage} />
 
 
 
@@ -155,12 +139,13 @@ export const UserProfile = () => {
 
       {renderButton('Apply', () => {
            const updatedUser = {
+            id:  user._id,
             name: editName || user.name,
             phone: editPhone || user.phone,
             address: user.address,
             img: image || user.img,
           };
-    
+            console.log(updatedUser,"Ussssss")
           dispatch(editUserInfo(updatedUser));
           setVisibleModal(null);
           ; setVisibleModal(null)
@@ -178,10 +163,10 @@ export const UserProfile = () => {
       quality: 1,
     });
 
-    console.log(result);
+    console.log(result.assets[0]);
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setImage(result.assets[0]);
     }
   };
 
@@ -191,12 +176,9 @@ export const UserProfile = () => {
     console.log(boatId,tripId , ratingValue)
     setRating(ratingValue)
     console.log("first")
-    // dispatch(addReview({boatId:boatId,clientId:user._id,tripId:tripId,rate:ratingValue})).then((res)=>{
-    //   console.log(res,"Ddddddddddddddddddddone")
+
       setDisabled(!disabled)
-    //   dispatch(finishedTrips({id:user._id}))
-    // }
-    // )
+
    }
 
   return (
@@ -245,66 +227,7 @@ export const UserProfile = () => {
         <TouchableOpacity onPress={() => { prev }}>
           <View style={styles.tabs__button}><Text style={styles.tabs__font__style} onPress={prev}>Finished Trips</Text></View>
         </TouchableOpacity>
-        {/* <TouchableOpacity onPress={() => {
-
-        }}>
-          <View style={styles.tabs__button}><Text style={styles.tabs__font__style}>Finished Trips</Text></View>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.profile__cards}>
-      {/* {tap === 'pending' &&
-        pending.map((item) => {
-          return <View style={styles.card} key={item.id} data={{...item,tap:tap}}>
-          <Image source={card} style={styles.profile__card__image} />
-          <View style={styles.card__content}>
-            <Text style={styles.card__text}>
-              {item.name}
-            </Text>
-            <Text style={styles.card__text}>
-              {item.email}
-            </Text>
-          </View>
-
-          <View style={styles.stars__rating}>
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-          </View>
-          <View style={styles.boat__loc}>
-            <IIcon style={styles.icon__loc} name='location' size={10} />
-            <Text style={styles.text__loc}>Port: El-Mahata</Text>
-          </View>
-        </View> ;
-        })}
-
-      {tap === 'accepted' &&
-        accepted.map((item) => {
-          return <View style={styles.card} key={item.id} data={{...item,tap:tap}}>
-          <Image source={card} style={styles.profile__card__image} />
-          <View style={styles.card__content}>
-            <Text style={styles.card__text}>
-              {item.name}
-            </Text>
-            <Text style={styles.card__text}>
-              {item.email}
-            </Text>
-          </View>
-
-          <View style={styles.stars__rating}>
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-          </View>
-          <View style={styles.boat__loc}>
-            <IIcon style={styles.icon__loc} name='location' size={10} />
-            <Text style={styles.text__loc}>Port: El-Mahata</Text>
-          </View>
-        </View> ;
-        })} */}
+        
 
 <View style={styles.cards_con}>
 {
@@ -463,126 +386,6 @@ export const UserProfile = () => {
 
 
 
-
-        {/* {tap === 'finished' &&
-          finished.map((item) => {
-            return <View style={styles.card} key={item.id} data={{ ...item, tap: tap }}>
-              <Image source={card} style={styles.profile__card__image} />
-              <View style={styles.card__content}>
-                <Text style={styles.card__text}>
-                  {item.name}
-                </Text>
-                <Text style={styles.card__text}>
-                  {item.hours}
-                </Text>
-              </View>
-
-              <View style={styles.stars__rating}>
-                <Icon name="star" size={10} color='yellow' />
-                <Icon name="star" size={10} color='yellow' />
-                <Icon name="star" size={10} color='yellow' />
-                <Icon name="star" size={10} color='yellow' />
-                <Icon name="star" size={10} color='yellow' />
-              </View>
-              <View style={styles.boat__loc}>
-                <IIcon style={styles.icon__loc} name='location' size={10} />
-                <Text style={styles.text__loc}>{item.status}</Text>
-              </View>
-            </View>;
-          })} */}
-
-
-
-
-        {/* <View style={styles.profile__cards}>
-        <View style={styles.card}>
-          <Image source={card} style={styles.profile__card__image} />
-          <View style={styles.card__content}>
-            <Text style={styles.card__text}>
-              Feloka
-            </Text>
-            <Text style={styles.card__text}>
-              200$
-            </Text>
-          </View>
-
-          <View style={styles.stars__rating}>
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-          </View>
-          <View style={styles.boat__loc}>
-            <IIcon style={styles.icon__loc} name='location' size={10} />
-            <Text style={styles.text__loc}>Port: El-Mahata</Text>
-          </View>
-        </View>
-
-        <View style={styles.card}>
-          <Image source={card} style={styles.profile__card__image} />
-          <View style={styles.card__content}>
-            <Text style={styles.card__text}>
-              Feloka
-            </Text>
-            <Text style={styles.card__text}>
-              200$
-            </Text>
-          </View>
-
-          <View style={styles.stars__rating}>
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-          </View>
-          <View style={styles.boat__loc}>
-            <IIcon style={styles.icon__loc} name='location' size={10} />
-            <Text style={styles.text__loc}>Port: El-Mahata</Text>
-          </View>
-        </View>
-
-        <View style={styles.card}>
-          <Image source={card} style={styles.profile__card__image} />
-          <View style={styles.card__content}>
-            <Text style={styles.card__text}>
-              Feloka
-            </Text>
-            <Text style={styles.card__text}>
-              200$
-            </Text>
-          </View>
-
-          <View style={styles.stars__rating}>
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-            <Icon name="star" size={10} color='yellow' />
-          </View>
-          <View style={styles.boat__loc}>
-            <IIcon style={styles.icon__loc} name='location' size={10} />
-            <Text style={styles.text__loc}>Port: El-Mahata</Text>
-          </View>
-        </View>
-
-        <View style={styles.card}>
-          <Image source={card} style={styles.profile__card__image} />
-          <View style={styles.card__content}>
-            <Text style={styles.card__text}>
-              Feloka
-            </Text>
-            <Text style={styles.card__text}>
-              200$
-            </Text>
-          </View>
-
-          <View style={styles.boat__loc}>
-            <IIcon style={styles.icon__loc} name='location' size={10} />
-            <Text style={styles.text__loc}>Port: El-Mahata</Text>
-          </View>
-        </View> */}
 
 
       </View>

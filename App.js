@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import UserProfile from './Screens/UserProfile'
-
+import React from 'react'
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -29,6 +29,10 @@ import Swvl from './Screens/Swvl';
 <<<<<<< Updated upstream
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+<<<<<<< Updated upstream
+=======
+import BottomNavBar from './BottomNavBar'
+>>>>>>> Stashed changes
 =======
 import BottomNavBar from './BottomNavBar'
 >>>>>>> Stashed changes
