@@ -12,9 +12,9 @@ import Animated, { useAnimatedStyle, withTiming, useDerivedValue } from 'react-n
 import Lottie from 'lottie-react-native'
 //components
 import HomeCards from './Screens/HomeCards'
-import Chat from './Screens/chat/Chat';
+// import Chat from './Screens/chat/Chat';
 import NewUserProfile from './Screens/NewUserProfile';
-import Cards from './Screens/Cards';
+import NewBoatOwnerProfile from './Screens/NewBoatOwnerProfile';
 
 // ------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ const MyBottomNav = () => {
               // @ts-ignore
               tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/chat.icon.json')} style={styles.icon} />,
             }}
-            component={Cards}
+            component={NewBoatOwnerProfile}
           />
           <Tab.Screen
             name="profile"

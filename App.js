@@ -30,6 +30,7 @@ import Swvl from './Screens/Swvl';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import BottomNavBar from './BottomNavBar'
+import NewBoatOwnerProfile from './Screens/NewBoatOwnerProfile';
 
 
 
@@ -68,6 +69,7 @@ export default function App() {
             <Stack.Screen name='Filter' options={{ headerShown: true }} component={Filter} />
             {/* <Stack.Screen name='HomeCards' component={HomeCards} /> */}
             <Stack.Screen name='LoginSignUp'  options={{ headerShown: false }} component={LoginSignUp} />
+            <Stack.Screen name='NewOwner'  options={{ headerShown: false }} component={NewBoatOwnerProfile} />
             <Stack.Screen name='swvl'  component={Swvl} />
             <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavBar}></Stack.Screen>
 

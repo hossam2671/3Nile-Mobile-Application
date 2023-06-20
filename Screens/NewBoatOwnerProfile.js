@@ -24,25 +24,27 @@ import cardboat from '../assets/Nile.jpg'
 import boat from '../assets/Nile.jpg';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
-import { addReview, canceltrip, pendingTrips, finishedTrips, editUserInfo, acceptedTrips } from '../redux/slices/UserSlice';
+import {ownerUpdateInfo, SwvlDetails, getOwnerBoats, getOwnerCurrentTrips, getOwnerPreviousTrips, getOwnerRequests } from '../redux/slices/UserSlice';
 
 //modal
 import Modal from "react-native-modal";
-import StarRating from 'react-native-star-rating';
 
-function NewUserProfile() {
-    //get user data
-    const { user } = useSelector(state => state.UserSlice)
-    const [userState , setUserState] = useState(user)
+
+function NewBoatOwnerProfile() {
+    //get boatOwner data
+    const { boatOwner } = useSelector(state => state.UserSlice)
+    const { ownerBoats } = useSelector(state => state.UserSlice)
+
+    const [boatOwnerState , setboatOwnerState] = useState(boatOwner)
     const dispatch = useDispatch();
 
 
     //modal
 
     const [visibleModal, setVisibleModal] = useState(null);
-    const [editName, setName] = useState("")
-    const [editPhone, setPhone] = useState("")
-    const [image, setImage] = useState(`http://${ip}:5000/${user.img}`);
+    const [editboatOwnerName, seteditboatOwnerName] = useState("")
+    const [editeditboatOwnerPhone, seteditboatOwnerPhone] = useState("")
+    const [image, setImage] = useState(`http://${ip}:5000/${boatOwner.img}`);
 
     const renderButton = (text, onPress) => (
         <TouchableOpacity onPress={onPress}>
@@ -60,12 +62,13 @@ function NewUserProfile() {
 
 
                 <TextInput style={styles.modal__profile__input}
-                    placeholder={userState.name}
+                    placeholder={boatOwnerState.name}
                     placeholderTextColor="#0000006a"
-                    onChangeText={(e) => {setName(e) ; console.log(editName)}}
+                    onChangeText={(e) => {setName(e) ;
+                    console.log(editboatOwnerName)}}
                 />
                 <TextInput style={styles.modal__profile__input}
-                    placeholder={userState.phone}
+                    placeholder={boatOwnerState.phone}
                     placeholderTextColor="0000006a"
                     onChangeText={(e) => setPhone(e)}
 
@@ -78,16 +81,16 @@ function NewUserProfile() {
 
 
             {renderButton('Apply', () => {
-                const updatedUser = {
-                    name: editName || userState.name,
-                    phone: editPhone || userState.phone,
-                    id: user._id
+                const updatedBoatOwner = {
+                    name: editboatOwnerName || boatOwnerState.name,
+                    phone: editeditboatOwnerPhone || boatOwnerState.phone,
+                    id: boatOwner._id
                 };
 
-                dispatch(editUserInfo({ updatedUser })).then((res) => { 
+                dispatch(ownerUpdateInfo({ updatedBoatOwner })).then((res) => { 
                     setVisibleModal(false)
                     console.log(res.payload.data,"ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
-                    setUserState(res.payload.data)
+                    setboatOwnerState(res.payload.data)
                 })
             })}
 
@@ -137,12 +140,7 @@ function NewUserProfile() {
 
 
 
-        dispatch(finishedTrips({ id: user._id }))
-
-
-        dispatch(acceptedTrips({ id: user._id }))
-        dispatch(pendingTrips({ id: user._id }))
-        console.log(pending)
+       
 
     }, []);
     const TabButton = ({ currentTab, setCurrentTab, title, icon, onPress }) => {
@@ -185,30 +183,13 @@ function NewUserProfile() {
     };
 
     function cancel(id){
-        // console.log("first")
-        // dispatch(pendingTrips({id:user._id})) 
-         dispatch(canceltrip(id)).then(() =>dispatch(pendingTrips({id:user._id})) )
+        dispatch(pendingTrips({id:boatOwner._id})) 
+        dispatch(canceltrip(id)).then(() =>dispatch(pendingTrips({id:boatOwner._id})) )
     }
- //rating
- const [rating , setRating] = useState(0)
- const handleRatingChange = (itemId, newRating,boatId) => {
-    console.log('New rating:', newRating);
-    console.log('Item ID:', itemId);
-  
 
-    const updatedFinished = finished.map((item) => {
-      if (item._id === itemId) {
-        setRating(newRating)
-        dispatch(addReview({boatId:boatId,clientId:user._id,tripId:itemId,rate:newRating})).then(()=>{
-          dispatch(finishedTrips({id:user._id}))
-        })
-    }})
-  
-
-} 
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <SafeAreaView style={styles.container}>
 
             <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
 
@@ -228,13 +209,13 @@ function NewUserProfile() {
                     fontWeight: 'bold',
                     color: 'white',
                     marginTop: 20
-                }}>{user.name}</Text>
+                }}>{boatOwner.name}</Text>
 
                 <TouchableOpacity>
                     <Text style={{
                         marginTop: 6,
                         color: 'white'
-                    }}>{user.phone}</Text>
+                    }}>{boatOwner.phone}</Text>
                 </TouchableOpacity>
 
                 <View style={{ flexGrow: 1, marginTop: 50 }}>
@@ -484,13 +465,17 @@ function NewUserProfile() {
                         <View style={styles.edit__button}><Text style={styles.edit__button__style}>+ Edit</Text></View>
                     </TouchableOpacity>
 
+                    <TouchableOpacity
+                        isVisible={visibleModal === 1}
+                        onPress={() => { setVisibleModal(1) }}>
+                        <View style={styles.add__boat__button}><Text style={styles.add__boat__button__style}>+ Add Boat</Text></View>
+                    </TouchableOpacity>
+
                     <TouchableOpacity onPress={() => { pickImage() }}>
                         <Icon name="camera" size={20} color="#0c8df7" style={styles.icon__button} />
                     </TouchableOpacity>
 
 
-
-<View style={{paddingBottom: 300}}>
 
                     {
   tap == "pending" && (
@@ -509,57 +494,10 @@ function NewUserProfile() {
                     <IIcon name="date-range" size={13} />
                     <Text style={styles.card__date}>27 June 2023</Text>
                     <Text style={styles.card__price}>200$</Text>
-                    <TouchableOpacity onPress={() => cancel(item._id)}>
+                    <TouchableOpacity onPress={() => {cancel(item.id)}}>
                         <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>x Cancel</Text></View>
                     </TouchableOpacity>
                 </View>
-            </View>
-      )}
-    />
-  )
-  
-}
-{
-  tap == "finished" && (
-    <FlatList
-      data={finished}
-      keyExtractor={(item) => item._id}
-      renderItem={({ item }) => (
-        <View style={styles.card__box}>
-                <View style={styles.card__image}>
-                    <Image source={cardboat} style={styles.cardboat__img} />
-                </View>
-                <View style={styles.card__content}>
-                    <Text style={styles.card__name}>Feloka</Text>
-                    <Icona name="location" size={13} style={styles.loc__icon} />
-                    <Text style={styles.card__location}>Port: MAC</Text>
-                    <IIcon name="date-range" size={13} />
-                    <Text style={styles.card__date}>27 June 2023</Text>
-                    <Text style={styles.card__price}>200$</Text>
-                    
-                </View>
-                {
-              !item.rate ?
-            <StarRating
-              key={item._id}
-              disabled={false}
-              maxStars={5}
-              rating={item.rating}
-              selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
-              starSize={20}
-              fullStarColor="#ffc107"
-              emptyStarColor="#e4e5e9"
-            /> : <StarRating
-            key={item._id}
-            disabled={false}
-            maxStars={5}
-            rating={item.rate.rating}
-            // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
-            starSize={20}
-            fullStarColor="#ffc107"
-            emptyStarColor="#e4e5e9"
-          />
-            }
             </View>
       )}
     />
@@ -592,13 +530,13 @@ function NewUserProfile() {
   )
   
 }
-</View>
-            
+
 
                 </Animated.View>
 
             </Animated.View>
-        </ScrollView>
+
+        </SafeAreaView>
     );
 }
 
@@ -638,7 +576,6 @@ const TabButton = (currentTab, setCurrentTab, title, image) => {
 
             </View>
         </TouchableOpacity>
-       
     );
 }
 
@@ -648,7 +585,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        // marginBottom:100,
     },
 
     edit__button: {
@@ -761,7 +697,21 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 600,
         textAlign: 'center',
+    },
+    add__boat__button:{
+        width: 85,
+        height: 35,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#0c8df7',
+        left: 200,
+        bottom: 27,
+    },
+    add__boat__button__style:{
+        fontSize: 15,
+        fontWeight: 600,
     }
 });
 
-export default NewUserProfile
+export default NewBoatOwnerProfile

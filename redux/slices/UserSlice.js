@@ -83,16 +83,27 @@ export const addReview= createAsyncThunk ("/addReview", async(payload )=>{
 
 
   // user cancel trip
-export const canceltrip= createAsyncThunk ("/cancelTrip", async(payload )=>{
+// export const canceltrip= createAsyncThunk ("/cancelTrip", async(payload )=>{
 
-  let res =axios.put(`http://${ip}:5000/user/cancelTrip`,{
+//   let res =axios.put(`http://${ip}:5000/user/cancelTrip`,{
   
-  id: payload,
+//   id: payload,
 
 
-  })
-  return res
-  })
+//   })
+//   return res
+//   })
+
+export const canceltrip = createAsyncThunk('/canceltrip', async (payload) => {
+  console.log(payload,"jjjjjj")
+    const response = await axios.put(`http://${ip}:5000/user/cancelTrip`,{
+      id:payload
+    });
+    console.log(response)
+    // const data = await response.data;
+    // return data;
+  }
+);
 
 // Delete Boat -->> Owner
 export const OwnerdeleteBoat = createAsyncThunk("boatOwner/Boats", async (payload) => {
@@ -298,9 +309,9 @@ export const ownerUpdateInfo= createAsyncThunk ("/editOwnerInfo", async(payload 
   await axios.put(`http://${ip}:5000/boatOwner/updateData/${payload.boatOwnerId}`,{
   
   name: payload.name,
-  address:payload.address,
+  // address:payload.address,
   phone: payload.phone,
-  img:payload.img,
+  // img:payload.img,
   },{
     headers:{
       'Content-Type':'multipart/form-data' 

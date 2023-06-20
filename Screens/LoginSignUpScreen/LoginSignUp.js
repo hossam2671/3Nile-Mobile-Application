@@ -168,7 +168,7 @@ const LoginSignUp = (props) => {
               props.navigation.navigate('HomeCards')
             }
             else if(res.payload.boatOwner){
-              props.navigation.navigate('BoatOwnerProfile')
+              props.navigation.navigate('NewOwner')
               
             }
             
