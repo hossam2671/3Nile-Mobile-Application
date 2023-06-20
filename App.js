@@ -26,16 +26,12 @@ import { Provider } from 'react-redux'
 import { Store } from './redux/Store';
 import { Modals } from  './Screens/modals/Modals';
 import Swvl from './Screens/Swvl';
-<<<<<<< Updated upstream
+
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-<<<<<<< Updated upstream
-=======
 import BottomNavBar from './BottomNavBar'
->>>>>>> Stashed changes
-=======
-import BottomNavBar from './BottomNavBar'
->>>>>>> Stashed changes
+
+
 
 export default function App() {
 

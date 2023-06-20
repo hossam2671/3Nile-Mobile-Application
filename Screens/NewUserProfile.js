@@ -1,16 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useRef, useState } from 'react';
-import { Animated, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { Animated, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ip from '../config'
 import * as ImagePicker from 'expo-image-picker';
+import Cards from './Cards';
 
-
+import Icona from 'react-native-vector-icons/Ionicons';
+import IIcon from 'react-native-vector-icons/MaterialIcons';
 // Tab ICons...
 import home from '../assets/home.png';
 import accept from '../assets/accept.png';
-import pending from '../assets/pending.png';
-import finished from '../assets/end.png';
+import pendingg from '../assets/pending.png';
+import finishedd from '../assets/end.png';
 import logout from '../assets/logout.png';
 // Menu
 import menu from '../assets/menu.png';
@@ -18,6 +20,8 @@ import close from '../assets/close.png';
 
 // Photo
 import photo from '../assets/userimage.jpg';
+import cardboat from '../assets/Nile.jpg'
+import boat from '../assets/Nile.jpg';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
 import { addReview, canceltrip, pendingTrips, finishedTrips, editUserInfo, acceptedTrips } from '../redux/slices/UserSlice';
@@ -29,10 +33,12 @@ import Modal from "react-native-modal";
 function NewUserProfile() {
     //get user data
     const { user } = useSelector(state => state.UserSlice)
-
+    const [userState , setUserState] = useState(user)
     const dispatch = useDispatch();
 
+
     //modal
+
     const [visibleModal, setVisibleModal] = useState(null);
     const [editName, setName] = useState("")
     const [editPhone, setPhone] = useState("")
@@ -54,13 +60,13 @@ function NewUserProfile() {
 
 
                 <TextInput style={styles.modal__profile__input}
-                    placeholder={user.name}
-                    placeholderTextColor="black"
-                    onChangeText={(e) => setName(e)}
+                    placeholder={userState.name}
+                    placeholderTextColor="#0000006a"
+                    onChangeText={(e) => {setName(e) ; console.log(editName)}}
                 />
                 <TextInput style={styles.modal__profile__input}
-                    placeholder={user.phone}
-                    placeholderTextColor="black"
+                    placeholder={userState.phone}
+                    placeholderTextColor="0000006a"
                     onChangeText={(e) => setPhone(e)}
 
                 />
@@ -73,14 +79,16 @@ function NewUserProfile() {
 
             {renderButton('Apply', () => {
                 const updatedUser = {
-                    name: editName || user.name,
-                    phone: editPhone || user.phone,
+                    name: editName || userState.name,
+                    phone: editPhone || userState.phone,
+                    id: user._id
                 };
 
-                dispatch(editUserInfo({updatedUser})).then((res)=>{
+                dispatch(editUserInfo({ updatedUser })).then((res) => { 
                     setVisibleModal(false)
-        
-                  })
+                    console.log(res.payload.data,"ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
+                    setUserState(res.payload.data)
+                })
             })}
 
         </View>
@@ -91,19 +99,19 @@ function NewUserProfile() {
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
         });
-    
+
         console.log(result);
-    
-        if (!result.cancelled) {
-          setImage(result.uri);
+
+        if (!result.canceled) {
+            setImage(result.uri);
         }
-      };
-    
+    };
+
 
 
     const [currentTab, setCurrentTab] = useState("Home");
@@ -117,6 +125,66 @@ function NewUserProfile() {
     const scaleValue = useRef(new Animated.Value(1)).current;
     const closeButtonOffset = useRef(new Animated.Value(0)).current;
 
+
+    const [tap, setTap] = useState("accepted")
+    const { accepted } = useSelector(state => state.UserSlice)
+    const { finished } = useSelector(state => state.UserSlice)
+    const { pending } = useSelector(state => state.UserSlice)
+
+
+
+    useEffect(() => {
+
+
+
+        dispatch(finishedTrips({ id: user._id }))
+
+
+        dispatch(acceptedTrips({ id: user._id }))
+        dispatch(pendingTrips({ id: user._id }))
+        console.log(pending)
+
+    }, []);
+    const TabButton = ({ currentTab, setCurrentTab, title, icon, onPress }) => {
+        return (
+            
+            <TouchableOpacity onPress={onPress}>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        paddingVertical: 8,
+                        backgroundColor: currentTab === title ? "white" : "transparent",
+                        paddingLeft: 13,
+                        paddingRight: 35,
+                        borderRadius: 8,
+                        marginTop: 15,
+                    }}
+                >
+                    <Image
+                        source={icon}
+                        style={{
+                            width: 25,
+                            height: 25,
+                            tintColor: currentTab === title ? "#0c8df7" : "white",
+                        }}
+                    />
+                    <Text
+                        style={{
+                            fontSize: 15,
+                            fontWeight: "bold",
+                            paddingLeft: 15,
+                            color: currentTab === title ? "#0c8df7" : "white",
+                        }}
+                    >
+                        {title}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
+
     return (
         <SafeAreaView style={styles.container}>
 
@@ -126,7 +194,7 @@ function NewUserProfile() {
             </Modal>
 
             <View style={{ justifyContent: 'flex-start', padding: 15 }}>
-                <Image source={{uri : image}} style={{
+                <Image source={{ uri: image }} style={{
                     width: 60,
                     height: 60,
                     borderRadius: 50,
@@ -152,10 +220,148 @@ function NewUserProfile() {
                         // Tab Bar Buttons....
                     }
 
-                    {TabButton(currentTab, setCurrentTab, "Home", home)}
-                    {TabButton(currentTab, setCurrentTab, "Accept", accept)}
-                    {TabButton(currentTab, setCurrentTab, "Pending", pending)}
-                    {TabButton(currentTab, setCurrentTab, "Finished", finished)}
+                    <TabButton
+                        currentTab={currentTab}
+                        setCurrentTab={setCurrentTab}
+                        title="Home"
+                        icon={home}
+                        onPress={() => {
+                            console.log("first");
+                            setCurrentTab("Home")
+                            Animated.timing(scaleValue, {
+                                toValue: showMenu ? 1 : 1,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+    
+                            Animated.timing(offsetValue, {
+                                // YOur Random Value...
+                                toValue: showMenu ? 0 : 200,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+                            Animated.timing(closeButtonOffset, {
+                                // YOur Random Value...
+                                toValue: !showMenu ? -30 : 0,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+    
+                            setShowMenu(!showMenu);
+
+                        }}
+                    />
+                    <TabButton
+                        currentTab={currentTab}
+                        setCurrentTab={setCurrentTab}
+                        title="Accept"
+                        icon={accept}
+                        onPress={() => {
+                            setTap("accepted")
+                            console.log(tap)
+                            setCurrentTab("Accept")
+                         
+                            Animated.timing(scaleValue, {
+                                toValue: showMenu ? 1 : 1,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+    
+                            Animated.timing(offsetValue, {
+                                // YOur Random Value...
+                                toValue: showMenu ? 0 : 200,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+                            Animated.timing(closeButtonOffset, {
+                                // YOur Random Value...
+                                toValue: !showMenu ? -30 : 0,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+    
+                            setShowMenu(!showMenu);
+
+                        }}
+                    />
+                    <TabButton
+                        currentTab={currentTab}
+                        setCurrentTab={setCurrentTab}
+                        title="Pending"
+                        icon={pendingg}
+                        onPress={() => {
+                            setTap("pending")
+                            console.log(tap)
+                            setCurrentTab("Pending")
+                            Animated.timing(scaleValue, {
+                                toValue: showMenu ? 1 : 1,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+    
+                            Animated.timing(offsetValue, {
+                                // YOur Random Value...
+                                toValue: showMenu ? 0 : 200,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+                            Animated.timing(closeButtonOffset, {
+                                // YOur Random Value...
+                                toValue: !showMenu ? -30 : 0,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+    
+                            setShowMenu(!showMenu);
+
+                        }}
+                    />
+                    <TabButton
+                        currentTab={currentTab}
+                        setCurrentTab={setCurrentTab}
+                        title="Finished"
+                        icon={finishedd}
+                        onPress={() => {
+                            setTap("finished")
+                            console.log(tap)
+                            setCurrentTab("Finished")
+                            Animated.timing(scaleValue, {
+                                toValue: showMenu ? 1 : 1,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+    
+                            Animated.timing(offsetValue, {
+                                // YOur Random Value...
+                                toValue: showMenu ? 0 : 200,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+                            Animated.timing(closeButtonOffset, {
+                                // YOur Random Value...
+                                toValue: !showMenu ? -30 : 0,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+    
+                            setShowMenu(!showMenu);
+                        }}
+                    />
+                    {/* {TabButton(currentTab, setCurrentTab, "Accept", accept)} */}
+                    {/* {TabButton(currentTab, setCurrentTab, "Pending", pending)} */}
+                    {/* {TabButton(currentTab, setCurrentTab, "Finished", finished)} */}
 
                 </View>
 
@@ -242,7 +448,7 @@ function NewUserProfile() {
                         marginTop: 5
                     }}></Image>
 
-                    <Image source={{uri: image}} style={{
+                    <Image source={{ uri: image }} style={{
                         width: 90,
                         height: 90,
                         borderRadius: 50,
@@ -256,10 +462,59 @@ function NewUserProfile() {
                         <View style={styles.edit__button}><Text style={styles.edit__button__style}>+ Edit</Text></View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => {pickImage()}}>
-                    <Icon name="camera" size={20} color="#0c8df7" style={styles.icon__button}/>
+                    <TouchableOpacity onPress={() => { pickImage() }}>
+                        <Icon name="camera" size={20} color="#0c8df7" style={styles.icon__button} />
                     </TouchableOpacity>
 
+
+
+                    {
+  tap == "pending" && (
+    <FlatList
+      data={pending}
+      keyExtractor={(item) => item._id}
+      renderItem={({ item }) => (
+        <View style={styles.card__box}>
+                <View style={styles.card__image}>
+                    <Image source={cardboat} style={styles.cardboat__img} />
+                </View>
+                <View style={styles.card__content}>
+                    <Text style={styles.card__name}>Feloka</Text>
+                    <Icona name="location" size={13} style={styles.loc__icon} />
+                    <Text style={styles.card__location}>Port: MAC</Text>
+                    <IIcon name="date-range" size={13} />
+                    <Text style={styles.card__date}>27 June 2023</Text>
+                    <Text style={styles.card__price}>200$</Text>
+                </View>
+            </View>
+      )}
+    />
+  )
+  
+}
+{
+  tap == "accepted" && (
+    <FlatList
+      data={accepted.data}
+      renderItem={({ item }) => (
+        <View style={styles.card__box}>
+                <View style={styles.card__image}>
+                    <Image source={cardboat} style={styles.cardboat__img} />
+                </View>
+                <View style={styles.card__content}>
+                    <Text style={styles.card__name}>Feloka</Text>
+                    <Icona name="location" size={13} style={styles.loc__icon} />
+                    <Text style={styles.card__location}>Port: MAC</Text>
+                    <IIcon name="date-range" size={13} />
+                    <Text style={styles.card__date}>27 June 2023</Text>
+                    <Text style={styles.card__price}>200$</Text>
+                </View>
+            </View>
+      )}
+    />
+  )
+  
+}
 
 
                 </Animated.View>
@@ -357,11 +612,61 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#0c8df7',
     },
-    icon__button:{
+    icon__button: {
         bottom: 170,
         left: 231,
-    }
+    },
+    cards__container: {
+      
+    },
 
+    card__box: {
+        marginLeft:60,
+        elevation: 4,
+        width: 300,
+        height: 300,
+        borderRadius: 20,
+        backgroundColor: '#878585',
+        shadowColor: '#171717',
+        shadowOffset: { width: -2, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        marginBottom:15
+    },
+    card__image:{
+        width: 270,
+        height: 120,
+        alignItems: 'center',
+        borderRadius: 20,
+        left: 15,
+        top: 20,
+    },
+    cardboat__img: {
+        width: 270,
+        height: 120,
+        borderRadius: 10,
+    },
+    card__content:{
+        top: 40,
+        left: 15,
+    },
+    card__name: {
+        fontSize: 20,
+        fontWeight: 600,
+        bottom: 15,
+    },
+    card__location:{
+        bottom: 18,
+        left: 16,
+    },
+    card__date:{
+        bottom: 17,
+        left: 16,
+    },
+    card__price:{
+        fontSize: 20,
+        fontWeight: 600,
+    }
 });
 
 export default NewUserProfile

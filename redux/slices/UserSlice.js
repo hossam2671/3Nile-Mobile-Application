@@ -57,21 +57,13 @@ export const login = createAsyncThunk("allUser/login", async (payload) => {
 });
 
 export const editUserInfo= createAsyncThunk ("/editUserInfo", async(payload )=>{
-const form = new FormData();
-form.append("name",payload.name)
-form.append("adrees",payload.address)
-form.append("phone",payload.phone)
-form.append("img",payload.img)
+console.log(payload,"payload")
 
-const result = axios.put(`http://${ip}:5000/user/editUserinfo/${payload.id}`,{
-      name: payload.name,
-      address:payload.address,
-      phone:payload.phone,
-      img:payload.img
-},{
-  headers:{
-    'Content-Type':'multipart/form-data' 
-  } 
+const result = axios.put(`http://${ip}:5000/user/editUserinfo/${payload.updatedUser.id}`,{
+      name: payload.updatedUser.name,
+      // address:payload.address,
+      phone:payload.updatedUser.phone,
+      // img:payload.img
 })
 return result
 })
@@ -293,7 +285,7 @@ export const bookTrip = createAsyncThunk("user/bookTrip", async (payload) => {
 
   const response = await axios.post(`http://${ip}:5000/user/addTrip/${payload.boatId}/${payload.clientId}`, {
     date: payload.date, 
-    startTime:`${payload.time.hours}:${payload.time.minutes}`,
+    startTime:payload.time,
     hours:payload.hours,
   });
   const data = response.data; 

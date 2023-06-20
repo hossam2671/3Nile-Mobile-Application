@@ -1,9 +1,4 @@
 {
   "compilerOptions": {},
-<<<<<<< Updated upstream
-  "extends": "expo/tsconfig.base",
-  
-=======
   "extends": "expo/tsconfig.base"
->>>>>>> Stashed changes
 }

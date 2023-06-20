@@ -208,12 +208,11 @@ export const Discreption = () => {
 
                     <TimePickerModal
                         visible={visible}
-
+                        use24HourClock={true}
                         animationType='slide'
 
                         onDismiss={onDismiss}
                         onConfirm={onConfirm}
-                        hours={12}
                         minutes={14}
                     />
                 </View>

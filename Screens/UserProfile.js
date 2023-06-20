@@ -81,7 +81,7 @@ export const UserProfile = () => {
   function cancel(id){
     dispatch(pendingTrips({id:user._id})) 
     dispatch(canceltrip(id)).then(() =>dispatch(pendingTrips({id:user._id})) )
-   }
+  }
 
   //modal
   const [visibleModal, setVisibleModal] = useState(null);
@@ -235,44 +235,19 @@ export const UserProfile = () => {
     <FlatList
       data={pending}
       renderItem={({ item }) => (
-        <View style={styles.card_con}>
-            <Image
-            style={styles.card_con_img}
-              width={170}
-              height={170}
-              source={{
-                uri: `http://${ip}:5000/${item.boatId.images[0]}`,
-              }}
-            />
-
-            <View style={styles.card_con_info}>
-              <View style={styles.card_con_info_row}>
-                <Text style={styles.card_con_info_row_name}>{item.boatId.name}</Text>
-              </View>
-              <View style={styles.card_con_info_row}>
-                <Text style={styles.card_con_info_row_price}>{item.price}</Text>
-       
-              </View>
-              <View style={styles.card_con_info_row}>
-                <Text style={styles.card_con_info_row_port}>{item.boatId.type}</Text>
-              </View>
-              <View style={styles.card_con_info_row}>
-               <Icon  name='anchor' size={18} color={'#166582'} />
-                <Text style={styles.card_con_info_row_type}> {item.boatId.portName} </Text>
-             
-              </View>
-              <TouchableOpacity
-          isVisible={visibleModal === 1}
-          style={styles.button}
-          onPress={() => {
-            cancel(item._id);
-          }}
-        >
-          <Text style={styles.buttonText}>Cancel</Text>
-        </TouchableOpacity>
+        <View style={styles.card__box}>
+                <View style={styles.card__image}>
+                    <Image source={cardboat} style={styles.cardboat__img} />
+                </View>
+                <View style={styles.card__content}>
+                    <Text style={styles.card__name}>Feloka</Text>
+                    <Icon name="location" size={13} style={styles.loc__icon} />
+                    <Text style={styles.card__location}>Port: MAC</Text>
+                    <IIcon name="date-range" size={13} />
+                    <Text style={styles.card__date}>27 June 2023</Text>
+                    <Text style={styles.card__price}>200$</Text>
+                </View>
             </View>
-            
-          </View>
       )}
     />
   )
