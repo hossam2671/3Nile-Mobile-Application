@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import UserProfile from './Screens/UserProfile'
-
+import React from 'react'
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -26,7 +26,13 @@ import { Provider } from 'react-redux'
 import { Store } from './redux/Store';
 import { Modals } from  './Screens/modals/Modals';
 import Swvl from './Screens/Swvl';
+
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
 import BottomNavBar from './BottomNavBar'
+import NewBoatOwnerProfile from './Screens/NewBoatOwnerProfile';
+
+
 
 export default function App() {
 
@@ -64,6 +70,7 @@ export default function App() {
             <Stack.Screen name='Filter' options={{ headerShown: true }} component={Filter} />
             {/* <Stack.Screen name='HomeCards' component={HomeCards} /> */}
             <Stack.Screen name='LoginSignUp'  options={{ headerShown: false }} component={LoginSignUp} />
+            <Stack.Screen name='NewOwner'  options={{ headerShown: false }} component={NewBoatOwnerProfile} />
             <Stack.Screen name='swvl'  component={Swvl} />
             <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
 

@@ -262,12 +262,11 @@ console.log(formattedTime,"Te4eeeee2");
 
                     <TimePickerModal
                         visible={visible}
-
+                        use24HourClock={true}
                         animationType='slide'
 
                         onDismiss={onDismiss}
                         onConfirm={onConfirm}
-                        hours={12}
                         minutes={14}
                     />
                 </View>

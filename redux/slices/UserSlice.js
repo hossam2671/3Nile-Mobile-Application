@@ -3,6 +3,7 @@ import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Cookies from "js-cookie";
 import ip from '../../config'
+import { Form } from "formik";
 
 
 
@@ -42,10 +43,8 @@ export const login = createAsyncThunk("allUser/login", async (payload) => {
     // Serialize the headers object
     const serializedHeaders = JSON.stringify(headers);
 
-    // console.log(data);
 
     if (data.user === 'user') {
-      // console.log(data.userData);
       AsyncStorage.setItem("user", data.userData._id)
       // const token = data.userData._id;
       // Cookies.remove("boatOwnerId");
@@ -54,7 +53,6 @@ export const login = createAsyncThunk("allUser/login", async (payload) => {
 
         return data;
     } else if (data.boatOwner === 'boatOwner') {
-      // console.log(data)
         AsyncStorage.setItem("boatOwner", data.boatOwnerData._id)
         return data;
       //return { data, serializedHeaders }; // Return both data and serializedHeaders
@@ -69,25 +67,19 @@ export const login = createAsyncThunk("allUser/login", async (payload) => {
 });
 
 export const editUserInfo= createAsyncThunk ("/editUserInfo", async(payload )=>{
-// console.log(payload,"Payload")
 console.log(payload,"payload")
-// console.log(payload.userData._id)
-const result =   axios.put(`http://${ip}:5000/user/editUserinfo/${payload.updatedUser.id}`,{
+
+const result = axios.put(`http://${ip}:5000/user/editUserinfo/${payload.updatedUser.id}`,{
       name: payload.updatedUser.name,
-      address:payload.updatedUser.address,
+      // address:payload.address,
       phone:payload.updatedUser.phone,
-      img:payload.updatedUser.img
-},{
-  headers:{
-    'Content-Type':'multipart/form-data' 
-  } 
+      // img:payload.img
 })
 return result
 })
 
 // add review 
 export const addReview= createAsyncThunk ("/addReview", async(payload )=>{
-  console.log(payload,"Payload")
 
    const res = axios.post(`http://${ip}:5000/user/addReview`,{
   
@@ -101,17 +93,27 @@ export const addReview= createAsyncThunk ("/addReview", async(payload )=>{
 
 
   // user cancel trip
-export const canceltrip= createAsyncThunk ("/cancelTrip", async(payload )=>{
-  console.log(payload,"Payload")
+// export const canceltrip= createAsyncThunk ("/cancelTrip", async(payload )=>{
 
-  let res =axios.put(`http://${ip}:5000/user/cancelTrip`,{
+//   let res =axios.put(`http://${ip}:5000/user/cancelTrip`,{
   
-  id: payload,
+//   id: payload,
 
 
-  })
-  return res
-  })
+//   })
+//   return res
+//   })
+
+export const canceltrip = createAsyncThunk('/canceltrip', async (payload) => {
+  console.log(payload,"jjjjjj")
+    const response = await axios.put(`http://${ip}:5000/user/cancelTrip`,{
+      id:payload
+    });
+    console.log(response)
+    // const data = await response.data;
+    // return data;
+  }
+);
 
 // Delete Boat -->> Owner
 export const OwnerdeleteBoat = createAsyncThunk("boatOwner/Boats", async (payload) => {
@@ -119,7 +121,6 @@ export const OwnerdeleteBoat = createAsyncThunk("boatOwner/Boats", async (payloa
   try {
 
       let res = await axios.delete(`http://${ip}:5000/boatOwner/deleteBoat/${payload.id}/${payload.ownerId}`);
-      console.log(res.data,"DATA AFTER");
       return res.data;
   }
   catch (err) {
@@ -174,8 +175,6 @@ export const getCategoryOne = createAsyncThunk("user/category/3nile/boats", asyn
 
     try {
         let res = await axios.get(`http://${ip}:5000/user/category/3nile/boats`);
-        // console.log(res.data , "3nile")
-          console.log(ip)
         return res.data;
     }
     catch (err) {
@@ -186,7 +185,6 @@ export const getCategoryOne = createAsyncThunk("user/category/3nile/boats", asyn
 export const getCategoryTwo = createAsyncThunk("user/category/3nileplus/boats", async (payload) => {
     try {
         let res = await axios.get(`http://${ip}:5000/user/category/3nileplus/boats`);
-        // console.log(res.data , "3nilePlus")
         return res;
     }
     catch (err) {
@@ -207,7 +205,6 @@ export const getCategoryThree = createAsyncThunk("user/category/3nilevip/boats",
 export const getSwvl = createAsyncThunk("swvl/swvlTrips", async (payload) => {
   try {
       let res = await axios.get(`http://${ip}:5000/swvl/swvlTrips`);
-      console.log(res)
       return res;
   }
   catch (err) {
@@ -216,11 +213,11 @@ export const getSwvl = createAsyncThunk("swvl/swvlTrips", async (payload) => {
 
 })
 export const getOwnerBoats = createAsyncThunk("boatOwner/Boats", async (payload) => {
-  // console.log(payload);
   
     try {
   
         let res = await axios.get(`http://${ip}:5000/boatOwner/getAllBoats/${payload}`);
+        // console.log(res)
         return res;
     }
     catch (err) {
@@ -230,29 +227,20 @@ export const getOwnerBoats = createAsyncThunk("boatOwner/Boats", async (payload)
 })
 export const getOwnerPreviousTrips = createAsyncThunk("boatOwner/Boats", async (payload) => {
   
-    try {
+    
   
         let res = await axios.get(`http://${ip}:5000/boatOwner/getAllFinishedTrips/${payload}`);
-        // console.log(res);
         return res;
-    }
-    catch (err) {
-
-    }
+    
+    
 
 })
 export const getOwnerRequests = createAsyncThunk("boatOwner/Boats", async (payload) => {
   
-    try {
-  
         let res = await axios.get(`http://${ip}:5000/boatOwner/getAllPendingTrips/${payload}`);
-        // console.log(res);
-
+      
         return res;
-    }
-    catch (err) {
-
-    }
+  
 
 })
 export const getOwnerCurrentTrips = createAsyncThunk("boatOwner/Boats/current", async (payload) => {
@@ -260,13 +248,26 @@ export const getOwnerCurrentTrips = createAsyncThunk("boatOwner/Boats/current", 
     try {
   
         let res = await axios.get(`http://${ip}:5000/boatOwner/getAllCurrentTrips/${payload}`);
-        // console.log(res);
 
         return res;
     }
     catch (err) {
 
     }
+
+})
+export const SwvlDetails = createAsyncThunk("boatOwner/swvlDetail", async (payload) => {
+  
+  
+  try {
+
+      let res = await axios.get(`http://localhost:5000/swvl/swvlTrip/${payload}`);
+
+      return res.data;
+  }
+  catch (err) {
+
+  }
 
 })
 
@@ -279,8 +280,6 @@ export const getBoatData = createAsyncThunk("getBoat", async (payload) => {
         return Data.data;
     }
     catch (err) {
-        console.log("eeeee");
-        console.log(err)
 
     }
 
@@ -290,11 +289,8 @@ export const getBoatData = createAsyncThunk("getBoat", async (payload) => {
 // هنا بدات فاطمة 
 export const addTrip = createAsyncThunk("fatma/addTrip", async (payload) => {
  
-  console.log(payload)
   const dateOnly=[...payload.date.toString().split(" ")[1]," ",...payload.date.toString().split(" ")[2]," ",...payload.date.toString().split(" ")[3]].join("")
- console.log(dateOnly)
  const timeOnly=payload.startTime.toString().split("T")[1].split(" ")[4]
- console.log(payload.startTime)
   const response = await axios.post(`http://${ip}:5000/user/addTrip/${payload.boatId}/${payload.id}`, {
     date: dateOnly, 
     startTime:timeOnly,
@@ -333,22 +329,18 @@ export const bookSwvl = createAsyncThunk("user/bookswvl",async(payload)=>{
 // Boat Owner Edit Info 
 export const ownerUpdateInfo= createAsyncThunk ("/editOwnerInfo", async(payload )=>{
   let owner;
-  console.log(payload,"Payload")
-  console.log(payload.img)
-  // console.log(payload.userData._id)
   await axios.put(`http://${ip}:5000/boatOwner/updateData/${payload.boatOwnerId}`,{
   
   name: payload.name,
-  address:payload.address,
+  // address:payload.address,
   phone: payload.phone,
-  img:payload.img,
+  // img:payload.img,
   },{
     headers:{
       'Content-Type':'multipart/form-data' 
     } 
   }).then(res => {
     owner=  res.data
-    console.log(owner);
     
    
   })
@@ -391,7 +383,6 @@ console.log(state.seatReserved)
         );
       
         state.filteredswvl = filteredSwvl;
-        console.log(state.filteredswvl);
       
         if (searchQuery === "") {
           state.filteredswvl = [...state.swvl];
@@ -464,7 +455,6 @@ console.log(state.seatReserved)
       
        // filter cat two
        filter2(state, action) {
-        // console.log(action.payload);
         let filtered = [...state.categoryTwo];
         let filteredByPort = [...state.categoryTwo];
       
@@ -493,7 +483,6 @@ console.log(state.seatReserved)
         Cookies.remove("userId");
 
         state.user = null
-        console.log(state.user)
       },
        // change price for category one
        change(state, action) {      
@@ -596,19 +585,14 @@ console.log(state.seatReserved)
         getcategoryboats(state, action) {          
             if (state.boats && state.boats.length > 0) {
               if (action.payload == 1) {
-                console.log("hhh");
                 state.categoryboats = state.boats.filter(boat => boat.category === "3nile");
-                console.log(state.categoryboats);
               } else if (action.payload === 2) {
                 state.categoryboats = state.boats.filter(boat => boat.category === "3nileplus");
               } else if (action.payload === 3) {
                 state.categoryboats = state.boats.filter(boat => boat.category === "3nile vip");
               } else {
-                console.log("hi");
               }
-            } else {
-              console.log("No boats available");
-            }
+            } 
           }
     },
     // 
@@ -617,8 +601,6 @@ console.log(state.seatReserved)
           state.user = action.payload.data
       },
        [ register.fulfilled]:(state,action)=>{
-        console.log("fulfilled")
-        console.log("first")
         
        },
        [login.pending]:(state,action)=>{
@@ -627,14 +609,11 @@ console.log(state.seatReserved)
       
        } ,
        [login.fulfilled]: (state, action) => {
-          console.log(action.payload.boatOwner)
          if(action.payload.boatOwner){
             state.boatOwner=action.payload.boatOwnerData
-            console.log(state.boatOwner)
           }
           else{
             state.user=action.payload.userData
-             console.log(state.user,"User Data From Slice")
         }
         // state.anyUser = action.payload;
       
@@ -645,27 +624,30 @@ console.log(state.seatReserved)
   
     },
     [getOwnerBoats.fulfilled]:(state,action)=>{
-     
       state.ownerBoats =action.payload
     
     },
     [getOwnerRequests.fulfilled]:(state,action)=>{
-   
-      state.ownerBoats =action.payload
+   console.log(action.payload,"hjfghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+      state.ownerRequestsTrips =action.payload
+      // console.log(state.ownerRequestsTrips , "lkjldjlfdjlfgfsjdkfljlsdfjklsdjfklsjkldfjljlsdfklkldfjlsdfljldkfkljlsdlsjldkf")
      
     },
     [getOwnerPreviousTrips.fulfilled]:(state,action)=>{
-   
-      state.ownerBoats =action.payload
+      // console.log(action.payload,"hjfghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+
+      state.ownerPreviousTrips =action.payload
      
     },
     [addTrip.fulfilled]:(state,action)=>{
-      console.log("done")
     },
     [getOwnerCurrentTrips.fulfilled]:(state,action)=>{
    
-      state.ownerBoats =action.payload
+      state.ownerCurrentTrips =action.payload
      
+    },
+    [SwvlDetails.fulfilled]:(state,action)=>{ 
+      state.ownerSwvlTrip =action.payload
     },
   
 
@@ -691,7 +673,6 @@ console.log(state.seatReserved)
 
               // Get Categories Start
         [getCategoryOne.fulfilled]: (state, action) => {
-             console.log(action.payload);
             
            
             state.categoryOne = action.payload;
@@ -719,27 +700,21 @@ console.log(state.seatReserved)
         [getSwvl.fulfilled]:(state,action) =>{
           state.swvl = action.payload.data;
           state.filteredswvl = action.payload.data;
-           console.log(state.swvl , "ghfdfdh")
           // state.filteredcategoryThree = action.payload.data
         },
 // /////////////////////////////////////////////////////////
         [finishedTrips.fulfilled]:(state,action) => {
           state.finished = action.payload.data
-          // console.log(state.finished)
         },
         [acceptedTrips.fulfilled]:(state,action) => {
           state.accepted = action.payload.data
         },
         [pendingTrips.fulfilled]:(state,action) => {
-          // console.log(action.payload,"PAaaaaaaaaaaaaaaaaaaaay")      
           state.pending = action.payload.data
         },
         [addReview.fulfilled]:(state,action) => {
-          console.log("fulfilled")
         },
         [canceltrip.fulfilled]:(state,action) => {{
-          console.log('fulfilled')
-          console.log(action.payload)
         }
       },
         // Get Categories End
@@ -758,16 +733,11 @@ console.log(state.seatReserved)
         // Owner Edit Info
 
         [ownerUpdateInfo.fulfilled]: (state, action) => {
-          console.log( state.boatOwner,"Old");
-            console.log(action.payload);
           state.boatOwner = action.payload;
-          // console.log( state.boatOwner,"Gold");
        },
 
 
         [bookTrip.fulfilled]: (state, action) => {
-          console.log("Old");
-          // console.log( state.boatOwner,"Gold");
        },
     }
     
