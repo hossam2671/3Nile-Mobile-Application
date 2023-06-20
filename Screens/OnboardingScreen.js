@@ -110,7 +110,7 @@ const OnboardingScreen = ({navigation}) => {
         {/* Render buttons */}
         <View style={{marginBottom: 45}}>
           {currentSlideIndex == slides.length - 1 ? (
-            <View style={{height: 50,borderRadios:0}}>
+            <View style={{height: 50,borderRadios:0,width:190, marginLeft:105,}}>
               <TouchableOpacity
                 style={styles.btn}
                 onPress={() => navigation.replace('LoginSignUp')}>
@@ -129,6 +129,7 @@ const OnboardingScreen = ({navigation}) => {
                     borderColor:"#1665c0",
                     borderWidth: 1,
                     backgroundColor: 'transparent',
+                    borderRadius:30,
                   },
                 ]}
                 onPress={skip}>
@@ -136,7 +137,7 @@ const OnboardingScreen = ({navigation}) => {
                   style={{
                     fontWeight: 'bold',
                     fontSize: 15,
-                    color:"#135fd1be"
+                    color:"#135fd1be",
                     // borderWidth:1,
                   }}>
                   SKIP
@@ -222,7 +223,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#0151ad',
     justifyContent: 'center',
     alignItems: 'center',
-    color:"white"
+    color:"white",
+    borderRadius:30,
   },
 });
 export default OnboardingScreen;

@@ -1,26 +1,32 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Dimensions } from 'react-native';
 import Icon from 'react-native-dynamic-vector-icons';
+import { useDispatch } from 'react-redux';
+import { seatResearv } from '../../redux/slices/UserSlice';
+
+const windowWidth = Dimensions.get('window').width;
 
 const Seats = () => {
-    
+const dispatch= useDispatch()
+
+
   const [seat, setSeat] = useState([
-    'Front1', 'Front2', 'Front3',
-    'Middle1', 'Middle2', 'Middle3',
-    'Back1', 'Back2', 'Back3'
+    'Front1', 'Front2',
+    'Middle1', 'Middle2','Back6', 'Back2',
+    'Back1', 'Back3','Back7', 'Back5','Back9','Back10',
+    'Back11','Back12','Back13','Back14','Back15','Back16','Back17','Back18',
   ]);
   const [seatAvailable, setSeatAvailable] = useState([
-    'Front1', 'Front2', 'Front3',
-    'Middle1', 'Middle2', 'Middle3',
-    'Back1', 'Back2', 'Back3'
+    'Front1', 'Front2',
+    'Middle1', 'Middle2',
+    'Back1', 'Back3', 'Back5', 'Back2',
   ]);
   const [seatReserved, setSeatReserved] = useState([]);
-  console.log(seatAvailable.length+1)
+
   const onClickData = (selectedSeat) => {
     if (seatReserved.includes(selectedSeat)) {
       setSeatAvailable([...seatAvailable, selectedSeat]);
       setSeatReserved(seatReserved.filter((res) => res !== selectedSeat));
-     
     } else {
       setSeatReserved([...seatReserved, selectedSeat]);
       setSeatAvailable(seatAvailable.filter((res) => res !== selectedSeat));
@@ -32,23 +38,24 @@ const Seats = () => {
     return (
       <TouchableOpacity
         style={[styles.seat, isReserved && styles.reserved]}
-        onPress={() => onClickData(item)}
+        onPress={() =>{ onClickData(item) ; dispatch(seatResearv(seatReserved.length+1))}}
       >
         <Icon name='person' size={20}/>
-        <Text>{item}</Text>
       </TouchableOpacity>
     );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Seat Reservation System</Text>
-      <FlatList
-        data={seat}
-        renderItem={renderSeatItem}
-        keyExtractor={(item) => item}
-        numColumns={3}
-      />
+      {/* <Text style={styles.heading}>Seat Reservation System</Text> */}
+      <View style={styles.seatContainer}>
+        <FlatList
+          data={seat}
+          renderItem={renderSeatItem}
+          keyExtractor={(item) => item}
+          numColumns={2}
+        />
+      </View>
       <AvailableList available={seatAvailable} />
       <ReservedList reserved={seatReserved} />
     </View>
@@ -60,14 +67,14 @@ const AvailableList = ({ available }) => {
 
   return (
     <View style={styles.left}>
-      <Text style={styles.listHeading}>
+      {/* <Text style={styles.listHeading}>
         Available Seats: ({seatCount === 0 ? 'No seats available' : seatCount})
       </Text>
       <FlatList
         data={available}
         renderItem={({ item }) => <Text style={styles.listItem}>{item}</Text>}
         keyExtractor={(item) => item}
-      />
+      /> */}
     </View>
   );
 };
@@ -75,12 +82,12 @@ const AvailableList = ({ available }) => {
 const ReservedList = ({ reserved }) => {
   return (
     <View style={styles.right}>
-      <Text style={styles.listHeading}>Reserved Seats: ({reserved.length})</Text>
+      {/* <Text style={styles.listHeading}>Reserved Seats: ({reserved.length})</Text>
       <FlatList
         data={reserved}
         renderItem={({ item }) => <Text style={styles.listItem}>{item}</Text>}
         keyExtractor={(item) => item}
-      />
+      /> */}
     </View>
   );
 };
@@ -88,24 +95,35 @@ const ReservedList = ({ reserved }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 60,
+    position: "absolute",
+    left: 210,
+    zIndex: 5000,
+    top: 105,
   },
   heading: {
     fontSize: 20,
-    fontWeight: 'bold',
+    flex: 1,
     marginBottom: 16,
   },
+  seatContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    width: windowWidth - 330, // Adjust the width based on your requirements
+  },
   seat: {
+    aspectRatio: 2,
+    borderWidth: 3,
+    borderColor: '#060706',
+    margin: 5,
     flex: 1,
-    aspectRatio: 1,
-    borderWidth: 1,
-    borderColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 4,
+    // height: 8,
+    backgroundColor: '#bccdc9',
   },
   reserved: {
-    backgroundColor: 'gray',
+    backgroundColor: '#67aef6',
+    zIndex: 5000,
   },
   left: {
     flex: 1,
@@ -114,7 +132,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listHeading: {
-    fontSize: 16,
+    fontSize: 10,
     fontWeight: 'bold',
     marginBottom: 8,
   },
@@ -125,4 +143,3 @@ const styles = StyleSheet.create({
 });
 
 export default Seats;
-

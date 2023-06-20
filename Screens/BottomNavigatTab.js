@@ -22,18 +22,11 @@ function BottomNavigatTab() {
     headerShown: false, 
   }}>
 
-<<<<<<< Updated upstream
-<Tab.Screen 
-name='home' 
-component={HomeCards}
-/>
-=======
     <Tab.Screen
       name='home'
       component={HomeCards}
       options={{ tabBarIcon: ({ color }) => <Icon name="home" color={color} size={24} /> }}
     />
->>>>>>> Stashed changes
 
     <Tab.Screen
       name='search'

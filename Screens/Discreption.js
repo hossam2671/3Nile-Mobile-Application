@@ -11,7 +11,9 @@ import { useRoute } from '@react-navigation/native';
 import Iconn from 'react-native-vector-icons/Fontisto'
 import Iconnn from 'react-native-vector-icons/Ionicons'
 // Modal Data
-
+import Iconnnnnn from 'react-native-vector-icons/FontAwesome';
+import succ from '../assets/succsses.png'
+import errorImage from '../assets/error.png'
 import { DatePickerModal } from 'react-native-paper-dates';
 
 import { TimePickerModal } from 'react-native-paper-dates';
@@ -22,6 +24,8 @@ import ip from '../config'
 import { bookTrip } from '../redux/slices/UserSlice';
 import { Root, Popup } from 'popup-ui'
 import { PopupDialog } from 'react-native-popup-dialog';
+import moment from 'moment';
+
 const renderPagination = (index, total, context) => {
     return (
         <View style={styles.paginationStyle}>
@@ -38,11 +42,16 @@ export const Discreption = () => {
     const dispatch = useDispatch()
     const { user } = useSelector(state => state.UserSlice)
     const [isPopupVisible, setPopupVisible] = useState(false);
+    // 
+    // Booking 
+    const [bookMessage,SetBookMessage] = useState("");
+    const [bookStatus,SetBookStatus] = useState(null);
+    // Booking Enbd
 
 
     // Timer Picker
     const [visible, setVisible] = React.useState(false)
-    const [timey, setTime] = React.useState({})
+    const [timey, setTime] = React.useState("")
     const [dateOnly, setdateOnly] = React.useState("")
     const [isPicked, setIsPicked] = React.useState(false)
     const [DateisPicked, setDateisPicked] = React.useState(false)
@@ -53,9 +62,13 @@ export const Discreption = () => {
     const onConfirm = React.useCallback(
         ({ hours, minutes }) => {
             setVisible(false);
-            console.log({ hours, minutes });
+            console.log({ hours, minutes },"Te4eeeee");
+ const timeString = `${hours}:${minutes}`;
+const formattedTime = moment(timeString, 'h:mm').format('HH:mm');
+
+console.log(formattedTime,"Te4eeeee2");
             
-            setTime({ hours: hours, minutes: minutes })
+            setTime(formattedTime)
         },
         [setVisible]
     );
@@ -77,7 +90,7 @@ export const Discreption = () => {
             const datepi=[...params.date.toString().split(" ")[1]," ",...params.date.toString().split(" ")[2]," ",...params.date.toString().split(" ")[3]].join("")
         
             setdateOnly(datepi)
-
+            console.log(dateOnly,"dateOnlydateOnly")
         },
         [setOpen, setDate]
     );
@@ -118,34 +131,75 @@ export const Discreption = () => {
             </View>
         </TouchableOpacity>
     );
-
+    const [modalVisible, setModalVisible] = useState(false);
     const handleSubmit = () => {
-        console.log('time:', timey);
+        console.log('timetime:', timey);
         console.log('Date:', date);
         console.log('hour:', text);
     
         dispatch(bookTrip({
             time: timey,
-            date: date,
+            date: dateOnly,
             hours: text,
             boatId: data._id,
             clientId: user._id,
-        }))
-            console.log(dateOnly,"d")
-        // setPopupVisible(true);
-        alert(`Your Trip has been booked Successfully .. Boat Owner will a2ccept it SOON , Keep Update :)`
-        )
-        //  Day: ${date} 
-        //  Start Hour: ${time.hours}:${time.minutes}
-        //  Number Of Hours: ${text}
+        })).then((res) => {
+            console.log(res);
+            if (res.payload.status === 200) {
+                SetBookStatus(true)
+            //   openSuccussfullModal();
+              SetBookMessage(res.payload.message);
+              setTimeout(() => {
+               
+                // succussfullmodalClose();
+                setModalVisible(false)
+                SetBookStatus(null)
+              }, 2500);
+              console.log(bookMessage,"(bookMessage)")
+            }
+              else if (res.payload.status === 201) {
+                SetBookStatus(false)
+                // openErrorModal();
+                SetBookMessage(res.payload.message);    
+                            setTimeout(() => {
+                //   closeErrorModal();
+                setModalVisible(false)
+                SetBookStatus(null)
+                }, 2500);
+                console.log(bookMessage,"  console.log(bookMessage)")
+              }
+              else if (res.payload.status === 202) {
+                SetBookStatus(false)
+                // openErrorModal();
+                SetBookMessage(res.payload.message);    
+                            setTimeout(() => {
+                //   closeErrorModal();
+                setModalVisible(false)
+                SetBookStatus(null)
+                }, 2500);
+               
+              }
+         
+        })
+
+
+
+
+
+
+
+
+            console.log("d")
+            setModalVisible(true)
+       
     };
 
     const renderModalContent = () => (
         <View style={styles.modalContent}>
             <View style={styles.select}>
-            <View style={{flexDirection:"row" , justifyContent:"flex-start" , alignItems:"center"}}>
+            <View style={{flexDirection:"row" , justifyContent:"center" , alignItems:"center"}}>
             <IconButton
-        icon={() => <Iconnn name="arrow-back" size={24} color="#000" style={{marginLeft:20,zIndex:1000}} />}
+        icon={() => <Iconnn name="arrow-back" size={25} color="#000" style={{marginLeft:20,zIndex:1000}} />}
         
         
         style={{marginLeft:200}}
@@ -165,10 +219,10 @@ export const Discreption = () => {
                     
                     
                     
-                    } uppercase={false} mode="outlined" title='start time' style={styles.timeBtn}>
+                    } uppercase={false} colortheme={'red'} mode="outlined" title='start time' style={styles.timeBtn}>
 
                     {
-                        isPicked ? <Text style={styles.time} >{timey.hours} : {timey.minutes}</Text> : <Text style={styles.time} >Start Time</Text>
+                        isPicked ? <Text style={styles.time} >{timey}</Text> : <Text style={styles.time} >Start Time</Text>
 
                     }
 
@@ -237,13 +291,58 @@ export const Discreption = () => {
             {/* Date Picker  End */}
             <View style={styles.book_fixToText}>
                 <TouchableOpacity style={styles.book_bookBtn} onPress={handleSubmit}>
-                    <Text style={styles.book_btn}>{'Book '}</Text>
-                    <Icon name="arrow-right" color={'#000'} size={20} style={styles.book_arrow} />
+                    <Text style={styles.book_btn}>{'Book'}</Text>
+                    <Icon name="check" color={'#000'} size={20} style={styles.book_arrow} />
                 </TouchableOpacity>
             </View> 
 
          
+<Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
+      <View style={styles.modalContainer}>
+        {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
+        <View style={styles.modalContainer_card_con}>
+        <IconButton
+        icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
+        
+        
+        style={{marginLeft:-330}}
+        onPress={() => setModalVisible(false)}
+      />
+       <Image source={bookStatus?succ:errorImage} style={styles.succ} />
+         <Text style={styles.modaltitle}>{bookMessage}</Text>
+       
 
+  
+      
+         
+    
+        </View>
+      </View>
+    </Modal>
+
+       
+    <Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
+      <View style={styles.modalContainer}>
+        {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
+        <View style={styles.modalContainer_card_con}>
+        <IconButton
+        icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
+        
+        
+        style={{marginLeft:-330}}
+        onPress={() => setModalVisible(false)}
+      />
+       <Image  source={bookStatus?succ:errorImage} style={styles.succ} />
+         <Text style={styles.modaltitle}>{bookMessage}</Text>
+       
+
+  
+      
+         
+    
+        </View>
+      </View>
+    </Modal>
             {/* {renderButton('Apply', () => setVisibleModal(null))} */}
  
         </View>
@@ -476,7 +575,7 @@ const styles = StyleSheet.create({
     },
     bookBtn: {
         justifyContent: "space-between",
-        backgroundColor: '#ff6a00',
+        backgroundColor: '#0c8df7',
         flexDirection: 'column',
         alignItems: 'center',
         // justifyContent: 'center',
@@ -487,9 +586,10 @@ const styles = StyleSheet.create({
         width: 50,
         height: 140,
         borderRadius: 10,
+  
     },
     btn: {
-        color: '#000',
+        color: '#ffffff',
         fontWeight: 'bold',
         fontSize: 16,
         // marginRight: 10,
@@ -499,6 +599,7 @@ const styles = StyleSheet.create({
     },
     arrow: {
         paddingBottom: 15,
+           color: '#ffffff',
     },
     bottomModal: {
         justifyContent: 'flex-end',
@@ -511,7 +612,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
-        height: 500,
+        height: 430,
         borderColor: 'rgba(0, 0, 0, 0.1)',
 
     },
@@ -524,13 +625,14 @@ const styles = StyleSheet.create({
 
     },
     Header_filter: {
-        fontWeight: 'bold',
+       
         fontSize: 25,
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(213, 213, 213, 1)',
-        width: 530,
-        paddingLeft: 200,
+        width: 380,
+        paddingLeft: 110,
         paddingBottom: 20,
+        marginRight:80,
 
     },
     input: {
@@ -614,14 +716,14 @@ const styles = StyleSheet.create({
     height: 65,
     width: 405,
     fontSize: 15,
-    fontWeight: 'bold',
-    bottom: 100,
+
+    bottom: 10,
     
     // right: 30,
     backgroundColor: '#0c8df7',
     borderRadius: 55,
   
-    top:405,
+    // top:405,
     // left:10 ,
  
 },
@@ -636,7 +738,7 @@ book_bookBtn: {
 },
 book_btn: {
     color: '#ffffff',
-    fontWeight: 'bold',
+
     fontSize: 25,
     height:40,
     paddingLeft: 20,
@@ -651,6 +753,56 @@ book_arrow: {
     padding:10,
     marginTop:10,
 },
+
+modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    width:480,
+    // marginRight:-60,
+    right:30,
+    top:30,
+    // height:700,
+  },
+  modalContainer_card_con:{
+    backgroundColor: 'rgba(247, 247, 247, 1)',
+    width:380,
+    height:300,
+    borderRadius:20,
+  
+    alignItems: 'center',
+  },
+
+ 
+  succ:{
+    width:70,
+    height:70,
+
+  },
+
+  modaltitle:{
+    // paddingTop:5,
+    color: '#000000',
+    fontSize:25,
+    width:300,
+    marginTop:20,
+    marginLeft:20,   
+     color: '#0b4227',
+  },
+  Total_text:{
+    color: '#0c8df7',
+    paddingTop:5,
+  },
+  Hours_text:{
+    color: '#0c8df7',
+    paddingTop:5,
+  },
+  Date_text:{
+    color: '#0c8df7',
+    paddingTop:10,
+  },
+
 });
 
 export default Discreption;

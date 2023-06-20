@@ -48,7 +48,7 @@ const MyBottomNav = () => {
 
           {/* <Tab.Screen
             name="search"
-========
+
           <Tab.Screen
             name="ssddw"
             options={{
@@ -60,7 +60,7 @@ const MyBottomNav = () => {
           />
           <Tab.Screen
             name="Upload"
->>>>>>>> Stashed changes:Appfatam.tsx
+
             options={{
               // @ts-ignore
               tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/search.icon.json')} style={styles.icon} />,

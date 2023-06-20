@@ -9,18 +9,26 @@ import ip from '../../config'
 
 // هنا بدات ندي :)
 export const register =createAsyncThunk("nada/register", async (payload) => {
-console.log(payload)
-axios.post(`http://${ip}:5000/${payload.radiovalue}/register`, {
+  console.log(payload)
+  try {
   
-    name: payload.name,
-    password: payload.password,
-    email: payload.email
-  }).then(res => {
-   
-    console.log(res);
-    return res;
+    let response= axios.post(`http://${ip}:5000/${payload.radiovalue}/register`, {
+     
+       name: payload.name,
+       password: payload.password,
+       email: payload.email
+     }).then((res) => {
+        
+      return res.data
+    })
+    console.log(response)
+    return response;
+ 
+ }catch(err){
+   console.log(err,"errrrr");
+  
+  }
   })
-})
 
 export const login = createAsyncThunk("allUser/login", async (payload) => {
   try {
@@ -51,12 +59,12 @@ export const login = createAsyncThunk("allUser/login", async (payload) => {
         return data;
       //return { data, serializedHeaders }; // Return both data and serializedHeaders
     } else {
-      alert("Login failed");
-      return false;
+      // alert("Login failed");
+      return response;
     }
   } catch (err) {
-    alert(err);
-    return false;
+    // alert(err);
+    return response;
   }
 });
 
@@ -299,16 +307,28 @@ export const addTrip = createAsyncThunk("fatma/addTrip", async (payload) => {
 // BookTrip
 export const bookTrip = createAsyncThunk("user/bookTrip", async (payload) => {
  
-  console.log(payload)
-
+ 
+console.log(payload,"timetimetime")
   const response = await axios.post(`http://${ip}:5000/user/addTrip/${payload.boatId}/${payload.clientId}`, {
     date: payload.date, 
-    startTime:`${payload.time.hours}:${payload.time.minutes}`,
+    startTime:payload.time,
     hours:payload.hours,
   });
   const data = response.data; 
   return data;
 });
+
+// bookswvl 
+export const bookSwvl = createAsyncThunk("user/bookswvl",async(payload)=>{
+  console.log(payload)
+  const res = axios.post(`http://${ip}:5000/swvl/userBooking`,{
+    swvlId:payload.swvlId,
+    userId:payload.userId,
+    numberOfSeats:payload.numberOfSeats,
+  })
+  console.log(res,"test")
+  return res 
+})
 
 // Boat Owner Edit Info 
 export const ownerUpdateInfo= createAsyncThunk ("/editOwnerInfo", async(payload )=>{
@@ -348,15 +368,22 @@ const UserSlice = createSlice({
       ,ownerBoatsNum:null,pending:[],finished:[],accepted:[]
       ,filteredcategoryOne : [] ,filteredcategoryTwo : [],
         filteredcategoryThree : [],
-      radioButtonValue:"",boatOwner:null,anyUser:null,ownerBoats:[],
-
-      ip:"192.168.220.1"
+      radioButtonValue:"",boatOwner:null,anyUser:null,ownerBoats:[],swvlRecit:null,
+      seatReserved:0,
+      filteredData:null
+      
     },
 
 
     
 
     reducers:{
+      seatResearv(state,action){
+state.seatReserved=action.payload
+console.log(state.seatReserved)
+      },
+
+
       search(state, action) {
         const searchQuery = action.payload.toLowerCase(); 
         const filteredSwvl = state.swvl.filter((item) =>
@@ -370,15 +397,52 @@ const UserSlice = createSlice({
           state.filteredswvl = [...state.swvl];
         }
       },
-        // filter cat one
-      filter(state, action) {
-        // console.log(action.payload);
+
+      filterTaps(state, action) {
+        console.log(action.payload,"actiondsdas");
         let filtered = [...state.categoryOne];
         let filteredByPort = [...state.categoryOne];
       
         if (action.payload.port.length !== 0) {
-          filteredByPort = filteredByPort.filter(obj => action.payload.port.includes(obj.portName));
+          if(action.payload.port!=="all"){
+
+
+            filteredByPort = filteredByPort.filter(obj => action.payload.port.includes(obj.portName));
+            console.log(filteredByPort.length+1,"fillll")
+          }else
+          filteredByPort = [...state.categoryOne];
         }
+      
+        state.filteredData = filteredByPort;
+        state.filteredcategoryOne = filteredByPort;
+    
+      },
+      filterTaps2(state, action) {
+        // console.log(action.payload);
+        let filtered = [...state.categoryTwo];
+        let filteredByPort = [...state.categoryTwo];
+      
+        if (action.payload.port.length !== 0) {
+          if(action.payload.port!=="all"){
+
+
+            filteredByPort = filteredByPort.filter(obj => action.payload.port.includes(obj.portName));
+            console.log(filteredByPort.length+1,"fillll")
+          }else
+          filteredByPort = [...state.categoryOne];
+        }
+        
+    
+        state.filteredData = filteredByPort;
+    
+      },
+        // filter cat one
+      filter(state, action) {
+        // console.log(action.payload);
+        let filtered = [...state.filteredData];
+        let filteredByPort = [...state.filteredData];
+      
+    
       
         if (action.payload.type.length !== 0) {
           filtered = filteredByPort.filter(obj => action.payload.type.includes(obj.type));
@@ -396,6 +460,8 @@ const UserSlice = createSlice({
         state.filteredcategoryOne = filtered;
     
       },
+    
+      
        // filter cat two
        filter2(state, action) {
         // console.log(action.payload);
@@ -679,7 +745,16 @@ const UserSlice = createSlice({
         // Get Categories End
 
 
+// book swvl start 
 
+
+[bookSwvl.fulfilled]:(state,action) => {
+  state.swvlRecit = action.payload.data
+  console.log(state.swvlRecit,"swvlRecit")
+},
+
+
+//  book swvl end
         // Owner Edit Info
 
         [ownerUpdateInfo.fulfilled]: (state, action) => {
@@ -699,7 +774,7 @@ const UserSlice = createSlice({
 })
 
 
-export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt , filter , filter2 , search} = UserSlice.actions;
+export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt , filter , filter2 ,filterTaps,filterTaps2, search,seatResearv} = UserSlice.actions;
 
 export default UserSlice.reducer;
 
