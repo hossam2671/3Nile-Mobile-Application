@@ -90,19 +90,38 @@ export const addReview= createAsyncThunk ("/addReview", async(payload )=>{
   })
   return res
   })
- 
-  // add boat
-export const addBoat = createAsyncThunk ("boatOwner/addBoat", async(payload) => {
-  console.log(payload)
-  const res = await axios.post(`http://${ip}:5000/boatOwner/addBoatt`,{
+
+  // add boat 
+  export const addBoat = createAsyncThunk("owner/addBoat", async (payload) => {
+    console.log(payload);
+    try {
+      const res = await axios.post(`http://${ip}:5000/boatOwner/addBoatt`, {
+        boatOwnerId: payload.id,
         name: payload.name,
         description: payload.description,
         price: payload.price,
-        portName: payload.port,
-        type: payload.type
-  })
-  return res
-})
+        portName: payload.portName,
+        type: payload.type,
+      });
+      return res.data; // Return the response data as the action payload
+    } catch (error) {
+      // Handle any error that occurred during the API request
+      console.error("Error adding boat:", error);
+    }
+  });
+ 
+  // add boat
+// export const addBoat = createAsyncThunk ("boatOwner/addBoat", async(payload) => {
+//   console.log(payload)
+//   // const res = await axios.post(`http://${ip}:5000/boatOwner/addBoatt`,{
+//   //       name: payload.name,
+//   //       description: payload.description,
+//   //       price: payload.price,
+//   //       portName: payload.port,
+//   //       type: payload.type
+//   // })
+//   // return res
+// })
 
   // user cancel trip
 // export const canceltrip= createAsyncThunk ("/cancelTrip", async(payload )=>{
@@ -341,23 +360,14 @@ export const bookSwvl = createAsyncThunk("user/bookswvl",async(payload)=>{
 
 // Boat Owner Edit Info 
 export const ownerUpdateInfo= createAsyncThunk ("/editOwnerInfo", async(payload )=>{
-  let owner;
-  await axios.put(`http://${ip}:5000/boatOwner/updateData/${payload.boatOwnerId}`,{
+
+  let res = await axios.put(`http://${ip}:5000/boatOwner/update/${payload.boatOwnerId}`,{
   
   name: payload.name,
-  // address:payload.address,
   phone: payload.phone,
-  // img:payload.img,
-  },{
-    headers:{
-      'Content-Type':'multipart/form-data' 
-    } 
-  }).then(res => {
-    owner=  res.data
-    
-   
   })
-  return owner
+  
+  return res
   })
 
   // owner accept trip
@@ -379,6 +389,19 @@ export const ownerUpdateInfo= createAsyncThunk ("/editOwnerInfo", async(payload 
     console.log(payload)
     const respone = await axios.put(`http://${ip}:5000/boatOwner/finishTrip`,{
       id:payload
+    })
+  })
+
+  // edit user image
+  export const updateImage = createAsyncThunk ("boatOwner/editImage" , async(payload)=>{
+    console.log(payload)
+    const res = await axios.put(`http://${ip}:5000/boatOwner/editImage`,{
+      id:payload.id,
+      img:payload.image
+    },{
+      headers :{
+        'Content-Type': 'multipart/form-data',
+      }
     })
   })
 
@@ -767,14 +790,13 @@ console.log(state.seatReserved)
 //  book swvl end
         // Owner Edit Info
 
-        [ownerUpdateInfo.fulfilled]: (state, action) => {
-          state.boatOwner = action.payload;
-       },
+       
 
 
         [bookTrip.fulfilled]: (state, action) => {
        },
        [addBoat.fulfilled]: (state, action) => {
+        console.log("first")
       },
        [ownerAcceptTrip.fulfilled]: (state, action) => {
         console.log("first")
@@ -784,6 +806,12 @@ console.log(state.seatReserved)
       },
        [ownerFinishTrip.fulfilled]: (state, action) => {
         console.log("first")
+      },
+       [ownerUpdateInfo.fulfilled]: (state, action) => {
+         state.boatOwner = action.payload.data;
+      },
+       [updateImage.fulfilled]: (state, action) => {
+          console.log("first")
       },
     }
     

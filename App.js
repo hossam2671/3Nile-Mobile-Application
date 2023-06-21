@@ -4,7 +4,7 @@ import React from 'react'
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import BottomNavigatTab from './Screens/BottomNavigatTab';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
 
@@ -72,7 +72,7 @@ export default function App() {
             <Stack.Screen name='LoginSignUp'  options={{ headerShown: false }} component={LoginSignUp} />
             <Stack.Screen name='NewOwner'  options={{ headerShown: false }} component={NewBoatOwnerProfile} />
             <Stack.Screen name='swvl'  component={Swvl} />
-            <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
+            <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavBar}></Stack.Screen>
 
             </Stack.Navigator>
             <StatusBar style='dark' />

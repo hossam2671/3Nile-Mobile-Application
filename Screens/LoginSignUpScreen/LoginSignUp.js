@@ -230,7 +230,7 @@ const LoginSignUp = (props) => {
 
               setModalVisible(false)
 
-              props.navigation.navigate('BoatOwnerProfile')
+              props.navigation.navigate('NewOwner')
               
             }
             else{

@@ -20,14 +20,14 @@ import logout from '../assets/logout.png';
 // Menu
 import menu from '../assets/menu.png';
 import close from '../assets/close.png';
-
+import * as FileSystem from 'expo-file-system';
 // Photo
 import photo from '../assets/userimage.jpg';
 import cardboat from '../assets/Nile.jpg'
 import boat from '../assets/Nile.jpg';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
-import { ownerUpdateInfo, SwvlDetails, getOwnerBoats, getOwnerCurrentTrips, getOwnerPreviousTrips, getOwnerRequests, addBoat, ownerAcceptTrip, ownerCancelTrip, ownerFinishTrip } from '../redux/slices/UserSlice';
+import { ownerUpdateInfo, SwvlDetails, getOwnerBoats, getOwnerCurrentTrips, getOwnerPreviousTrips, getOwnerRequests, addBoat, ownerAcceptTrip, ownerCancelTrip, ownerFinishTrip, updateImage } from '../redux/slices/UserSlice';
 import { SelectList } from 'react-native-dropdown-select-list'
 //modal
 import Modal from "react-native-modal";
@@ -73,8 +73,8 @@ function NewBoatOwnerProfile() {
     const [visibleModal, setVisibleModal] = useState(null);
     const [addvisibleModal, setAddVisibleModal] = useState(null);
 
-    const [editboatOwnerName, seteditboatOwnerName] = useState("")
-    const [editeditboatOwnerPhone, seteditboatOwnerPhone] = useState("")
+    const [editboatOwnerName, setEditboatOwnerName] = useState("")
+    const [editeditboatOwnerPhone, setEditboatOwnerPhone] = useState("")
     const [image, setImage] = useState(`http://${ip}:5000/${boatOwner.img}`);
     function namy(e) {
         setBoatName(e)
@@ -90,7 +90,13 @@ function NewBoatOwnerProfile() {
     }
     function submit() {
         console.log("first")
-        dispatch(addBoat(5))
+        dispatch(addBoat({id:boatOwner._id,name:boatName,description:boatDescription,price:boatPrice,portName:selected,type:type}))
+        .then((res)=>{
+            dispatch(getOwnerBoats(boatOwner._id)).then((res)=>{
+                setAllBoats(res)
+            })
+        })
+        setAddVisibleModal(0)
     }
 
     const renderButton = (text, onPress) => (
@@ -112,14 +118,14 @@ function NewBoatOwnerProfile() {
                     placeholder={boatOwnerState.name}
                     placeholderTextColor="#0000006a"
                     onChangeText={(e) => {
-                        setName(e);
+                        setEditboatOwnerName(e);
                         console.log(editboatOwnerName)
                     }}
                 />
                 <TextInput style={styles.modal__profile__input}
                     placeholder={boatOwnerState.phone}
                     placeholderTextColor="0000006a"
-                    onChangeText={(e) => setPhone(e)}
+                    onChangeText={(e) => setEditboatOwnerPhone(e)}
 
                 />
 
@@ -130,13 +136,9 @@ function NewBoatOwnerProfile() {
 
 
             {renderButton('Apply', () => {
-                const updatedBoatOwner = {
-                    name: editboatOwnerName || boatOwnerState.name,
-                    phone: editeditboatOwnerPhone || boatOwnerState.phone,
-                    id: boatOwner._id
-                };
+                
 
-                dispatch(ownerUpdateInfo({ updatedBoatOwner })).then((res) => {
+                dispatch(ownerUpdateInfo({ boatOwnerId:boatOwner._id , name:editboatOwnerName , phone:editeditboatOwnerPhone })).then((res) => {
                     setVisibleModal(false)
                     console.log(res.payload.data, "ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
                     setboatOwnerState(res.payload.data)
@@ -315,7 +317,21 @@ function NewBoatOwnerProfile() {
         console.log(result);
 
         if (!result.canceled) {
+            const fileInfo = await FileSystem.getInfoAsync(result.uri);
+    const imageUriParts = result.uri.split('.');
+    const fileExtension = imageUriParts[imageUriParts.length - 1];
+    const formData = new FormData();
+    formData.append('image', {
+      uri: result.uri,
+      name: `image.${fileExtension}`,
+      type: fileInfo.mimeType,
+    });
+    console.log(formData)
             setImage(result.uri);
+            dispatch(updateImage({
+                id:boatOwner._id,
+                img: formData
+            }))
         }
     };
 
@@ -358,6 +374,7 @@ function NewBoatOwnerProfile() {
         })
         dispatch(SwvlDetails(boatOwner._id))
         console.log(ownerRequestsTrips,"checkreq")
+       
 
     }, []);
     const TabButton = ({ currentTab, setCurrentTab, title, icon, onPress }) => {
@@ -403,9 +420,7 @@ function NewBoatOwnerProfile() {
         dispatch(pendingTrips({ id: boatOwner._id }))
         dispatch(canceltrip(id)).then(() => dispatch(pendingTrips({ id: boatOwner._id })))
     }
-    function addBoat() {
-
-    }
+    
 
     return (
         <SafeAreaView style={styles.container}>
