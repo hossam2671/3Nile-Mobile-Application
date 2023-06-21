@@ -32,6 +32,10 @@ import { SelectList } from 'react-native-dropdown-select-list'
 //modal
 import Modal from "react-native-modal";
 import StarRating from 'react-native-star-rating';
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { TimePickerModal } from 'react-native-paper-dates';
+import { DatePickerModal } from 'react-native-paper-dates';
+
 
 //formik
 import { useFormik } from 'formik';
@@ -72,6 +76,8 @@ function NewBoatOwnerProfile() {
 
     const [visibleModal, setVisibleModal] = useState(null);
     const [addvisibleModal, setAddVisibleModal] = useState(null);
+    const [swVlvisibleModal, setswVlVisibleModal] = useState(null);
+
 
     const [editboatOwnerName, seteditboatOwnerName] = useState("")
     const [editeditboatOwnerPhone, seteditboatOwnerPhone] = useState("")
@@ -93,12 +99,17 @@ function NewBoatOwnerProfile() {
         dispatch(addBoat(5))
     }
 
+    function closeModal() {
+        setVisibleModal(false)
+    }
+
     const renderButton = (text, onPress) => (
-        <TouchableOpacity onPress={onPress}>
-            <View style={styles.apply__button}>
-                <Text >{text}</Text>
-            </View>
-        </TouchableOpacity>
+        <View style={styles.book_fixToText}>
+            <TouchableOpacity style={styles.book_bookBtn} onPress={onPress}>
+                <Text style={styles.book_btn}>{text}</Text>
+                <Icon name="arrow-right" color={'#000'} size={15} style={styles.book_arrow} />
+            </TouchableOpacity>
+        </View>
     );
 
     const renderModalContent = () => (
@@ -108,7 +119,7 @@ function NewBoatOwnerProfile() {
                 <Text style={styles.edit__text}>Edit your Details</Text>
 
 
-                <TextInput style={styles.modal__profile__input}
+                <TextInput style={styles.modal__input}
                     placeholder={boatOwnerState.name}
                     placeholderTextColor="#0000006a"
                     onChangeText={(e) => {
@@ -116,9 +127,9 @@ function NewBoatOwnerProfile() {
                         console.log(editboatOwnerName)
                     }}
                 />
-                <TextInput style={styles.modal__profile__input}
+                <TextInput style={styles.modal__input}
                     placeholder={boatOwnerState.phone}
-                    placeholderTextColor="0000006a"
+                    placeholderTextColor="#0000006a"
                     onChangeText={(e) => setPhone(e)}
 
                 />
@@ -148,45 +159,25 @@ function NewBoatOwnerProfile() {
 
     //add boat modal
 
-    // const validationSchema = Yup.object().shape({
-    //     name: Yup.string().required('Name is required'),
-    //     description: Yup.string().max(300, 'must be lower then 20').required('Description is required'),
-    //     price: Yup.required('Price is required'),
-    //     port: Yup.string.required('Port is required'),
-    //     type: Yup.string().required('Type is required')
-    // });
-
-
-
-    // const formik = useFormik({
-    //     initialValues: {
-    //         name: '',
-    //         description: '',
-    //         price: '',
-    //     },
-    //     // validationSchema,
-    //     onSubmit: (values) => {
-    //          console.log({...values,port:selected,type:type});
-    //         dispatch(addBoat({...values,port:selected,type:type}))
-    //     },
-    // });
 
     const addBoatrenderButton = (text, onPress) => (
-        <TouchableOpacity onPress={onPress}>
-            <View style={styles.apply__button}>
-                <Text>{text}</Text>
-            </View>
-        </TouchableOpacity>
+        <View style={styles.book_fixToText}>
+            <TouchableOpacity style={styles.book_bookBtn} onPress={onPress}>
+                <Text style={styles.book_btn}>{text}</Text>
+                <Icon name="arrow-right" color={'#000'} size={15} style={styles.book_arrow} />
+            </TouchableOpacity>
+        </View>
     );
 
     const addBoatrenderModalContent = () => (
         <View style={styles.modalContent}>
             <View style={styles.select}>
-                <Text style={styles.edit__text}>Add Boat</Text>
+                <Text style={styles.add__boat__text}>Add Boat</Text>
+                {/* <Text style={styles.add__boat__close__icon} onPress={closeModal()}>X</Text> */}
 
                 <TextInput
                     name="name"
-                    style={styles.input}
+                    style={styles.modal__input}
                     placeholder="Name"
                     placeholderTextColor={'#0000006a'}
                     onChangeText={(e) => namy(e)}
@@ -197,7 +188,7 @@ function NewBoatOwnerProfile() {
 
                 <TextInput
                     name="description"
-                    style={styles.input}
+                    style={styles.modal__input}
                     placeholder="Description"
                     placeholderTextColor={'#0000006a'}
                     onChangeText={(e) => description(e)}
@@ -208,7 +199,7 @@ function NewBoatOwnerProfile() {
 
                 <TextInput
                     name="price"
-                    style={styles.input}
+                    style={styles.modal__input}
                     placeholder="Price"
                     onChangeText={(e) => price(e)}
 
@@ -216,68 +207,85 @@ function NewBoatOwnerProfile() {
                     keyboardType="numeric"
                 />
 
+                <View style={styles.modal__dropdown}>
+                    <SelectList
+                        name="port"
+                        style={styles.modal__dropdown__item}
+                        setSelected={setSelected}
+                        fontFamily='lato'
+                        data={data}
+                        arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
+                        //   searchicon={<Icon name="search" size={12} color={'black'} />} 
+                        search={false}
+                        boxStyles={{ borderRadius: 0 }} //override default styles
+                        defaultOption={{ key: 'KFC', value: 'KFC' }}   //default selected option
+                    />
 
-                <SelectList
-                    // onSelect={formik.handleChange('port')}
-                    name="port"
-                    //   value={formik.values.port}
-                    setSelected={setSelected}
-                    fontFamily='lato'
-                    data={data}
-                    arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
-                    //   searchicon={<Icon name="search" size={12} color={'black'} />} 
-                    search={false}
-                    boxStyles={{ borderRadius: 0 }} //override default styles
-                    defaultOption={{ key: 'KFC', value: 'KFC' }}   //default selected option
+                    <SelectList
+                        name="type"
+                        style={styles.modal__dropdown__item}
+                        setSelected={setType}
+                        fontFamily='lato'
+                        data={types}
+                        arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
+                        //   searchicon={<Icon name="search" size={12} color={'black'} />} 
+                        search={false}
+                        boxStyles={{ borderRadius: 0 }} //override default styles
+                        defaultOption={{ key: 'shera3', value: 'shera3' }}   //default selected option
+                    />
+                </View>
+
+            </View>
+            {addBoatrenderButton('Apply', submit)}
+        </View>
+    );
+
+    //SWVL Modal
+
+    const SwvlModalContent = () => (
+        <View style={styles.modalContent}>
+            <View style={styles.select}>
+                <Text style={styles.add__boat__text}>Add Boat</Text>
+                {/* <Text style={styles.add__boat__close__icon} onPress={closeModal()}>X</Text> */}
+
+                <TextInput
+                    name="target"
+                    style={styles.modal__input}
+                    placeholder="Target place"
+                    placeholderTextColor={'#0000006a'}
+                    // onChangeText={(e) => namy(e)}
+
+                    value={boatName}
                 />
 
-                <SelectList
-                    // onSelect={formik.handleChange('port')}
-                    name="type"
-                    //   value={formik.values.port}
-                    setSelected={setType}
-                    fontFamily='lato'
-                    data={types}
-                    arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
-                    //   searchicon={<Icon name="search" size={12} color={'black'} />} 
-                    search={false}
-                    boxStyles={{ borderRadius: 0 }} //override default styles
-                    defaultOption={{ key: 'shera3', value: 'shera3' }}   //default selected option
+
+                <TextInput
+                    name="price"
+                    style={styles.modal__input}
+                    placeholder="Price"
+                    placeholderTextColor={'#0000006a'}
+                    // onChangeText={(e) => description(e)}
+
+                    value={boatDescription}
                 />
-                {/* <Picker
-                    // selectedValue={formik.values.port}
-                    // onValueChange={formik.handleChange('port')}
-                    // onBlur={formik.handleBlur('port')}
-                >
-                    <Picker label="Select port" value="" />
-                    <Picker label="Port 1" value="KFC" />
-                    <Picker label="Port 2" value="MAC" />
-                    <Picker label="Port 3" value="El-Mahata" />
 
-                </Picker> */}
-                {/* {formik.touched.port && formik.errors.port ? (
-                    <Text style={styles.error}>{formik.errors.port}</Text>
-                ) : null} */}
 
-                {/* <Picker
-                    // selectedValue={formik.values.type}
-                    // onValueChange={formik.handleChange('type')}
-                    // onBlur={formik.handleBlur('type')}
-                >
-                    <Picker label="Select port" value="" />
-                    <Picker label="type 1" value="shera3" />
-                    <Picker label="type 2" value="Type2" />
-                    <Picker label="type 3" value="Type3" />
+               
+                <View style={styles.modal__dropdown}>
+                    <SelectList
+                        name="port"
+                        style={styles.modal__dropdown__item}
+                        setSelected={setSelected}
+                        fontFamily='lato'
+                        data={data}
+                        arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
+                        //   searchicon={<Icon name="search" size={12} color={'black'} />} 
+                        search={false}
+                        boxStyles={{ borderRadius: 0 }} //override default styles
+                        defaultOption={{ key: 'KFC', value: 'KFC' }}   //default selected option
+                    />
 
-                </Picker> */}
-                {/* {formik.touched.type && formik.errors.type ? (
-                    <Text style={styles.error}>{formik.errors.type}</Text>
-                ) : null} */}
-
-                {/* <TouchableOpacity
-                    onPress={() => { pickBoatImage() }}>
-                    <View style={styles.add__boat__image__button}><Text style={styles.add__boat__image__button__text}>Add Image</Text></View>
-                </TouchableOpacity> */}
+                </View>
 
             </View>
             {addBoatrenderButton('Apply', submit)}
@@ -342,22 +350,22 @@ function NewBoatOwnerProfile() {
 
     useEffect(() => {
 
-        dispatch(getOwnerBoats(boatOwner._id)).then((first)=>{
+        dispatch(getOwnerBoats(boatOwner._id)).then((first) => {
             setAllBoats(first)
         })
-        dispatch(getOwnerPreviousTrips(boatOwner._id)).then((first)=>{
+        dispatch(getOwnerPreviousTrips(boatOwner._id)).then((first) => {
             setPrevBoats(first)
         })
-        dispatch(getOwnerRequests(boatOwner._id)).then((first) =>    {
-            console.log(first,"iiiiiiiiiii")
+        dispatch(getOwnerRequests(boatOwner._id)).then((first) => {
+            console.log(first, "iiiiiiiiiii")
             setOwnerReqs(first)
-            
+
         })
-        dispatch(getOwnerCurrentTrips(boatOwner._id)).then((first)=>{
+        dispatch(getOwnerCurrentTrips(boatOwner._id)).then((first) => {
             setCurrBoats(first)
         })
         dispatch(SwvlDetails(boatOwner._id))
-        console.log(ownerRequestsTrips,"checkreq")
+        console.log(ownerRequestsTrips, "checkreq")
 
     }, []);
     const TabButton = ({ currentTab, setCurrentTab, title, icon, onPress }) => {
@@ -418,6 +426,11 @@ function NewBoatOwnerProfile() {
             <Modal isVisible={addvisibleModal === 1} style={styles.bottomModal}>
 
                 {addBoatrenderModalContent()}
+            </Modal>
+
+            <Modal isVisible={swVlvisibleModal === 1} style={styles.bottomModal}>
+
+                {SwvlModalContent()}
             </Modal>
 
             <View style={{ justifyContent: 'flex-start', padding: 15 }}>
@@ -792,30 +805,32 @@ function NewBoatOwnerProfile() {
                                         <View style={styles.card__content}>
                                             <Text style={styles.card__name}>{item._id}</Text>
                                             <Icona name="location" size={13} style={styles.loc__icon} />
-                                            <Text style={styles.card__location}>{item.bo }</Text>
+                                            <Text style={styles.card__location}>{item.bo}</Text>
                                             <IIcon name="date-range" size={13} />
                                             <Text style={styles.card__date}>27 June 2023</Text>
                                             <Text style={styles.card__price}>200$</Text>
-                                            <TouchableOpacity onPress={() => { dispatch(ownerAcceptTrip(item._id)).then((res)=>{
-                                                dispatch(getOwnerRequests(boatOwner._id)).then((res)=>{
-                                                    setOwnerReqs(res)
-                                                    
-                                                    dispatch(getOwnerCurrentTrips(boatOwner._id)).then((res)=>{
-                                                        console.log(res,"ggggggggggggggggggggggggg")
-                                                        setCurrBoats(res)
+                                            <TouchableOpacity onPress={() => {
+                                                dispatch(ownerAcceptTrip(item._id)).then((res) => {
+                                                    dispatch(getOwnerRequests(boatOwner._id)).then((res) => {
+                                                        setOwnerReqs(res)
+
+                                                        dispatch(getOwnerCurrentTrips(boatOwner._id)).then((res) => {
+                                                            console.log(res, "ggggggggggggggggggggggggg")
+                                                            setCurrBoats(res)
+                                                        })
                                                     })
-                                                })
-                                            }) ; console.log("first")
-                                            
+                                                }); console.log("first")
+
                                             }}>
                                                 <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Accept</Text></View>
                                             </TouchableOpacity>
-                                            <TouchableOpacity onPress={() => { dispatch(ownerCancelTrip(item._id)).then((res)=>{
-                                                dispatch(getOwnerRequests(boatOwner._id)).then((res)=>{
-                                                    setOwnerReqs(res)
-                                                })
-                                            }) ; console.log("first")
-                                            
+                                            <TouchableOpacity onPress={() => {
+                                                dispatch(ownerCancelTrip(item._id)).then((res) => {
+                                                    dispatch(getOwnerRequests(boatOwner._id)).then((res) => {
+                                                        setOwnerReqs(res)
+                                                    })
+                                                }); console.log("first")
+
                                             }}>
                                                 <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>cancel</Text></View>
                                             </TouchableOpacity>
@@ -842,14 +857,14 @@ function NewBoatOwnerProfile() {
                                             <Text style={styles.card__location}>Port: MAC</Text>
                                             <IIcon name="date-range" size={13} />
                                             <Text style={styles.card__date}>27 June 2023</Text>
-                                            <Text style={styles.card__price}>200$</Text>                                           
+                                            <Text style={styles.card__price}>200$</Text>
                                         </View>
                                         {
-                                            item.category == "swvl" && 
-                                            <TouchableOpacity onPress={() => { 
-                                            
+                                            item.category == "swvl" &&
+                                            <TouchableOpacity onPress={() => {
+                                                setswVlVisibleModal(1)
                                             }}>
-                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>add swvl</Text></View>
+                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>+ Add swvl</Text></View>
                                             </TouchableOpacity>
                                         }
                                     </View>
@@ -874,21 +889,21 @@ function NewBoatOwnerProfile() {
                                             <Text style={styles.card__location}>Port: MAC</Text>
                                             <IIcon name="date-range" size={13} />
                                             <Text style={styles.card__date}>27 June 2023</Text>
-                                            <Text style={styles.card__price}>200$</Text>                                           
+                                            <Text style={styles.card__price}>200$</Text>
                                         </View>
                                         {
-              item.rate &&
-            <StarRating
-            key={item._id}
-            disabled={false}
-            maxStars={5}
-            rating={item.rate.rating}
-            // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
-            starSize={20}
-            fullStarColor="#ffc107"
-            emptyStarColor="#e4e5e9"
-            ></StarRating>
-            }
+                                            item.rate &&
+                                            <StarRating
+                                                key={item._id}
+                                                disabled={false}
+                                                maxStars={5}
+                                                rating={item.rate.rating}
+                                                // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
+                                                starSize={20}
+                                                fullStarColor="#ffc107"
+                                                emptyStarColor="#e4e5e9"
+                                            ></StarRating>
+                                        }
                                     </View>
                                 )}
                             />
@@ -911,27 +926,28 @@ function NewBoatOwnerProfile() {
                                             <Text style={styles.card__location}>Port: MAC</Text>
                                             <IIcon name="date-range" size={13} />
                                             <Text style={styles.card__date}>27 June 2023</Text>
-                                            <Text style={styles.card__price}>200$</Text>                                           
+                                            <Text style={styles.card__price}>200$</Text>
                                         </View>
-                                        <TouchableOpacity onPress={() => { dispatch(ownerFinishTrip(item._id)).then((res)=>{
-                                           dispatch(getOwnerRequests(boatOwner._id)).then((res)=>{
-                                            setCurrBoats(res)
-                                           })
-                                                dispatch(getOwnerPreviousTrips(boatOwner._id)).then((res)=>{
+                                        <TouchableOpacity onPress={() => {
+                                            dispatch(ownerFinishTrip(item._id)).then((res) => {
+                                                dispatch(getOwnerRequests(boatOwner._id)).then((res) => {
+                                                    setCurrBoats(res)
+                                                })
+                                                dispatch(getOwnerPreviousTrips(boatOwner._id)).then((res) => {
                                                     setPrevBoats(res)
                                                 })
-                                            }) ; console.log("first")
-                                            
-                                            }}>
-                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>finish</Text></View>
-                                            </TouchableOpacity>
+                                            }); console.log("first")
+
+                                        }}>
+                                            <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Finish</Text></View>
+                                        </TouchableOpacity>
                                     </View>
                                 )}
                             />
                         )
 
                     }
-                 
+
 
 
                 </Animated.View>
@@ -947,7 +963,7 @@ const TabButton = (currentTab, setCurrentTab, title, image) => {
     return (
 
         <TouchableOpacity onPress={() => {
-            if (title == "LogOut") {
+            if (title == "Logout") {
                 // Do your Stuff...
             } else {
                 setCurrentTab(title)
@@ -991,7 +1007,7 @@ const styles = StyleSheet.create({
 
     edit__button: {
         width: 80,
-        height: 40,
+        height: 35,
         borderRadius: 10,
         backgroundColor: '#0c8df7',
         left: 320,
@@ -999,9 +1015,11 @@ const styles = StyleSheet.create({
     },
 
     edit__button__style: {
-        fontSize: 20,
-        left: 10,
-        top: 5,
+        fontSize: 15,
+        fontWeight: 600,
+        top: 7,
+        textAlign: 'center',
+        alignItems: 'center',
     },
     modalContent: {
         backgroundColor: '#fff',
@@ -1030,24 +1048,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
     },
     icon__button: {
-        bottom: 170,
+        bottom: 210,
         left: 231,
     },
-    // cards__container: {
-
-    // },
 
     card__box: {
+        borderColor: '#000000',
+        borderWidth: 1,
         marginLeft: 60,
-        elevation: 4,
         width: 300,
         height: 300,
         borderRadius: 20,
-        backgroundColor: '#878585',
-        shadowColor: '#171717',
-        shadowOffset: { width: -2, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
         marginBottom: 15
     },
     card__image: {
@@ -1103,12 +1114,12 @@ const styles = StyleSheet.create({
     add__boat__button: {
         width: 85,
         height: 35,
-        borderRadius: 5,
+        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#0c8df7',
-        left: 200,
-        bottom: 27,
+        left: 23,
+        bottom: 115,
     },
     add__boat__button__style: {
         fontSize: 15,
@@ -1121,12 +1132,78 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#0c8df7',
+        marginTop: 20,
     },
     add__boat__image__button__text: {
         fontSize: 15,
         fontWeight: 600,
+    },
+    modal__input: {
+        width: 300,
+        height: 50,
+        borderBottomColor: '#17171769',
+        marginTop: 10,
+        marginBottom: 10,
+        padding: 5,
+        borderBottomWidth: 1,
+    },
+    modal__dropdown: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginBottom: 20,
+        marginTop: 10,
+    },
+    modal__dropdown__item: {
+        width: 100,
+        height: 40,
+    },
+    add__boat__text: {
+        fontSize: 20,
+        fontWeight: 600,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    book_fixToText: {
+        // height: 100,
+        // width: 45,
+        backgroundColor: '#0c8df7',
+        borderRadius: 55,
+        marginTop: 30,
+    },
+    book_bookBtn: {
+        justifyContent: "space-between",
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: 150,
+        height: 50,
+        paddingTop: 15,
+    },
+    book_btn: {
+        color: '#ffffff',
+        fontWeight: 600,
+        fontSize: 20,
+        paddingLeft: 20,
+        marginTop: -17,
+    },
+    book_arrow: {
+        color: '#000000',
+        backgroundColor: "#fff",
+        borderRadius: 50,
+        padding: 10,
+        marginTop: -15,
+        marginRight: 20,
+    },
+    add__boat__close__icon: {
+        fontSize: 20,
+        fontWeight: 600,
+        left: 200,
+    },
+    edit__text: {
+        fontSize: 20,
+        fontWeight: 600,
+        textAlign: 'center',
+        alignItems: 'center',
     }
-
 });
 
 export default NewBoatOwnerProfile
