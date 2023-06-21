@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { RadioButton } from 'react-native-paper';
+import { IconButton, Modal, RadioButton } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { register , login } from '../../redux/slices/UserSlice';
 import { useSelector } from "react-redux";
+import Iconnnnnn from 'react-native-vector-icons/FontAwesome';
+
 import {
   StyleSheet,
   Text,
@@ -28,12 +30,17 @@ import Animated, {
   withSequence,
   withSpring,
 } from "react-native-reanimated";
-
+import succ from '../../assets/succsses.png'
+import errorImage from '../../assets/error.png'
 
 
 
 const LoginSignUp = (props) => {
+ 
   const [loggedIn, setLoggedIn] = useState(false);
+  const [loginMessage, SetLoginMessage] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [LoginStatus,SetLoginStatus] = useState(null);
 
   const { user } = useSelector(state => state.UserSlice)
   const { boatOwner } = useSelector(state => state.UserSlice)
@@ -41,6 +48,11 @@ const LoginSignUp = (props) => {
   const imagePosition = useSharedValue(1);
   const formButtonScale = useSharedValue(1);
   const [isRegistering, setIsRegistering] = useState(false);
+
+  useEffect(()=>{
+
+  },[loginMessage])
+
   const imageAnimatedStyle = useAnimatedStyle(() => {
     const interpolation = interpolate(
       imagePosition.value,
@@ -97,6 +109,7 @@ const LoginSignUp = (props) => {
   };
   const dispatch = useDispatch();
   const registerHandler = () => {
+    
     imagePosition.value = 0;
     if (!isRegistering) {
       runOnJS(setIsRegistering)(true);
@@ -143,37 +156,98 @@ const LoginSignUp = (props) => {
   const [logPassword , setLogPassword] =useState("")
   const [logEmail , setLogEmail] =useState("")
   function registerr(){
+    
     console.log(regEmail)
     dispatch(register({radiovalue:checked , email:regEmail , name:regName , password:regPassword})).then((res) => {
+
+      if(res.payload.status===400){
+        setModalVisible(true)
+        SetLoginStatus(false)
+        SetLoginMessage(res.payload.message)
+        // openErrorModal()
+        setTimeout(()=>{
+          // closeErrorModal() 
+          imagePosition.value = 0;
+          
+          setModalVisible(false)
+        },3000)
+      }
+      else if (res.payload.status===200){
+        SetLoginStatus(true)
+        SetLoginMessage(res.payload.message)
+        setModalVisible(true)
+        // openSuccussfullModal()
+        setTimeout(()=>{
+          if (isRegistering) {
+            runOnJS(setIsRegistering)(false);
+          }
+          // closeSuccussfullmodal() 
+          setModalVisible(false)
+        },3000)
+     
+      }
+     
       setRegEmail("")
-      setRegName("")
       setRegPassword("")
     })
-    imagePosition.value = 0;
-    if (isRegistering) {
-      runOnJS(setIsRegistering)(false);
-    }
+   
   }
   function loginn(){
-        
+   
     // console.log(logEmail,logPassword)
     dispatch(login({email:logEmail,password:logPassword}))
     .then((res)=>{
-   
-        if(res.payload){
+        console.log(LoginStatus)
+      if(res.payload.data===401){
+        SetLoginMessage(res.payload.data.message)
+        SetLoginStatus(false)
+
+        setModalVisible(true)
+        setTimeout(()=>{
+          setModalVisible(false)
+        },2000)
+      }
+
+      else if(res.payload){
+        console.log(res.payload,"res.payloadasdsayload")
+
+        SetLoginStatus(true)
+        setModalVisible(true)
+        console.log(LoginStatus)
 
           setTimeout(()=>{
+
             if(res.payload.user){
+              SetLoginMessage("Welcome Back")
+
+              setModalVisible(false)
+
               setLoggedIn(true)
               props.navigation.navigate('HomeCards')
             }
             else if(res.payload.boatOwner){
-              props.navigation.navigate('NewOwner')
+              SetLoginMessage("Welcome Back")
+
+              setModalVisible(false)
+
+              props.navigation.navigate('BoatOwnerProfile')
               
             }
+            else{
+
+              SetLoginMessage(res.payload.data.message)
+
+              SetLoginStatus(true)
+              setModalVisible(true)
+
+              
+              
+            }
+            setModalVisible(false)
             
-            
-          },2000)
+          
+
+          },3000)
         }
   
     }).catch((error)=>{
@@ -184,6 +258,7 @@ const LoginSignUp = (props) => {
 
       <>
  
+          
 
     <Animated.View  style={styles.container}>
       <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
@@ -193,7 +268,7 @@ const LoginSignUp = (props) => {
           </ClipPath>
           {/* Image  */}
       <Image
-          href={require("./loginnnn.png")}
+          href={require("./logincopy.jpg")}
           width={width}
           height={height +120}
           preserveAspectRatio="xMidYMid slice"
@@ -202,10 +277,12 @@ const LoginSignUp = (props) => {
           
         </Svg>
        
-      
+   
         <Animated.View
           style={[styles.closeButtonContainer, closeButtonContainerStyle]}
         >
+
+
           <Text
             style={{ color: "white", fontSize: 20, lineHeight: 30 }}
             onPress={() => ((imagePosition.value = 1))}
@@ -215,6 +292,28 @@ const LoginSignUp = (props) => {
         </Animated.View>
       </Animated.View>
       <View style={styles.bottomContainer}>
+      <Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
+      <View style={styles.modalContainer}>
+        {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
+        <View style={styles.modalContainer_card_con}>
+        <IconButton
+        icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
+        
+        
+        style={{marginLeft:-330}}
+        onPress={() => setModalVisible(false)}
+      />
+       <Image  source={LoginStatus?succ:errorImage} style={styles.succ} />
+         <Text style={styles.modaltitle}>{loginMessage}</Text>
+       
+
+  
+      
+         
+    
+        </View>
+      </View>
+    </Modal>
         <Animated.View style={buttonsAnimatedStyle}>
           <Pressable style={styles.button} onPress={loginHandler}>
             <Text style={styles.buttonText}>LOG IN</Text>
@@ -226,6 +325,8 @@ const LoginSignUp = (props) => {
           </Pressable>
         </Animated.View>
         <Animated.View style={[styles.formInputContainer, formAnimatedStyle]}>
+     
+
         {!isRegistering && (
         <TextInput
             placeholder="Email"
@@ -244,7 +345,11 @@ const LoginSignUp = (props) => {
               value={logPassword}
           />
         )}
+
+
                {isRegistering && (
+
+
             <TextInput
               placeholder="Full Name"
               placeholderTextColor="#b6b6b6"
@@ -279,6 +384,8 @@ const LoginSignUp = (props) => {
     
 
 {isRegistering && (
+  <>
+  
 <View style={styles.radios}>
   <View  style={styles.radios_user}>
    <Text style={styles.radios_user_text}>User</Text>
@@ -298,6 +405,7 @@ const LoginSignUp = (props) => {
       />
     </View>
     </View>
+    </>
 )}
           <Animated.View style={[styles.formButton, formButtonAnimatedStyle]}>
           {isRegistering && (

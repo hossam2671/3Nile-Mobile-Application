@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#3191eaaf',
-    height: 55,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 100,
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderWidth: 1,
     borderColor: '#a1a1a1ff',
-    marginHorizontal: 20,
+    marginHorizontal: 40,
     marginVertical: 10,
     paddingLeft: 10,
     borderRadius:50,
@@ -38,10 +38,10 @@ const styles = StyleSheet.create({
   formButton: {
     borderRadius:30,
     backgroundColor: '#3191eaff',
-    height: 40,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 80,
+    marginHorizontal: 100,
     marginVertical: 30,
     borderColor: 'white',
     shadowColor: "#000",
@@ -101,6 +101,56 @@ const styles = StyleSheet.create({
     width:130,
     marginRight:40,
   },
+  
+modalContainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: 'rgba(255, 255, 255, 0.5)',
+  width:480,
+  // marginRight:-60,
+  right:30,
+  top:30,
+  // height:700,
+},
+modalContainer_card_con:{
+  backgroundColor: 'rgba(247, 247, 247, 1)',
+  width:380,
+  height:300,
+  borderRadius:20,
+
+  alignItems: 'center',
+},
+
+
+succ:{
+  width:70,
+  height:70,
+
+},
+
+modaltitle:{
+  // paddingTop:5,
+  color: '#000000',
+  fontSize:25,
+  width:300,
+  marginTop:20,
+  marginLeft:20,   
+   color: '#0b4227',
+},
+Total_text:{
+  color: '#0c8df7',
+  paddingTop:5,
+},
+Hours_text:{
+  color: '#0c8df7',
+  paddingTop:5,
+},
+Date_text:{
+  color: '#0c8df7',
+  paddingTop:10,
+},
+
 });
 
 export default styles;

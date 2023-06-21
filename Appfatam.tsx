@@ -12,9 +12,9 @@ import Animated, { useAnimatedStyle, withTiming, useDerivedValue } from 'react-n
 import Lottie from 'lottie-react-native'
 //components
 import HomeCards from './Screens/HomeCards'
-// import Chat from './Screens/chat/Chat';
-import NewUserProfile from './Screens/NewUserProfile';
-import NewBoatOwnerProfile from './Screens/NewBoatOwnerProfile';
+
+import Chat from './Screens/chat/Chat';
+import UserProfile from './Screens/UserProfile';
 
 import BoatOwnerProfile from './Screens/BoatOwnerProfile'
 import ContactUs from './Screens/ContactUs';
@@ -48,7 +48,7 @@ const MyBottomNav = () => {
 
           {/* <Tab.Screen
             name="search"
-========
+
           <Tab.Screen
             name="ssddw"
             options={{
@@ -60,7 +60,7 @@ const MyBottomNav = () => {
           />
           <Tab.Screen
             name="Upload"
->>>>>>>> Stashed changes:Appfatam.tsx
+
             options={{
               // @ts-ignore
               tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/search.icon.json')} style={styles.icon} />,
@@ -73,7 +73,7 @@ const MyBottomNav = () => {
               // @ts-ignore
               tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/chat.icon.json')} style={styles.icon} />,
             }}
-            component={NewBoatOwnerProfile}
+            component={Chat}
           />
           <Tab.Screen
             name="profile"
@@ -81,7 +81,7 @@ const MyBottomNav = () => {
               // @ts-ignore
               tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/profile.icon.json')} style={styles.icon} />,
             }}
-            component={NewUserProfile}
+            component={UserProfile}
           />
         </Tab.Navigator>
   

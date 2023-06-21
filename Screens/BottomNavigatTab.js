@@ -22,10 +22,11 @@
 //     headerShown: false, 
 //   }}>
 
-// <Tab.Screen 
-// name='home' 
-// component={HomeCards}
-// />
+    <Tab.Screen
+      name='home'
+      component={HomeCards}
+      options={{ tabBarIcon: ({ color }) => <Icon name="home" color={color} size={24} /> }}
+    />
 
 //     <Tab.Screen
 //       name='search'

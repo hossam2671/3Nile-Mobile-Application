@@ -40,24 +40,25 @@ export default function App() {
 
   return (
 
-    // <MyBottomNav />
+    // <Appp />
+    
     // <HomeCards />
 
   //   <NavigationContainer>
-  //    <Stack.Navigator screenOptions={{
-  //       headerStyle: { backgroundColor: '#ffffff' },
+    //  <Stack.Navigator screenOptions={{
+    //     headerStyle: { backgroundColor: '#ffffff' },
 
-  //     }}>
-  //       <Stack.Screen options={{ headerShown: false }} name='splash' component={Splash} />
-  //       <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
+    //   }}>
+    //     <Stack.Screen options={{ headerShown: false }} name='splash' component={Splash} />
+    //     <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
 
-  //     </Stack.Navigator>
+    //   </Stack.Navigator>
   // </NavigationContainer>
   
       <Provider store={Store}>
             <NavigationContainer>
             <Stack.Navigator screenOptions={{
-        headerStyle: { backgroundColor: '#f6f6f6' },
+        headerStyle: { },
 
       }}>
             
@@ -71,7 +72,7 @@ export default function App() {
             <Stack.Screen name='LoginSignUp'  options={{ headerShown: false }} component={LoginSignUp} />
             <Stack.Screen name='NewOwner'  options={{ headerShown: false }} component={NewBoatOwnerProfile} />
             <Stack.Screen name='swvl'  component={Swvl} />
-            <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavBar}></Stack.Screen>
+            <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
 
             </Stack.Navigator>
             <StatusBar style='dark' />

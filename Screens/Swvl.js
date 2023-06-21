@@ -12,11 +12,14 @@ import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
 import bk from '../assets/homecardimg.png'
 import boatSeats from '../assets/card.jpeg';
-import boatswvl from '../assets/swvlllll.jpg'
-import { OwnerdeleteBoat, SwvlDetails} from '../redux/slices/UserSlice'
+import boatswvl from '../assets/swvlboatnew.png'
+import { OwnerdeleteBoat, SwvlDetails, bookSwvl} from '../redux/slices/UserSlice'
 import { ResizeMode, Video } from 'expo-av'
 import { Button } from 'react-native-elements';
+import QRCode from 'react-native-qrcode-svg';
+import succ from '../assets/succsses.png'
 import Iconnnnnn from 'react-native-vector-icons/FontAwesome';
+import { IconButton } from 'react-native-paper';
 // import { MaterialDatetimePickerAndroid } from 'react-native-material-datetime-picker'; import DatePicker from 'react-native-modern-datepicker'
 // import { getToday, getFormatedDate } from 'react-native-modern-datepicker'
 
@@ -48,10 +51,10 @@ const renderPagination = (index, total, context) => {
  const Swvl = () => {
 
     const dispatch =useDispatch()
-    const { swvlTrip } = useSelector((state) => state.UserSlice);
-    console.log(swvlTrip,"fff");
     const [visibleModal, setVisibleModal] = useState(null);
-    
+    const { user } = useSelector((state) => state.UserSlice);
+    const { seatReserved } = useSelector((state) => state.UserSlice);
+    const { swvlRecit } = useSelector((state) => state.UserSlice);
 
     // const [number, onChangeNumber] = React.useState('');
 
@@ -61,6 +64,16 @@ const renderPagination = (index, total, context) => {
 
     // const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
+
+// modal recite
+
+const [modalVisible, setModalVisible] = useState(false);
+const [iscoming,setIsComing]=useState(false)
+const [Deatils,setDeatils]=useState({})
+
+useEffect(()=>{
+},[])
+// modal recite
 
     useEffect(()=>{
        
@@ -108,8 +121,7 @@ const renderPagination = (index, total, context) => {
     const route = useRoute();
     const { data } = route.params;
     useEffect(() => {
-        console.log(data)
-
+   
 
     }, [])
     const vid = React.useRef(null);
@@ -119,7 +131,8 @@ const renderPagination = (index, total, context) => {
     }
     return (
         <View style={styles.container}>
-        {/* <Video
+        
+        <Video
           ref={vid}
           resizeMode={ResizeMode.COVER}
           shouldPlay
@@ -136,7 +149,8 @@ const renderPagination = (index, total, context) => {
           }
 
           style={styles.container}
-        /> */}
+        />
+             <Seats />
        <Image source={boatswvl} style={styles.boatswvl}  />
         <Text style={styles.cardItems_name}> {data.boat.name}</Text>
        <Text style={styles.cardItems_date}> {data.date.slice(0,10)}</Text>
@@ -155,24 +169,70 @@ const renderPagination = (index, total, context) => {
         <Text style={styles.cardItems_port_val}>{data.port}</Text>
         <Iconnnnn name="anchor" color={'#000'} size={20} style={styles.cardItems_port_icon} />
         <View style={styles.fixToText}>
-                <TouchableOpacity style={styles.bookBtn}>
-                    <Text style={styles.btn}>{'Book Now'}</Text>
+        <TouchableOpacity
+  style={styles.bookBtn}
+  onPress={() => {
+    dispatch(bookSwvl({ swvlId:data._id,userId:user._id, numberOfSeats:seatReserved })).then((res=>{
+            setDeatils(res.payload.data)
+        }))
+        setModalVisible(true);
+  }}
+>
+<Text style={styles.btn}>{'Book Now'}</Text>
                     <Icon name="arrow-right" color={'#000'} size={20} style={styles.arrow} />
-                </TouchableOpacity>
+</TouchableOpacity>
             </View> 
         </View>
 
 
 
 
-   
+{/*    
 
             <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
                 {renderModalContent()}
-            </Modal>
+            </Modal> */}
 
-            <Seats />
+           
+      
+    
+<Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
+      <View style={styles.modalContainer}>
+        {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
+        <View style={styles.modalContainer_card_con}>
+        <IconButton
+        icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
+        
+        
+        style={{marginLeft:-230}}
+        onPress={() => setModalVisible(false)}
+      />
+            <Image source={succ} style={styles.succ} />
+        <Text style={styles.TotalPrice_text}>bookingBarcode :{Deatils?.TripDetails?.TotalPrice}</Text>
+        <Text style={styles.numberOfSeats_text}>numberOfSeats :{Deatils?.TripDetails?.numberOfSeats}</Text>
+        <View>
+        <View style={styles.barCode}>
+      <Text style={styles.barCode_text}>bookingBarcode:</Text>
+        <QRCode
+        value={Deatils?.TripDetails?.bookingBarcode}
+        size={50} 
+        color= '#000000'
+        backgroundColor="#ffffff"
+        
+      />
         </View>
+    </View>
+  
+      
+         
+    
+        </View>
+      </View>
+    </Modal>
+
+
+    </View>
+   
     )
 }
 
@@ -185,10 +245,11 @@ const styles = StyleSheet.create({
     
     boatswvl:{
         position: 'absolute',
-        top:50,
+        // top:10,
         left:240,
-        height: 590,
+        height: 830,
         width:175,
+        bottom:40
     },
     cardItems_name:{
         fontSize: 20,
@@ -414,10 +475,46 @@ const styles = StyleSheet.create({
         marginTop:10,
     },
 
-
-
-   
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    width:480,
+    // marginRight:-60,
+    right:30,
+    top:30,
+    // height:700,
+  },
+  modalContainer_card_con:{
+    backgroundColor: 'rgba(247, 247, 247, 1)',
+    width:260,
+    height:270,
+    borderRadius:20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  barCode:{
+    marginLeft:60,
+    paddingBottom:25,
+  },
+  barCode_text:{
+paddingBottom:10,
+right:30,
+color: '#0c8df7',
+  },
+  TotalPrice_text:{
   
+    color: '#0c8df7',
+  },
+  numberOfSeats_text:{
+    padding:10,
+    color: '#0c8df7',
+  },
+  succ:{
+    width:70,
+    height:70,
+  },
 });
 
 export default Swvl;

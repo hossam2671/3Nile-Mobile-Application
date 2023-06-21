@@ -1,14 +1,14 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useState } from 'react';
-
-
+import Icon from 'react-native-vector-icons/AntDesign'
+import  { useRef } from 'react';
 import { ResizeMode, Video } from 'expo-av'
 import * as Animatable from 'react-native-animatable';
 
 // import bk from '../assets/ice-3_cleanupp_auto_x2.jpg'
 // import boat from '../assets/ice-3-removebg-preview.png'
 import bk from '../assets/homecardimg.png'
-import boat from '../assets/boatt.png'
+import boat from '../assets/login.jpg'
 
 
 const HomeCards = (props) => {
@@ -17,61 +17,34 @@ const HomeCards = (props) => {
   function hello() {
     props.navigation.navigate('Filter')
   }
+  const scrollViewRef = useRef(null);
+
+  const scrollToSection = (y) => {
+    scrollViewRef.current.scrollTo({ y, animated: true });
+  };
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
+    <ScrollView contentContainerStyle={styles.scrollView} ref={scrollViewRef}>
      
    
 <View style={styles.vidio_con}>
-        <Video
-          ref={vid}
-          resizeMode={ResizeMode.COVER}
-          shouldPlay
-          isMuted
-          onLoad={() => {
-            setTimeout(() => {
-              setViewed(true)
-              console.log("first")
-              
-            }, 5000)
-          }}
-          isLooping
-          source={require('../assets/home.mp4')
-          }
-
-          style={{ height: 700,}}
-        />
+  <Image source={boat} style={styles.vidio_con} />
+  <View style={styles.vidio_con_header}>
+  <Text style={styles.vidio_con_header_text}>Embark on a River Journey, Where History Unfolds </Text>
+    <Text style={styles.vidio_con_header_text_bottom}>Embark on a River Journey, Where History Unfolds </Text>
+    <TouchableOpacity style={styles.bookBtn}  onPress={()=>scrollToSection(800)}>
+                  
+   <Icon name="arrowdown" color={'#000'} size={30} style={styles.arrow} />
+   </TouchableOpacity>
+  </View>
+       
         </View>
-        {/* {viewed &&
-
-          <Animatable.Text iterationDelay={5} style={styles.homeVBtn} animation="slideInDown" iterationCount={Infinity} direction="alternate">go!</Animatable.Text>
-
-        } */}
- 
-
-
-        {/* <View style={styles.home__cards}>
-          <Image source={bk} style={styles.bk__style} />
-        </View>
-        <View style={styles.card__content}>
-          <Text style={styles.card__text}>Hi this is my category, Hi this is my category, Hi this is my category</Text>
-          <TouchableOpacity onPressIn={() => {
-            console.log("first");
-            props.navigation.navigate('Filter', { num: 1 });
-          }}>
-            <View style={styles.card__button}>
-              <Text style={styles.card__button__text}>See more</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Image source={boat} resizeMode='contain' style={styles.boat__style} />
-        </View> */}
+      
      
 
 
 
 
-     <View style={styles.container}>
+     <View style={styles.container} >
         <View>
       <View style={styles.home__cards}>
           <Image source={bk} style={styles.bk__style} />
@@ -109,7 +82,7 @@ const HomeCards = (props) => {
 
 
 
-{/* 22222222222222222222222 */}
+
       <View>
       <View style={styles.home__cards}>
           <Image source={bk} style={styles.bk__style} />
@@ -144,10 +117,36 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   vidio_con:{
-    // width:200,
-    height:700,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    width:510,
+    height:800,
+
+  },
+  vidio_con_header:{
+    position: 'absolute',
+    top:480,
+    width:360,
+    height:240,
+    backgroundColor:"#64646483",
+    left:45,
+    borderRadius:40,
+  },
+  vidio_con_header_text:{
+    fontSize:33,
+    padding:20,
+    textAlign:"left",
+    color:"white",
+    lineHeight:39,
+    paddingTop:30,
+    width:338,
+    paddingLeft:40,
+  },
+  vidio_con_header_text_bottom:{
+    color:"white",
+    // padding:5,
+    fontSize:16,
+    textAlign:"center",
+    width:330,
+    paddingLeft:60,
   },
   container:{
     alignItems: 'center',
@@ -211,7 +210,23 @@ const styles = StyleSheet.create({
      left: 200,
       fontSize: 30
 
-  }
+  },
+
+
+arrow: {
+    color: '#0566cd',
+    backgroundColor:"#fff",
+    borderRadius:50,
+    width:50,
+    height:50,
+    padding:10,
+    left:320,
+    bottom:10,
+
+},
+
+
+
 
 })
 export default HomeCards
