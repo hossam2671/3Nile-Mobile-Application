@@ -4,15 +4,18 @@ import { Animated, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ip from '../config'
 import * as ImagePicker from 'expo-image-picker';
+import Picker from '@react-native-picker/picker'
 import Cards from './Cards';
-
+import { Button, Menu, Divider, PaperProvider } from 'react-native-paper';
 import Icona from 'react-native-vector-icons/Ionicons';
 import IIcon from 'react-native-vector-icons/MaterialIcons';
 // Tab ICons...
 import home from '../assets/home.png';
-import accept from '../assets/accept.png';
-import pendingg from '../assets/pending.png';
-import finishedd from '../assets/end.png';
+import allboatsI from '../assets/allboat.png';
+import prevI from '../assets/prev.jpg';
+import reqI from '../assets/req.png';
+import currI from '../assets/current.png';
+import swvlI from '../assets/swvli.png';
 import logout from '../assets/logout.png';
 // Menu
 import menu from '../assets/menu.png';
@@ -24,27 +27,71 @@ import cardboat from '../assets/Nile.jpg'
 import boat from '../assets/Nile.jpg';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
-import {ownerUpdateInfo, SwvlDetails, getOwnerBoats, getOwnerCurrentTrips, getOwnerPreviousTrips, getOwnerRequests } from '../redux/slices/UserSlice';
-
+import { ownerUpdateInfo, SwvlDetails, getOwnerBoats, getOwnerCurrentTrips, getOwnerPreviousTrips, getOwnerRequests, addBoat, ownerAcceptTrip, ownerCancelTrip, ownerFinishTrip } from '../redux/slices/UserSlice';
+import { SelectList } from 'react-native-dropdown-select-list'
 //modal
 import Modal from "react-native-modal";
+import StarRating from 'react-native-star-rating';
+
+//formik
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { set } from 'react-native-reanimated';
 
 
 function NewBoatOwnerProfile() {
+    const [selected, setSelected] = React.useState("");
+    const [type, setType] = React.useState("");
+    const [boatName, setBoatName] = useState("")
+    const [boatDescription, setBoatDescriprionName] = useState("")
+    const [boatPrice, setBoatPrice] = useState(0)
+    const [ownerReqs, setOwnerReqs] = useState([])
+    const [allBoats, setAllBoats] = useState([])
+    const [prevBoats, setPrevBoats] = useState([])
+    const [currBoats, setCurrBoats] = useState([])
+    const data = [
+        { key: 'KFC', value: 'KFC' },
+        { key: 'MAC', value: 'MAC' },
+        { key: 'Mahta', value: 'Mahta' },
+    ];
+    const types = [
+        { key: 'shera3', value: 'shera3' },
+        { key: 'swvl', value: 'swvl' },
+        { key: 'Dahabiya', value: 'Dahabiya' },
+        { key: 'Felucca', value: 'Felucca' },
+        { key: 'Houseboat', value: 'Houseboat' },
+    ];
     //get boatOwner data
     const { boatOwner } = useSelector(state => state.UserSlice)
-    const { ownerBoats } = useSelector(state => state.UserSlice)
 
-    const [boatOwnerState , setboatOwnerState] = useState(boatOwner)
+    const [boatOwnerState, setboatOwnerState] = useState(boatOwner)
     const dispatch = useDispatch();
 
 
     //modal
 
     const [visibleModal, setVisibleModal] = useState(null);
+    const [addvisibleModal, setAddVisibleModal] = useState(null);
+
     const [editboatOwnerName, seteditboatOwnerName] = useState("")
     const [editeditboatOwnerPhone, seteditboatOwnerPhone] = useState("")
     const [image, setImage] = useState(`http://${ip}:5000/${boatOwner.img}`);
+    function namy(e) {
+        setBoatName(e)
+        console.log(e)
+    }
+    function price(e) {
+        setBoatPrice(e)
+        console.log(e)
+    }
+    function description(e) {
+        setBoatDescriprionName(e)
+        console.log(e)
+    }
+    function submit() {
+        console.log("first")
+        dispatch(addBoat(5))
+    }
 
     const renderButton = (text, onPress) => (
         <TouchableOpacity onPress={onPress}>
@@ -64,8 +111,10 @@ function NewBoatOwnerProfile() {
                 <TextInput style={styles.modal__profile__input}
                     placeholder={boatOwnerState.name}
                     placeholderTextColor="#0000006a"
-                    onChangeText={(e) => {setName(e) ;
-                    console.log(editboatOwnerName)}}
+                    onChangeText={(e) => {
+                        setName(e);
+                        console.log(editboatOwnerName)
+                    }}
                 />
                 <TextInput style={styles.modal__profile__input}
                     placeholder={boatOwnerState.phone}
@@ -87,15 +136,170 @@ function NewBoatOwnerProfile() {
                     id: boatOwner._id
                 };
 
-                dispatch(ownerUpdateInfo({ updatedBoatOwner })).then((res) => { 
+                dispatch(ownerUpdateInfo({ updatedBoatOwner })).then((res) => {
                     setVisibleModal(false)
-                    console.log(res.payload.data,"ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
+                    console.log(res.payload.data, "ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
                     setboatOwnerState(res.payload.data)
                 })
             })}
 
         </View>
     );
+
+    //add boat modal
+
+    // const validationSchema = Yup.object().shape({
+    //     name: Yup.string().required('Name is required'),
+    //     description: Yup.string().max(300, 'must be lower then 20').required('Description is required'),
+    //     price: Yup.required('Price is required'),
+    //     port: Yup.string.required('Port is required'),
+    //     type: Yup.string().required('Type is required')
+    // });
+
+
+
+    // const formik = useFormik({
+    //     initialValues: {
+    //         name: '',
+    //         description: '',
+    //         price: '',
+    //     },
+    //     // validationSchema,
+    //     onSubmit: (values) => {
+    //          console.log({...values,port:selected,type:type});
+    //         dispatch(addBoat({...values,port:selected,type:type}))
+    //     },
+    // });
+
+    const addBoatrenderButton = (text, onPress) => (
+        <TouchableOpacity onPress={onPress}>
+            <View style={styles.apply__button}>
+                <Text>{text}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+
+    const addBoatrenderModalContent = () => (
+        <View style={styles.modalContent}>
+            <View style={styles.select}>
+                <Text style={styles.edit__text}>Add Boat</Text>
+
+                <TextInput
+                    name="name"
+                    style={styles.input}
+                    placeholder="Name"
+                    placeholderTextColor={'#0000006a'}
+                    onChangeText={(e) => namy(e)}
+
+                    value={boatName}
+                />
+
+
+                <TextInput
+                    name="description"
+                    style={styles.input}
+                    placeholder="Description"
+                    placeholderTextColor={'#0000006a'}
+                    onChangeText={(e) => description(e)}
+
+                    value={boatDescription}
+                />
+
+
+                <TextInput
+                    name="price"
+                    style={styles.input}
+                    placeholder="Price"
+                    onChangeText={(e) => price(e)}
+
+                    value={boatPrice}
+                    keyboardType="numeric"
+                />
+
+
+                <SelectList
+                    // onSelect={formik.handleChange('port')}
+                    name="port"
+                    //   value={formik.values.port}
+                    setSelected={setSelected}
+                    fontFamily='lato'
+                    data={data}
+                    arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
+                    //   searchicon={<Icon name="search" size={12} color={'black'} />} 
+                    search={false}
+                    boxStyles={{ borderRadius: 0 }} //override default styles
+                    defaultOption={{ key: 'KFC', value: 'KFC' }}   //default selected option
+                />
+
+                <SelectList
+                    // onSelect={formik.handleChange('port')}
+                    name="type"
+                    //   value={formik.values.port}
+                    setSelected={setType}
+                    fontFamily='lato'
+                    data={types}
+                    arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
+                    //   searchicon={<Icon name="search" size={12} color={'black'} />} 
+                    search={false}
+                    boxStyles={{ borderRadius: 0 }} //override default styles
+                    defaultOption={{ key: 'shera3', value: 'shera3' }}   //default selected option
+                />
+                {/* <Picker
+                    // selectedValue={formik.values.port}
+                    // onValueChange={formik.handleChange('port')}
+                    // onBlur={formik.handleBlur('port')}
+                >
+                    <Picker label="Select port" value="" />
+                    <Picker label="Port 1" value="KFC" />
+                    <Picker label="Port 2" value="MAC" />
+                    <Picker label="Port 3" value="El-Mahata" />
+
+                </Picker> */}
+                {/* {formik.touched.port && formik.errors.port ? (
+                    <Text style={styles.error}>{formik.errors.port}</Text>
+                ) : null} */}
+
+                {/* <Picker
+                    // selectedValue={formik.values.type}
+                    // onValueChange={formik.handleChange('type')}
+                    // onBlur={formik.handleBlur('type')}
+                >
+                    <Picker label="Select port" value="" />
+                    <Picker label="type 1" value="shera3" />
+                    <Picker label="type 2" value="Type2" />
+                    <Picker label="type 3" value="Type3" />
+
+                </Picker> */}
+                {/* {formik.touched.type && formik.errors.type ? (
+                    <Text style={styles.error}>{formik.errors.type}</Text>
+                ) : null} */}
+
+                {/* <TouchableOpacity
+                    onPress={() => { pickBoatImage() }}>
+                    <View style={styles.add__boat__image__button}><Text style={styles.add__boat__image__button__text}>Add Image</Text></View>
+                </TouchableOpacity> */}
+
+            </View>
+            {addBoatrenderButton('Apply', submit)}
+        </View>
+    );
+    //add image for boat
+    const pickBoatImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+            allowsMultipleSelection: true,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            setImage(result.uri);
+        }
+    };
 
     //edit Image
 
@@ -130,22 +334,35 @@ function NewBoatOwnerProfile() {
 
 
     const [tap, setTap] = useState("accepted")
-    const { accepted } = useSelector(state => state.UserSlice)
-    const { finished } = useSelector(state => state.UserSlice)
-    const { pending } = useSelector(state => state.UserSlice)
-
-
+    const { ownerBoats } = useSelector(state => state.UserSlice)
+    const { ownerPreviousTrips } = useSelector(state => state.UserSlice)
+    const { ownerRequestsTrips } = useSelector(state => state.UserSlice)
+    const { ownerCurrentTrips } = useSelector(state => state.UserSlice)
+    const { ownerSwvlTrip } = useSelector(state => state.UserSlice)
 
     useEffect(() => {
 
-
-
-       
+        dispatch(getOwnerBoats(boatOwner._id)).then((first)=>{
+            setAllBoats(first)
+        })
+        dispatch(getOwnerPreviousTrips(boatOwner._id)).then((first)=>{
+            setPrevBoats(first)
+        })
+        dispatch(getOwnerRequests(boatOwner._id)).then((first) =>    {
+            console.log(first,"iiiiiiiiiii")
+            setOwnerReqs(first)
+            
+        })
+        dispatch(getOwnerCurrentTrips(boatOwner._id)).then((first)=>{
+            setCurrBoats(first)
+        })
+        dispatch(SwvlDetails(boatOwner._id))
+        console.log(ownerRequestsTrips,"checkreq")
 
     }, []);
     const TabButton = ({ currentTab, setCurrentTab, title, icon, onPress }) => {
         return (
-            
+
             <TouchableOpacity onPress={onPress}>
                 <View
                     style={{
@@ -182,11 +399,13 @@ function NewBoatOwnerProfile() {
         );
     };
 
-    function cancel(id){
-        dispatch(pendingTrips({id:boatOwner._id})) 
-        dispatch(canceltrip(id)).then(() =>dispatch(pendingTrips({id:boatOwner._id})) )
+    function cancel(id) {
+        dispatch(pendingTrips({ id: boatOwner._id }))
+        dispatch(canceltrip(id)).then(() => dispatch(pendingTrips({ id: boatOwner._id })))
     }
+    function addBoat() {
 
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -196,12 +415,17 @@ function NewBoatOwnerProfile() {
                 {renderModalContent()}
             </Modal>
 
+            <Modal isVisible={addvisibleModal === 1} style={styles.bottomModal}>
+
+                {addBoatrenderModalContent()}
+            </Modal>
+
             <View style={{ justifyContent: 'flex-start', padding: 15 }}>
                 <Image source={{ uri: image }} style={{
                     width: 60,
                     height: 60,
                     borderRadius: 50,
-                    marginTop: 8
+                    marginTop: 80
                 }}></Image>
 
                 <Text style={{
@@ -218,7 +442,7 @@ function NewBoatOwnerProfile() {
                     }}>{boatOwner.phone}</Text>
                 </TouchableOpacity>
 
-                <View style={{ flexGrow: 1, marginTop: 50 }}>
+                <View style={{ flexGrow: 1, marginTop: 40 }}>
                     {
                         // Tab Bar Buttons....
                     }
@@ -237,7 +461,7 @@ function NewBoatOwnerProfile() {
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             Animated.timing(offsetValue, {
                                 // YOur Random Value...
                                 toValue: showMenu ? 0 : 200,
@@ -252,7 +476,7 @@ function NewBoatOwnerProfile() {
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             setShowMenu(!showMenu);
 
                         }}
@@ -260,20 +484,21 @@ function NewBoatOwnerProfile() {
                     <TabButton
                         currentTab={currentTab}
                         setCurrentTab={setCurrentTab}
-                        title="Accept"
-                        icon={accept}
+                        title="All Boats"
+                        icon={allboatsI}
                         onPress={() => {
-                            setTap("accepted")
+                            console.log(ownerReqs.payload.data)
+                            setTap("allBoats")
                             console.log(tap)
-                            setCurrentTab("Accept")
-                         
+                            setCurrentTab("All Boats")
+
                             Animated.timing(scaleValue, {
                                 toValue: showMenu ? 1 : 1,
                                 duration: 300,
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             Animated.timing(offsetValue, {
                                 // YOur Random Value...
                                 toValue: showMenu ? 0 : 200,
@@ -288,7 +513,7 @@ function NewBoatOwnerProfile() {
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             setShowMenu(!showMenu);
 
                         }}
@@ -296,19 +521,19 @@ function NewBoatOwnerProfile() {
                     <TabButton
                         currentTab={currentTab}
                         setCurrentTab={setCurrentTab}
-                        title="Pending"
-                        icon={pendingg}
+                        title="Previous Trips"
+                        icon={prevI}
                         onPress={() => {
-                            setTap("pending")
+                            setTap("prev")
                             console.log(tap)
-                            setCurrentTab("Pending")
+                            setCurrentTab("Previous Trips")
                             Animated.timing(scaleValue, {
                                 toValue: showMenu ? 1 : 1,
                                 duration: 300,
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             Animated.timing(offsetValue, {
                                 // YOur Random Value...
                                 toValue: showMenu ? 0 : 200,
@@ -323,7 +548,7 @@ function NewBoatOwnerProfile() {
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             setShowMenu(!showMenu);
 
                         }}
@@ -331,19 +556,19 @@ function NewBoatOwnerProfile() {
                     <TabButton
                         currentTab={currentTab}
                         setCurrentTab={setCurrentTab}
-                        title="Finished"
-                        icon={finishedd}
+                        title="Owner Requests"
+                        icon={reqI}
                         onPress={() => {
-                            setTap("finished")
+                            setTap("req")
                             console.log(tap)
-                            setCurrentTab("Finished")
+                            setCurrentTab("Owner Requests")
                             Animated.timing(scaleValue, {
                                 toValue: showMenu ? 1 : 1,
                                 duration: 300,
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             Animated.timing(offsetValue, {
                                 // YOur Random Value...
                                 toValue: showMenu ? 0 : 200,
@@ -358,18 +583,95 @@ function NewBoatOwnerProfile() {
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             setShowMenu(!showMenu);
                         }}
                     />
-                    {/* {TabButton(currentTab, setCurrentTab, "Accept", accept)} */}
-                    {/* {TabButton(currentTab, setCurrentTab, "Pending", pending)} */}
-                    {/* {TabButton(currentTab, setCurrentTab, "Finished", finished)} */}
+                    <TabButton
+                        currentTab={currentTab}
+                        setCurrentTab={setCurrentTab}
+                        title="Current Trips"
+                        icon={currI}
+                        onPress={() => {
+                            setTap("curr")
+                            console.log(tap)
+                            setCurrentTab("Current Trips")
+                            Animated.timing(scaleValue, {
+                                toValue: showMenu ? 1 : 1,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+
+                            Animated.timing(offsetValue, {
+                                // YOur Random Value...
+                                toValue: showMenu ? 0 : 200,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+                            Animated.timing(closeButtonOffset, {
+                                // YOur Random Value...
+                                toValue: !showMenu ? -30 : 0,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+
+                            setShowMenu(!showMenu);
+                        }}
+                    />
+
+                    <TabButton
+                        currentTab={currentTab}
+                        setCurrentTab={setCurrentTab}
+                        title="Swvl Details"
+                        icon={swvlI}
+                        onPress={() => {
+                            setTap("req")
+                            console.log(tap)
+                            setCurrentTab("Swvl Details")
+                            Animated.timing(scaleValue, {
+                                toValue: showMenu ? 1 : 1,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+
+                            Animated.timing(offsetValue, {
+                                // YOur Random Value...
+                                toValue: showMenu ? 0 : 200,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+                            Animated.timing(closeButtonOffset, {
+                                // YOur Random Value...
+                                toValue: !showMenu ? -30 : 0,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+
+                            setShowMenu(!showMenu);
+                        }}
+                    />
 
                 </View>
 
                 <View>
-                    {TabButton(currentTab, setCurrentTab, "LogOut", logout)}
+                    {/* {TabButton(currentTab, setCurrentTab, "LogOut", logout)} */}
+                    <TabButton
+                        currentTab={currentTab}
+                        setCurrentTab={setCurrentTab}
+                        title="Logout"
+                        icon={logout}
+                        onPress={() => {
+                            setTap("logout")
+                            console.log(tap)
+                            setCurrentTab("Logout")
+                        }}
+                    />
                 </View>
 
             </View>
@@ -387,7 +689,7 @@ function NewBoatOwnerProfile() {
                 left: 0,
                 right: 0,
                 paddingHorizontal: 15,
-                paddingVertical: -20,
+                paddingVertical: 20,
                 borderRadius: showMenu ? 15 : 0,
                 // Transforming View...
                 transform: [
@@ -467,7 +769,7 @@ function NewBoatOwnerProfile() {
 
                     <TouchableOpacity
                         isVisible={visibleModal === 1}
-                        onPress={() => { setVisibleModal(1) }}>
+                        onPress={() => { setAddVisibleModal(1) }}>
                         <View style={styles.add__boat__button}><Text style={styles.add__boat__button__style}>+ Add Boat</Text></View>
                     </TouchableOpacity>
 
@@ -478,58 +780,158 @@ function NewBoatOwnerProfile() {
 
 
                     {
-  tap == "pending" && (
-    <FlatList
-      data={pending}
-      keyExtractor={(item) => item._id}
-      renderItem={({ item }) => (
-        <View style={styles.card__box}>
-                <View style={styles.card__image}>
-                    <Image source={cardboat} style={styles.cardboat__img} />
-                </View>
-                <View style={styles.card__content}>
-                    <Text style={styles.card__name}>Feloka</Text>
-                    <Icona name="location" size={13} style={styles.loc__icon} />
-                    <Text style={styles.card__location}>Port: MAC</Text>
-                    <IIcon name="date-range" size={13} />
-                    <Text style={styles.card__date}>27 June 2023</Text>
-                    <Text style={styles.card__price}>200$</Text>
-                    <TouchableOpacity onPress={() => {cancel(item.id)}}>
-                        <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>x Cancel</Text></View>
-                    </TouchableOpacity>
-                </View>
-            </View>
-      )}
-    />
-  )
-  
-}
-{
-  tap == "accepted" && (
-    <FlatList
-      data={accepted.data}
-      renderItem={({ item }) => (
-        <View style={styles.card__box}>
-                <View style={styles.card__image}>
-                    <Image source={cardboat} style={styles.cardboat__img} />
-                </View>
-                <View style={styles.card__content}>
-                    <Text style={styles.card__name}>Feloka</Text>
-                    <Icona name="location" size={13} style={styles.loc__icon} />
-                    <Text style={styles.card__location}>Port: MAC</Text>
-                    <IIcon name="date-range" size={13} />
-                    <Text style={styles.card__date}>27 June 2023</Text>
-                    <Text style={styles.card__price}>200$</Text>
-                    <TouchableOpacity onPress={() => {cancel(item.id)}}>
-                        <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>x Cancel</Text></View>
-                    </TouchableOpacity>
-                </View>
-            </View>
-      )}
-    />
-  )
-  
-}
+                        tap == "req" && (
+                            <FlatList
+                                data={ownerReqs.payload.data}
+                                keyExtractor={(item) => item._id}
+                                renderItem={({ item }) => (
+                                    <View style={styles.card__box}>
+                                        <View style={styles.card__image}>
+                                            <Image source={cardboat} style={styles.cardboat__img} />
+                                        </View>
+                                        <View style={styles.card__content}>
+                                            <Text style={styles.card__name}>{item._id}</Text>
+                                            <Icona name="location" size={13} style={styles.loc__icon} />
+                                            <Text style={styles.card__location}>{item.bo }</Text>
+                                            <IIcon name="date-range" size={13} />
+                                            <Text style={styles.card__date}>27 June 2023</Text>
+                                            <Text style={styles.card__price}>200$</Text>
+                                            <TouchableOpacity onPress={() => { dispatch(ownerAcceptTrip(item._id)).then((res)=>{
+                                                dispatch(getOwnerRequests(boatOwner._id)).then((res)=>{
+                                                    setOwnerReqs(res)
+                                                    
+                                                    dispatch(getOwnerCurrentTrips(boatOwner._id)).then((res)=>{
+                                                        console.log(res,"ggggggggggggggggggggggggg")
+                                                        setCurrBoats(res)
+                                                    })
+                                                })
+                                            }) ; console.log("first")
+                                            
+                                            }}>
+                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Accept</Text></View>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => { dispatch(ownerCancelTrip(item._id)).then((res)=>{
+                                                dispatch(getOwnerRequests(boatOwner._id)).then((res)=>{
+                                                    setOwnerReqs(res)
+                                                })
+                                            }) ; console.log("first")
+                                            
+                                            }}>
+                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>cancel</Text></View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                )}
+                            />
+                        )
+
+                    }
+                    {
+                        tap == "allBoats" && (
+                            <FlatList
+                                data={allBoats.payload.data}
+                                keyExtractor={(item) => item._id}
+                                renderItem={({ item }) => (
+                                    <View style={styles.card__box}>
+                                        <View style={styles.card__image}>
+                                            <Image source={cardboat} style={styles.cardboat__img} />
+                                        </View>
+                                        <View style={styles.card__content}>
+                                            <Text style={styles.card__name}>{item._id}</Text>
+                                            <Icona name="location" size={13} style={styles.loc__icon} />
+                                            <Text style={styles.card__location}>Port: MAC</Text>
+                                            <IIcon name="date-range" size={13} />
+                                            <Text style={styles.card__date}>27 June 2023</Text>
+                                            <Text style={styles.card__price}>200$</Text>                                           
+                                        </View>
+                                        {
+                                            item.category == "swvl" && 
+                                            <TouchableOpacity onPress={() => { 
+                                            
+                                            }}>
+                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>add swvl</Text></View>
+                                            </TouchableOpacity>
+                                        }
+                                    </View>
+                                )}
+                            />
+                        )
+
+                    }
+                    {
+                        tap == "prev" && (
+                            <FlatList
+                                data={prevBoats.payload.data}
+                                keyExtractor={(item) => item._id}
+                                renderItem={({ item }) => (
+                                    <View style={styles.card__box}>
+                                        <View style={styles.card__image}>
+                                            <Image source={cardboat} style={styles.cardboat__img} />
+                                        </View>
+                                        <View style={styles.card__content}>
+                                            <Text style={styles.card__name}>{item._id}</Text>
+                                            <Icona name="location" size={13} style={styles.loc__icon} />
+                                            <Text style={styles.card__location}>Port: MAC</Text>
+                                            <IIcon name="date-range" size={13} />
+                                            <Text style={styles.card__date}>27 June 2023</Text>
+                                            <Text style={styles.card__price}>200$</Text>                                           
+                                        </View>
+                                        {
+              item.rate &&
+            <StarRating
+            key={item._id}
+            disabled={false}
+            maxStars={5}
+            rating={item.rate.rating}
+            // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
+            starSize={20}
+            fullStarColor="#ffc107"
+            emptyStarColor="#e4e5e9"
+            ></StarRating>
+            }
+                                    </View>
+                                )}
+                            />
+                        )
+
+                    }
+                    {
+                        tap == "curr" && (
+                            <FlatList
+                                data={currBoats.payload.data}
+                                keyExtractor={(item) => item._id}
+                                renderItem={({ item }) => (
+                                    <View style={styles.card__box}>
+                                        <View style={styles.card__image}>
+                                            <Image source={cardboat} style={styles.cardboat__img} />
+                                        </View>
+                                        <View style={styles.card__content}>
+                                            <Text style={styles.card__name}>{item._id}</Text>
+                                            <Icona name="location" size={13} style={styles.loc__icon} />
+                                            <Text style={styles.card__location}>Port: MAC</Text>
+                                            <IIcon name="date-range" size={13} />
+                                            <Text style={styles.card__date}>27 June 2023</Text>
+                                            <Text style={styles.card__price}>200$</Text>                                           
+                                        </View>
+                                        <TouchableOpacity onPress={() => { dispatch(ownerFinishTrip(item._id)).then((res)=>{
+                                           dispatch(getOwnerRequests(boatOwner._id)).then((res)=>{
+                                            setCurrBoats(res)
+                                           })
+                                                dispatch(getOwnerPreviousTrips(boatOwner._id)).then((res)=>{
+                                                    setPrevBoats(res)
+                                                })
+                                            }) ; console.log("first")
+                                            
+                                            }}>
+                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>finish</Text></View>
+                                            </TouchableOpacity>
+                                    </View>
+                                )}
+                            />
+                        )
+
+                    }
+                 
 
 
                 </Animated.View>
@@ -631,12 +1033,12 @@ const styles = StyleSheet.create({
         bottom: 170,
         left: 231,
     },
-    cards__container: {
-      
-    },
+    // cards__container: {
+
+    // },
 
     card__box: {
-        marginLeft:60,
+        marginLeft: 60,
         elevation: 4,
         width: 300,
         height: 300,
@@ -646,9 +1048,9 @@ const styles = StyleSheet.create({
         shadowOffset: { width: -2, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 3,
-        marginBottom:15
+        marginBottom: 15
     },
-    card__image:{
+    card__image: {
         width: 270,
         height: 120,
         alignItems: 'center',
@@ -661,7 +1063,7 @@ const styles = StyleSheet.create({
         height: 120,
         borderRadius: 10,
     },
-    card__content:{
+    card__content: {
         top: 40,
         left: 15,
     },
@@ -670,19 +1072,19 @@ const styles = StyleSheet.create({
         fontWeight: 600,
         bottom: 15,
     },
-    card__location:{
+    card__location: {
         bottom: 18,
         left: 16,
     },
-    card__date:{
+    card__date: {
         bottom: 17,
         left: 16,
     },
-    card__price:{
+    card__price: {
         fontSize: 20,
         fontWeight: 600,
     },
-    cancel__button:{
+    cancel__button: {
         width: 70,
         height: 35,
         borderRadius: 5,
@@ -691,14 +1093,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
         left: 200,
         bottom: 27,
-        
+
     },
-    cancel__button__text:{
+    cancel__button__text: {
         fontSize: 15,
         fontWeight: 600,
         textAlign: 'center',
     },
-    add__boat__button:{
+    add__boat__button: {
         width: 85,
         height: 35,
         borderRadius: 5,
@@ -708,10 +1110,23 @@ const styles = StyleSheet.create({
         left: 200,
         bottom: 27,
     },
-    add__boat__button__style:{
+    add__boat__button__style: {
+        fontSize: 15,
+        fontWeight: 600,
+    },
+    add__boat__image__button: {
+        width: 85,
+        height: 35,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#0c8df7',
+    },
+    add__boat__image__button__text: {
         fontSize: 15,
         fontWeight: 600,
     }
+
 });
 
 export default NewBoatOwnerProfile

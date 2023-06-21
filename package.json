@@ -15,6 +15,7 @@
     "@mui/material": "^5.13.4",
     "@react-native-async-storage/async-storage": "^1.18.2",
     "@react-native-community/slider": "^4.4.2",
+    "@react-native-picker/picker": "^2.4.10",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
@@ -27,7 +28,7 @@
     "expo-av": "~13.2.1",
     "expo-image-picker": "^14.1.1",
     "expo-status-bar": "~1.4.4",
-    "formik": "^2.4.1",
+    "formik": "^2.4.2",
     "install": "^0.13.0",
     "js-cookie": "^3.0.5",
     "lottie-react-native": "^5.1.6",
@@ -66,8 +67,8 @@
     "resuite": "^0.0.2",
     "rn-range-slider": "^2.2.2",
     "strip-json-comments": "^5.0.0",
-    "yup": "^1.2.0",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

@@ -59,7 +59,7 @@ export const login = createAsyncThunk("allUser/login", async (payload) => {
 export const editUserInfo= createAsyncThunk ("/editUserInfo", async(payload )=>{
 console.log(payload,"payload")
 
-const result = axios.put(`http://${ip}:5000/user/editUserinfo/${payload.updatedUser.id}`,{
+const result = await axios.put(`http://${ip}:5000/user/editUserinfo/${payload.updatedUser.id}`,{
       name: payload.updatedUser.name,
       // address:payload.address,
       phone:payload.updatedUser.phone,
@@ -71,7 +71,7 @@ return result
 // add review 
 export const addReview= createAsyncThunk ("/addReview", async(payload )=>{
 
-   const res = axios.post(`http://${ip}:5000/user/addReview`,{
+   const res = await axios.post(`http://${ip}:5000/user/addReview`,{
   
   boatId: payload.boatId,
   clientId:payload.clientId,
@@ -80,7 +80,19 @@ export const addReview= createAsyncThunk ("/addReview", async(payload )=>{
   })
   return res
   })
-
+ 
+  // add boat
+export const addBoat = createAsyncThunk ("boatOwner/addBoat", async(payload) => {
+  console.log(payload)
+  const res = await axios.post(`http://${ip}:5000/boatOwner/addBoatt`,{
+        name: payload.name,
+        description: payload.description,
+        price: payload.price,
+        portName: payload.port,
+        type: payload.type
+  })
+  return res
+})
 
   // user cancel trip
 // export const canceltrip= createAsyncThunk ("/cancelTrip", async(payload )=>{
@@ -202,12 +214,12 @@ export const getSwvl = createAsyncThunk("swvl/swvlTrips", async (payload) => {
   }
 
 })
-export const getOwnerBoats = createAsyncThunk("boatOwner/Boats", async (payload) => {
+export const getOwnerBoats = createAsyncThunk("boatOwner/getAllBoats", async (payload) => {
   
     try {
   
         let res = await axios.get(`http://${ip}:5000/boatOwner/getAllBoats/${payload}`);
-        // console.log(res)
+         console.log(res , "jkhdjkfhkhdasklhfaklhkldhaklfhlafgajkdgsfjkdagsjk")
         return res;
     }
     catch (err) {
@@ -215,6 +227,7 @@ export const getOwnerBoats = createAsyncThunk("boatOwner/Boats", async (payload)
     }
 
 })
+
 export const getOwnerPreviousTrips = createAsyncThunk("boatOwner/Boats", async (payload) => {
   
     
@@ -225,10 +238,10 @@ export const getOwnerPreviousTrips = createAsyncThunk("boatOwner/Boats", async (
     
 
 })
-export const getOwnerRequests = createAsyncThunk("boatOwner/Boats", async (payload) => {
+export const getOwnerRequests = createAsyncThunk("boatOwner/reqss", async (payload) => {
   
         let res = await axios.get(`http://${ip}:5000/boatOwner/getAllPendingTrips/${payload}`);
-      
+      // console.log(res,"fatma")
         return res;
   
 
@@ -322,6 +335,28 @@ export const ownerUpdateInfo= createAsyncThunk ("/editOwnerInfo", async(payload 
    
   })
   return owner
+  })
+
+  // owner accept trip
+  export const ownerAcceptTrip= createAsyncThunk ("/boatOwner/acceptt",async(payload)=>{
+    console.log(payload)
+    const respone = await axios.put(`http://${ip}:5000/boatOwner/acceptTrip`,{
+      id:payload
+    })
+  })
+// owner cancel trip
+  export const ownerCancelTrip= createAsyncThunk ("/boatOwner/cancell",async(payload)=>{
+    console.log(payload)
+    const respone = await axios.put(`http://${ip}:5000/boatOwner/cancelTrip`,{
+      id:payload
+    })
+  })
+  // owner finish trip
+  export const ownerFinishTrip= createAsyncThunk ("/boatOwner/finishTrip",async(payload)=>{
+    console.log(payload)
+    const respone = await axios.put(`http://${ip}:5000/boatOwner/finishTrip`,{
+      id:payload
+    })
   })
 
 
@@ -555,8 +590,8 @@ const UserSlice = createSlice({
   
     },
     [getOwnerBoats.fulfilled]:(state,action)=>{
-      state.ownerBoats =action.payload
-    
+      //  console.log(action.payload.data,"ojdsfjajlj;ljdf;laj;lfja;ld;kljf;klajf;kla;lj;la;sflaj;lsdajhj")
+      state.ownerBoats =action.payload.data
     },
     [getOwnerRequests.fulfilled]:(state,action)=>{
    console.log(action.payload,"hjfghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
@@ -661,6 +696,17 @@ const UserSlice = createSlice({
 
         [bookTrip.fulfilled]: (state, action) => {
        },
+       [addBoat.fulfilled]: (state, action) => {
+      },
+       [ownerAcceptTrip.fulfilled]: (state, action) => {
+        console.log("first")
+      },
+       [ownerCancelTrip.fulfilled]: (state, action) => {
+        console.log("first")
+      },
+       [ownerFinishTrip.fulfilled]: (state, action) => {
+        console.log("first")
+      },
     }
     
 })

@@ -24,6 +24,7 @@ const data2 = [
 ];
 
 
+
 export default function Filter(props) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => {setSearchQuery(query); dispatch(search(query));console.log(query)};
