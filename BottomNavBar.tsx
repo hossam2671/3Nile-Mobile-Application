@@ -46,27 +46,6 @@ const MyBottomNav = () => {
             component={HomeCards}
           />
 
-          {/* <Tab.Screen
-            name="search"
-========
-          <Tab.Screen
-            name="ssddw"
-            options={{
-              headerShown:false,
-              // @ts-ignore
-              tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/home.icon.json')} style={styles.icon} />,
-            }}
-            component={OnboardingScreen}
-          />
-          <Tab.Screen
-            name="Upload"
->>>>>>>> Stashed changes:Appfatam.tsx
-            options={{
-              // @ts-ignore
-              tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/search.icon.json')} style={styles.icon} />,
-            }}
-            component={Filter}
-          /> */}
           <Tab.Screen
             name="chat"
             options={{

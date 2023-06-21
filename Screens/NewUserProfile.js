@@ -29,6 +29,7 @@ import { addReview, canceltrip, pendingTrips, finishedTrips, editUserInfo, accep
 //modal
 import Modal from "react-native-modal";
 import StarRating from 'react-native-star-rating';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function NewUserProfile() {
     //get user data
@@ -45,11 +46,12 @@ function NewUserProfile() {
     const [image, setImage] = useState(`http://${ip}:5000/${user.img}`);
 
     const renderButton = (text, onPress) => (
-        <TouchableOpacity onPress={onPress}>
-            <View style={styles.apply__button}>
-                <Text >{text}</Text>
-            </View>
-        </TouchableOpacity>
+        <View style={styles.book_fixToText}>
+          <TouchableOpacity style={styles.book_bookBtn} onPress={onPress}>
+            <Text style={styles.book_btn}>{text}</Text>
+            <Icon name="arrow-right" color={'#000'} size={15} style={styles.book_arrow} />
+          </TouchableOpacity>
+        </View>
     );
 
     const renderModalContent = () => (
@@ -59,12 +61,12 @@ function NewUserProfile() {
                 <Text style={styles.edit__text}>Edit your Details</Text>
 
 
-                <TextInput style={styles.modal__profile__input}
+                <TextInput style={styles.modal__input}
                     placeholder={userState.name}
                     placeholderTextColor="#0000006a"
                     onChangeText={(e) => {setName(e) ; console.log(editName)}}
                 />
-                <TextInput style={styles.modal__profile__input}
+                <TextInput style={styles.modal__input}
                     placeholder={userState.phone}
                     placeholderTextColor="0000006a"
                     onChangeText={(e) => setPhone(e)}
@@ -388,7 +390,18 @@ function NewUserProfile() {
                 </View>
 
                 <View>
-                    {TabButton(currentTab, setCurrentTab, "LogOut", logout)}
+                    {/* {TabButton(currentTab, setCurrentTab, "LogOut", logout)} */}
+                    <TabButton
+                        currentTab={currentTab}
+                        setCurrentTab={setCurrentTab}
+                        title="Logout"
+                        icon={logout}
+                        onPress={() => {
+                            setTap("logout")
+                            AsyncStorage.removeItem("user")
+                            setCurrentTab("Logout")
+                        }}
+                    />
                 </View>
 
             </View>
@@ -653,7 +666,7 @@ const styles = StyleSheet.create({
 
     edit__button: {
         width: 80,
-        height: 40,
+        height: 35,
         borderRadius: 10,
         backgroundColor: '#0c8df7',
         left: 320,
@@ -661,9 +674,11 @@ const styles = StyleSheet.create({
     },
 
     edit__button__style: {
-        fontSize: 20,
-        left: 10,
-        top: 5,
+        fontSize: 15,
+        fontWeight: 600,
+        top: 7,
+        textAlign: 'center',
+        alignItems: 'center',
     },
     modalContent: {
         backgroundColor: '#fff',
@@ -672,31 +687,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    modal__profile__input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        width: '100%',
-        marginBottom: 20,
-        width: 270,
-        height: 40,
+    modal__input: {
+        width: 300,
+        height: 50,
+        borderBottomColor: '#17171769',
+        marginTop: 10,
+        marginBottom: 10,
         padding: 5,
-    },
-
-    apply__button: {
-        width: 70,
-        height: 40,
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#0c8df7',
+        borderBottomWidth: 1,
     },
     icon__button: {
         bottom: 170,
         left: 231,
-    },
-    cards__container: {
-      
     },
 
     card__box: {
@@ -761,7 +763,48 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 600,
         textAlign: 'center',
-    }
+    },
+    book_fixToText: {
+        // height: 100,
+        // width: 45,
+        backgroundColor: '#0c8df7',
+        borderRadius: 55,
+        marginTop: 30,
+      },
+      book_bookBtn: {
+        justifyContent: "space-between",
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: 150,
+        height: 50,
+        paddingTop: 15,
+      },
+      book_btn: {
+        color: '#ffffff',
+        fontWeight: 600,
+        fontSize: 20,
+        paddingLeft: 20,
+        marginTop: -17,
+      },
+      book_arrow: {
+        color: '#000000',
+        backgroundColor: "#fff",
+        borderRadius: 50,
+        padding: 10,
+        marginTop: -15,
+        marginRight:20,
+      },
+      add__boat__close__icon:{
+        fontSize: 20,
+        fontWeight: 600,
+        left: 200,
+      },
+      edit__text:{
+        fontSize: 20,
+        fontWeight: 600,
+        textAlign: 'center',
+        alignItems: 'center',
+      }
 });
 
 export default NewUserProfile
