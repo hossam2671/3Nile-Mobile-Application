@@ -243,6 +243,24 @@ export const getSwvl = createAsyncThunk("swvl/swvlTrips", async (payload) => {
   }
 
 })
+
+// get owner swvls
+export const ownerSwvl = createAsyncThunk("swvl/boatOwner",async (payload)=>{
+  let res = await axios.get(`http://${ip}:5000/swvl/boatowner/${payload}/swvl`)
+  return res
+})
+
+export const fireSwvl = createAsyncThunk("swvl/AddTrip", async (payload)=>{
+  console.log(payload)
+  let res = await axios.post(`http://${ip}:5000/swvl/AddTrip`,{
+  boatId:payload.boatId,
+  time:payload.time,
+  port:payload.port,
+  targetPlace:payload.targetPlace,
+  date:payload.date,
+  priceForTrip:payload.priceForTrip
+  })
+})
 export const getOwnerBoats = createAsyncThunk("boatOwner/getAllBoats", async (payload) => {
   
     try {
@@ -393,17 +411,14 @@ export const ownerUpdateInfo= createAsyncThunk ("/editOwnerInfo", async(payload 
   })
 
   // edit user image
-  export const updateImage = createAsyncThunk ("boatOwner/editImage" , async(payload)=>{
-    console.log(payload)
-    const res = await axios.put(`http://${ip}:5000/boatOwner/editImage`,{
-      id:payload.id,
-      img:payload.image
-    },{
-      headers :{
-        'Content-Type': 'multipart/form-data',
-      }
-    })
-  })
+  // export const updateImage = createAsyncThunk ("boatOwner/editImage" , async(payload)=>{
+  // const formData = new FormData();
+  // formData.append('img', payload.img);
+  // console.log(formData,"l;kas;lf;lsa;lf")
+  //   console.log(payload,"jjjjjjjjjjjjjjjjj")
+  //   const res = await axios.put(`http://${ip}:5000/boatOwner/editImage/${payload.id}`,formData)
+  //   return res.data
+  // })
 
 
 const UserSlice = createSlice({
@@ -538,9 +553,8 @@ console.log(state.seatReserved)
       },
       
       logoutt(state,action){
-        Cookies.remove("userId");
-
         state.user = null
+        state.boatOwner = null
       },
        // change price for category one
        change(state, action) {      
@@ -810,7 +824,13 @@ console.log(state.seatReserved)
        [ownerUpdateInfo.fulfilled]: (state, action) => {
          state.boatOwner = action.payload.data;
       },
-       [updateImage.fulfilled]: (state, action) => {
+      //  [updateImage.fulfilled]: (state, action) => {
+      //     console.log("first")
+      // },
+       [fireSwvl.fulfilled]: (state, action) => {
+          console.log("first")
+      },
+       [ownerSwvl.fulfilled]: (state, action) => {
           console.log("first")
       },
     }

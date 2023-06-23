@@ -11,7 +11,7 @@ import Icona from 'react-native-vector-icons/Ionicons';
 import IIcon from 'react-native-vector-icons/MaterialIcons';
 // Tab ICons...
 import home from '../assets/home.png';
-import allboatsI from '../assets/allboat.png';
+import allboatsIT from '../assets/allboat.png';
 import prevI from '../assets/prev.jpg';
 import reqI from '../assets/req.png';
 import currI from '../assets/current.png';
@@ -27,7 +27,7 @@ import cardboat from '../assets/Nile.jpg'
 import boat from '../assets/Nile.jpg';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
-import { ownerUpdateInfo, SwvlDetails, getOwnerBoats, getOwnerCurrentTrips, getOwnerPreviousTrips, getOwnerRequests, addBoat, ownerAcceptTrip, ownerCancelTrip, ownerFinishTrip, updateImage } from '../redux/slices/UserSlice';
+import { ownerUpdateInfo, SwvlDetails, getOwnerBoats, getOwnerCurrentTrips, getOwnerPreviousTrips, getOwnerRequests, addBoat, ownerAcceptTrip, ownerCancelTrip, ownerFinishTrip,  fireSwvl, ownerSwvl, logoutt } from '../redux/slices/UserSlice';
 import { SelectList } from 'react-native-dropdown-select-list'
 //modal
 import Modal from "react-native-modal";
@@ -37,13 +37,39 @@ import { TimePickerModal } from 'react-native-paper-dates';
 import { DatePickerModal } from 'react-native-paper-dates';
 
 
+
 //formik
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { set } from 'react-native-reanimated';
+import axios from 'axios';
 
 
-function NewBoatOwnerProfile() {
+function NewBoatOwnerProfile(props) {
+    const [date, setDate] = React.useState(undefined);
+  const [open, setOpen] = React.useState(false);
+  const onDismissSingle = React.useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+  const onConfirmSingle = React.useCallback(
+    (params) => {
+      setOpen(false);
+      setDate(params.date);
+    },
+    [setOpen, setDate]
+  );
+  const [visible, setVisible] = React.useState(false)
+  const onDismiss = React.useCallback(() => {
+    setVisible(false)
+  }, [setVisible])
+  const onConfirm = React.useCallback(
+    ({ hours, minutes }) => {
+      setVisible(false);
+      console.log({ hours, minutes });
+      setTime(`${hours} - ${minutes}`)
+    },
+    [setVisible]
+  );
     const [selected, setSelected] = React.useState("");
     const [type, setType] = React.useState("");
     const [boatName, setBoatName] = useState("")
@@ -53,6 +79,7 @@ function NewBoatOwnerProfile() {
     const [allBoats, setAllBoats] = useState([])
     const [prevBoats, setPrevBoats] = useState([])
     const [currBoats, setCurrBoats] = useState([])
+    const [swvlTrips , setSwvlTrips] = useState([])
     const data = [
         { key: 'KFC', value: 'KFC' },
         { key: 'MAC', value: 'MAC' },
@@ -70,7 +97,14 @@ function NewBoatOwnerProfile() {
 
     const [boatOwnerState, setboatOwnerState] = useState(boatOwner)
     const dispatch = useDispatch();
+ // add swvl
+    const [boatId , setBoatId] = useState(0)
+    const [time , setTime] = useState("")
+    const [targetPlace , setTargetPlace] = useState("")
+    const [swvlPrice , setSwvlPrice] = useState(0)
+    const [swvlType , setSwvlType] = useState("")
 
+ // end add swvl
 
     //modal
 
@@ -103,6 +137,9 @@ function NewBoatOwnerProfile() {
             })
         })
         setAddVisibleModal(0)
+    }
+    function fire(){
+        dispatch(fireSwvl({boatId:boatId,time:time , port:swvlType , targetPlace:targetPlace , date:date , priceForTrip:swvlPrice}))
     }
 
     function closeModal() {
@@ -255,9 +292,9 @@ function NewBoatOwnerProfile() {
                     style={styles.modal__input}
                     placeholder="Target place"
                     placeholderTextColor={'#0000006a'}
-                    // onChangeText={(e) => namy(e)}
+                     onChangeText={(e) => setTargetPlace(e)}
 
-                    value={boatName}
+                    value={targetPlace}
                 />
 
 
@@ -266,9 +303,9 @@ function NewBoatOwnerProfile() {
                     style={styles.modal__input}
                     placeholder="Price"
                     placeholderTextColor={'#0000006a'}
-                    // onChangeText={(e) => description(e)}
+                     onChangeText={(e) => setSwvlPrice(e)}
 
-                    value={boatDescription}
+                    value={swvlPrice}
                 />
 
 
@@ -277,20 +314,49 @@ function NewBoatOwnerProfile() {
                     <SelectList
                         name="port"
                         style={styles.modal__dropdown__item}
-                        setSelected={setSelected}
+                        setSelected={setSwvlType}
                         fontFamily='lato'
                         data={data}
                         arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
                         //   searchicon={<Icon name="search" size={12} color={'black'} />} 
                         search={false}
-                        boxStyles={{ borderRadius: 0 }} //override default styles
-                        defaultOption={{ key: 'KFC', value: 'KFC' }}   //default selected option
+                        boxStyles={{ borderRadius: 0 }} 
+                        defaultOption={{ key: 'KFC', value: 'KFC' }}  
                     />
 
+                <SafeAreaProvider>
+      <View style={{justifyContent: 'center', flex: 1, alignItems: 'center'}}>
+        <Button onPress={() => setOpen(true)} uppercase={false} mode="outlined">
+          Pick single date
+        </Button>
+        <DatePickerModal
+          locale="en"
+          mode="single"
+          visible={open}
+          onDismiss={onDismissSingle}
+          date={date}
+          onConfirm={onConfirmSingle}
+        />
+      </View>
+    </SafeAreaProvider>
+    <SafeAreaProvider>
+      <View style={{justifyContent: 'center', flex: 1, alignItems: 'center'}}>
+        <Button onPress={() => setVisible(true)} uppercase={false} mode="outlined">
+          Pick time
+        </Button>
+        <TimePickerModal
+          visible={visible}
+          onDismiss={onDismiss}
+          onConfirm={onConfirm}
+          hours={12}
+          minutes={14}
+        />
+      </View>
+    </SafeAreaProvider>
                 </View>
 
             </View>
-            {addBoatrenderButton('Apply', submit)}
+            {addBoatrenderButton('Apply', fire)}
         </View>
     );
     //add image for boat
@@ -326,20 +392,22 @@ function NewBoatOwnerProfile() {
 
         if (!result.canceled) {
             const fileInfo = await FileSystem.getInfoAsync(result.uri);
-    const imageUriParts = result.uri.split('.');
-    const fileExtension = imageUriParts[imageUriParts.length - 1];
-    const formData = new FormData();
-    formData.append('image', {
-      uri: result.uri,
-      name: `image.${fileExtension}`,
-      type: fileInfo.mimeType,
-    });
-    console.log(formData)
+            const uriParts = result.uri.split('.');
+            const fileExtension = uriParts[uriParts.length - 1];
+    const timestamp = Date.now();
             setImage(result.uri);
-            dispatch(updateImage({
-                id:boatOwner._id,
-                img: formData
-            }))
+            const formData = new FormData();
+            formData.append('img', {
+                uri: result.uri,
+                name: `image_${timestamp}.jpeg`,
+                type: `image/${fileExtension}`,
+              });
+           
+            const response = await axios.put(`http://${ip}:5000/boatOwner/editImage/${boatOwner._id}`, formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              });
         }
     };
 
@@ -357,7 +425,7 @@ function NewBoatOwnerProfile() {
     const closeButtonOffset = useRef(new Animated.Value(0)).current;
 
 
-    const [tap, setTap] = useState("accepted")
+    const [tap, setTap] = useState("")
     const { ownerBoats } = useSelector(state => state.UserSlice)
     const { ownerPreviousTrips } = useSelector(state => state.UserSlice)
     const { ownerRequestsTrips } = useSelector(state => state.UserSlice)
@@ -365,9 +433,10 @@ function NewBoatOwnerProfile() {
     const { ownerSwvlTrip } = useSelector(state => state.UserSlice)
 
     useEffect(() => {
-
+        
         dispatch(getOwnerBoats(boatOwner._id)).then((first) => {
             setAllBoats(first)
+            setTap("allBoats")
         })
         dispatch(getOwnerPreviousTrips(boatOwner._id)).then((first) => {
             setPrevBoats(first)
@@ -380,7 +449,10 @@ function NewBoatOwnerProfile() {
         dispatch(getOwnerCurrentTrips(boatOwner._id)).then((first) => {
             setCurrBoats(first)
         })
-        dispatch(SwvlDetails(boatOwner._id))
+        dispatch(ownerSwvl(boatOwner._id)).then((first)=>{
+            console.log(first.payload.data,"hoho@gmail.com")
+            setSwvlTrips(first)
+        })
         console.log(ownerRequestsTrips,"checkreq")
        
 
@@ -513,7 +585,7 @@ function NewBoatOwnerProfile() {
                         currentTab={currentTab}
                         setCurrentTab={setCurrentTab}
                         title="All Boats"
-                        icon={allboatsI}
+                        icon={allboatsIT}
                         onPress={() => {
                             console.log(ownerReqs.payload.data)
                             setTap("allBoats")
@@ -656,7 +728,7 @@ function NewBoatOwnerProfile() {
                         title="Swvl Details"
                         icon={swvlI}
                         onPress={() => {
-                            setTap("req")
+                            setTap("Swvl")
                             console.log(tap)
                             setCurrentTab("Swvl Details")
                             Animated.timing(scaleValue, {
@@ -694,10 +766,8 @@ function NewBoatOwnerProfile() {
                         setCurrentTab={setCurrentTab}
                         title="Logout"
                         icon={logout}
-                        onPress={() => {
-                            setTap("logout")
-                            console.log(tap)
-                            setCurrentTab("Logout")
+                        onPress={() => {                  
+                                props.navigation.navigate("LoginSignUp")
                         }}
                     />
                 </View>
@@ -818,12 +888,12 @@ function NewBoatOwnerProfile() {
                                             <Image source={cardboat} style={styles.cardboat__img} />
                                         </View>
                                         <View style={styles.card__content}>
-                                            <Text style={styles.card__name}>{item._id}</Text>
+                                            <Text style={styles.card__name}>{item.boatId.name}</Text>
                                             <Icona name="location" size={13} style={styles.loc__icon} />
-                                            <Text style={styles.card__location}>{item.bo}</Text>
+                                            <Text style={styles.card__location}>{item.price} EGP</Text>
                                             <IIcon name="date-range" size={13} />
-                                            <Text style={styles.card__date}>27 June 2023</Text>
-                                            <Text style={styles.card__price}>200$</Text>
+                                            <Text style={styles.card__date}>{item.boatId.type}</Text>
+                                            <Text style={styles.card__price}>{item.boatId.portName}</Text>
                                             <TouchableOpacity onPress={() => {
                                                 dispatch(ownerAcceptTrip(item._id)).then((res) => {
                                                     dispatch(getOwnerRequests(boatOwner._id)).then((res) => {
@@ -867,17 +937,18 @@ function NewBoatOwnerProfile() {
                                             <Image source={cardboat} style={styles.cardboat__img} />
                                         </View>
                                         <View style={styles.card__content}>
-                                            <Text style={styles.card__name}>{item._id}</Text>
+                                            <Text style={styles.card__name}>{item.name}</Text>
                                             <Icona name="location" size={13} style={styles.loc__icon} />
-                                            <Text style={styles.card__location}>Port: MAC</Text>
+                                            <Text style={styles.card__location}>{item.price}</Text>
                                             <IIcon name="date-range" size={13} />
-                                            <Text style={styles.card__date}>27 June 2023</Text>
-                                            <Text style={styles.card__price}>200$</Text>
+                                            <Text style={styles.card__date}>{item.type}</Text>
+                                            <Text style={styles.card__price}>{item.portName}</Text>
                                         </View>
                                         {
                                             item.category == "swvl" &&
                                             <TouchableOpacity onPress={() => {
                                                 setswVlVisibleModal(1)
+                                                setBoatId(item._id)
                                             }}>
                                                 <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>+ Add swvl</Text></View>
                                             </TouchableOpacity>
@@ -899,12 +970,12 @@ function NewBoatOwnerProfile() {
                                             <Image source={cardboat} style={styles.cardboat__img} />
                                         </View>
                                         <View style={styles.card__content}>
-                                            <Text style={styles.card__name}>{item._id}</Text>
+                                            <Text style={styles.card__name}>{item.boatId.name}</Text>
                                             <Icona name="location" size={13} style={styles.loc__icon} />
-                                            <Text style={styles.card__location}>Port: MAC</Text>
+                                            <Text style={styles.card__location}>{item.price}</Text>
                                             <IIcon name="date-range" size={13} />
-                                            <Text style={styles.card__date}>27 June 2023</Text>
-                                            <Text style={styles.card__price}>200$</Text>
+                                            <Text style={styles.card__date}>{item.boatId.type}</Text>
+                                            <Text style={styles.card__price}>{item.boatId.portName}</Text>
                                         </View>
                                         {
                                             item.rate &&
@@ -936,12 +1007,12 @@ function NewBoatOwnerProfile() {
                                             <Image source={cardboat} style={styles.cardboat__img} />
                                         </View>
                                         <View style={styles.card__content}>
-                                            <Text style={styles.card__name}>{item._id}</Text>
+                                            <Text style={styles.card__name}>{item.boatId.name}</Text>
                                             <Icona name="location" size={13} style={styles.loc__icon} />
-                                            <Text style={styles.card__location}>Port: MAC</Text>
+                                            <Text style={styles.card__location}>{item.price}</Text>
                                             <IIcon name="date-range" size={13} />
-                                            <Text style={styles.card__date}>27 June 2023</Text>
-                                            <Text style={styles.card__price}>200$</Text>
+                                            <Text style={styles.card__date}>{item.type}</Text>
+                                            <Text style={styles.card__price}>{item.portName}</Text>
                                         </View>
                                         <TouchableOpacity onPress={() => {
                                             dispatch(ownerFinishTrip(item._id)).then((res) => {
@@ -956,6 +1027,31 @@ function NewBoatOwnerProfile() {
                                         }}>
                                             <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Finish</Text></View>
                                         </TouchableOpacity>
+                                    </View>
+                                )}
+                            />
+                        )
+
+                    }
+                     {
+                        tap == "Swvl" && (
+                            <FlatList
+                                data={swvlTrips.payload.data}
+                                keyExtractor={(item) => item._id}
+                                renderItem={({ item }) => (
+                                    <View style={styles.card__box}>
+                                        <View style={styles.card__image}>
+                                            <Image source={cardboat} style={styles.cardboat__img} />
+                                        </View>
+                                        <View style={styles.card__content}>
+                                            <Text style={styles.card__name}>{item.boat.name}</Text>
+                                            <Icona name="location" size={13} style={styles.loc__icon} />
+                                            <Text style={styles.card__location}>{item.priceForTrip}</Text>
+                                            <IIcon name="date-range" size={13} />
+                                            <Text style={styles.card__date}>{item.time}</Text>
+                                            <Text style={styles.card__price}>{item.date}</Text>
+                                        </View>
+                                        
                                     </View>
                                 )}
                             />
