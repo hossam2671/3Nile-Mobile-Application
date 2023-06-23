@@ -46,6 +46,21 @@ import axios from 'axios';
 
 
 function NewBoatOwnerProfile(props) {
+    const [boatImages, setBoatImages] = useState([]);
+    const pickBoatImages = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+        console.log(result);
+
+        if (!result.canceled) {
+          setImage(result.assets[0].uri);
+        }
+      };
     const [date, setDate] = React.useState(undefined);
   const [open, setOpen] = React.useState(false);
   const onDismissSingle = React.useCallback(() => {
@@ -128,16 +143,54 @@ function NewBoatOwnerProfile(props) {
         setBoatDescriprionName(e)
         console.log(e)
     }
-    function submit() {
-        console.log("first")
-        dispatch(addBoat({id:boatOwner._id,name:boatName,description:boatDescription,price:boatPrice,portName:selected,type:type}))
-        .then((res)=>{
-            dispatch(getOwnerBoats(boatOwner._id)).then((res)=>{
-                setAllBoats(res)
-            })
-        })
-        setAddVisibleModal(0)
-    }
+    async function submit() {
+        const formData = new FormData();
+        const timestamp = Date.now();
+      
+        boatImages.forEach((image, index) => {
+          const uriParts = image.split('.');
+          const fileExtension = uriParts[uriParts.length - 1];
+          const imageName = `image_${timestamp}_${index}.${fileExtension}`;
+      
+          formData.append('images', {
+            uri: image,
+            name: imageName,
+            type: `image/${fileExtension}`,
+          });
+        });
+      
+        formData.append('id', boatOwner._id);
+        formData.append('name', boatName);
+        formData.append('description', boatDescription);
+        formData.append('price', boatPrice);
+        formData.append('portName', selected);
+        formData.append('type', type);
+      console.log(formData)
+        try {
+          let res = await axios.post(`http://${ip}:5000/boatOwner/addBoatt`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }).then((ress)=>{
+            setAllBoats(ress.data)
+          });
+      
+        
+        
+      
+          // dispatch(addBoat({id:boatOwner._id,name:boatName,description:boatDescription,price:boatPrice,portName:selected,type:type}))
+          // .then((res)=>{
+          //     dispatch(getOwnerBoats(boatOwner._id)).then((res)=>{
+          //
+          //     })
+          // })
+      
+          setAddVisibleModal(0);
+        } catch (error) {
+          // Handle error here
+          console.error(error);
+        }
+      }
     function fire(){
         dispatch(fireSwvl({boatId:boatId,time:time , port:swvlType , targetPlace:targetPlace , date:date , priceForTrip:swvlPrice}))
     }
@@ -212,8 +265,28 @@ function NewBoatOwnerProfile(props) {
         <View style={styles.modalContent}>
             <View style={styles.select}>
                 <Text style={styles.add__boat__text}>Add Boat</Text>
+               
                 {/* <Text style={styles.add__boat__close__icon} onPress={closeModal()}>X</Text> */}
-
+                <View style={{  alignItems: 'center', justifyContent: 'center' }}>
+                <TouchableOpacity onPress={() => { pickBoatImage() }}>
+                        <Text> Boat Image</Text>
+                    </TouchableOpacity>
+                    <View style={styles.boatImages}>
+                    {boatImages && 
+  boatImages.map((item, index) => (
+    <>
+      <Image source={{ uri: item }} style={{ width: 100, height: 100 }} />
+      <TouchableOpacity style={{right:15}} onPress={() => {
+        boatImages.splice(index, 1);
+        setBoatImages([...boatImages]);
+      }}>
+        <Text>X</Text>
+      </TouchableOpacity>
+    </>
+  ))
+}
+</View>
+    </View>
                 <TextInput
                     name="name"
                     style={styles.modal__input}
@@ -373,7 +446,8 @@ function NewBoatOwnerProfile(props) {
         console.log(result);
 
         if (!result.canceled) {
-            setImage(result.uri);
+            const newImages = [...boatImages,result.uri].slice(0,9);
+            setBoatImages(newImages);
         }
     };
 
@@ -391,14 +465,13 @@ function NewBoatOwnerProfile(props) {
         console.log(result);
 
         if (!result.canceled) {
-            const fileInfo = await FileSystem.getInfoAsync(result.uri);
             const uriParts = result.uri.split('.');
             const fileExtension = uriParts[uriParts.length - 1];
     const timestamp = Date.now();
             setImage(result.uri);
             const formData = new FormData();
             formData.append('img', {
-                uri: result.uri,
+                uri: image,
                 name: `image_${timestamp}.jpeg`,
                 type: `image/${fileExtension}`,
               });
@@ -435,7 +508,7 @@ function NewBoatOwnerProfile(props) {
     useEffect(() => {
         
         dispatch(getOwnerBoats(boatOwner._id)).then((first) => {
-            setAllBoats(first)
+            setAllBoats(first.payload.data)
             setTap("allBoats")
         })
         dispatch(getOwnerPreviousTrips(boatOwner._id)).then((first) => {
@@ -929,7 +1002,7 @@ function NewBoatOwnerProfile(props) {
                     {
                         tap == "allBoats" && (
                             <FlatList
-                                data={allBoats.payload.data}
+                                data={allBoats}
                                 keyExtractor={(item) => item._id}
                                 renderItem={({ item }) => (
                                     <View style={styles.card__box}>
@@ -1314,6 +1387,11 @@ const styles = StyleSheet.create({
         fontWeight: 600,
         textAlign: 'center',
         alignItems: 'center',
+    },
+    boatImages:{
+        flexWrap: 'wrap',
+        flexDirection:"row"
+        
     }
 });
 
