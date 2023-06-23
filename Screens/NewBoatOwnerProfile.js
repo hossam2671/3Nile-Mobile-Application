@@ -366,7 +366,6 @@ function NewBoatOwnerProfile(props) {
                     placeholder="Target place"
                     placeholderTextColor={'#0000006a'}
                      onChangeText={(e) => setTargetPlace(e)}
-
                     value={targetPlace}
                 />
 
@@ -377,7 +376,7 @@ function NewBoatOwnerProfile(props) {
                     placeholder="Price"
                     placeholderTextColor={'#0000006a'}
                      onChangeText={(e) => setSwvlPrice(e)}
-
+                    required={true}
                     value={swvlPrice}
                 />
 

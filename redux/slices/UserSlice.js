@@ -213,17 +213,17 @@ export const getCategoryOne = createAsyncThunk("user/category/3nile/boats", asyn
     }
 
 })
-export const getCategoryTwo = createAsyncThunk("user/category/3nileplus/boats", async (payload) => {
-    try {
-        let res = await axios.get(`http://${ip}:5000/user/category/3nileplus/boats`);
-        return res;
-    }
-    catch (err) {
+// export const getCategoryTwo = createAsyncThunk("user/category/3nileplus/boats", async (payload) => {
+//     try {
+//         let res = await axios.get(`http://${ip}:5000/user/category/3nileplus/boats`);
+//         return res;
+//     }
+//     catch (err) {
 
-    }
+//     }
 
-})
-export const getCategoryThree = createAsyncThunk("user/category/3nilevip/boats", async (payload) => {
+// })
+export const getCategoryTwo = createAsyncThunk("user/category/3nilevip/boats", async (payload) => {
     try {
         let res = await axios.get(`http://${ip}:5000/user/category/3nilevip/boats`);
         return res;
@@ -763,12 +763,12 @@ console.log(state.seatReserved)
             state.filteredcategoryTwo = action.payload.data
             
         },
-        [getCategoryThree.fulfilled]: (state, action) => {
+        // [getCategoryThree.fulfilled]: (state, action) => {
             
             
-           state.categoryThree = action.payload.data;
-           state.filteredcategoryThree = action.payload.data
-        },
+        //    state.categoryThree = action.payload.data;
+        //    state.filteredcategoryThree = action.payload.data
+        // },
         [getSwvl.fulfilled]:(state,action) =>{
           state.swvl = action.payload.data;
           state.filteredswvl = action.payload.data;

@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ip from '../config'
 import * as ImagePicker from 'expo-image-picker';
 import Cards from './Cards';
-
+import axios from 'axios';
 import Icona from 'react-native-vector-icons/Ionicons';
 import IIcon from 'react-native-vector-icons/MaterialIcons';
 // Tab ICons...
@@ -31,7 +31,7 @@ import Modal from "react-native-modal";
 import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function NewUserProfile() {
+function NewUserProfile(props) {
     //get user data
     const { user } = useSelector(state => state.UserSlice)
     const [userState , setUserState] = useState(user)
@@ -110,13 +110,29 @@ function NewUserProfile() {
         console.log(result);
 
         if (!result.canceled) {
+            console.log("firkst")
+            const uriParts = result.uri.split('.');
+            const fileExtension = uriParts[uriParts.length - 1];
+            const timestamp = Date.now();
             setImage(result.uri);
+            const formData = new FormData();
+            formData.append('img', {
+                uri: image,
+                name: `image_${timestamp}.jpeg`,
+                type: `image/${fileExtension}`,
+              });
+           
+            const response = await axios.put(`http://${ip}:5000/user/editImage/${user._id}`, formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              });
         }
     };
 
 
 
-    const [currentTab, setCurrentTab] = useState("Home");
+    const [currentTab, setCurrentTab] = useState("Pending");
     // To get the curretn Status of menu ...
     const [showMenu, setShowMenu] = useState(false);
 
@@ -143,7 +159,9 @@ function NewUserProfile() {
 
 
         dispatch(acceptedTrips({ id: user._id }))
-        dispatch(pendingTrips({ id: user._id }))
+        dispatch(pendingTrips({ id: user._id })).then(()=>{
+            setTap("pending")
+        })
         console.log(pending)
 
     }, []);
@@ -398,8 +416,9 @@ function NewUserProfile() {
                         icon={logout}
                         onPress={() => {
                             setTap("logout")
-                            AsyncStorage.removeItem("user")
+                           
                             setCurrentTab("Logout")
+                            props.navigation.navigate("LoginSignUp")
                         }}
                     />
                 </View>
