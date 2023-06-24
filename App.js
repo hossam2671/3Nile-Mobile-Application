@@ -31,7 +31,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import BottomNavBar from './BottomNavBar'
 import NewBoatOwnerProfile from './Screens/NewBoatOwnerProfile';
-
+import  NotiFincation  from './Screens/Notification';
+import Notification from './Screens/Notification';
 
 
 export default function App() {
@@ -59,21 +60,34 @@ export default function App() {
             <NavigationContainer>
             <Stack.Navigator screenOptions={{
         headerStyle: { },
-
+        headerRight: () => <NotiFincation />, 
       }}>
             
             <Stack.Screen name='OnboardingScreen 'options={{ headerShown: false }} component={OnboardingScreen} />
 
-            <Stack.Screen name='BoatOwnerProfile' options={{ headerShown: true }} component={BoatOwnerProfile} />
-            <Stack.Screen name='ContactUs' options={{ headerShown: true }} component={ContactUs} />
-            <Stack.Screen name='Discreption'  options={{ headerShown: true }}component={Discreption} />
-            <Stack.Screen name='Filter' options={{ headerShown: true }} component={Filter} />
+            <Stack.Screen name='BoatOwnerProfile' options={{ headerShown: true,headerRight: () => <NotiFincation />, }} component={BoatOwnerProfile} />
+            <Stack.Screen name='ContactUs' options={{ headerShown: true,headerRight: () => <NotiFincation />, }} component={ContactUs} />
+            <Stack.Screen name='Discreption'  options={{ headerShown: true,headerRight: () => <NotiFincation />, }}component={Discreption} />
+            <Stack.Screen name='Filter' options={{ headerShown: true,headerRight: () => <NotiFincation />, }} component={Filter} />
             {/* <Stack.Screen name='HomeCards' component={HomeCards} /> */}
             <Stack.Screen name='LoginSignUp'  options={{ headerShown: false }} component={LoginSignUp} />
-            <Stack.Screen name='NewOwner'  options={{ headerShown: false }} component={NewBoatOwnerProfile} />
-            <Stack.Screen name='swvl'  component={Swvl} />
-            <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavBar}></Stack.Screen>
-
+            <Stack.Screen name='NewOwner'   options={{ headerShown: true,headerRight: () => <NotiFincation />, }} component={NewBoatOwnerProfile} />
+            <Stack.Screen name='swvl'  component={Swvl}  options={{ headerShown: true,headerRight: () => <NotiFincation />, }}/>
+            <Stack.Screen
+        name="HomeCards"
+        component={BottomNavBar}
+        options={{
+          headerRight: () => <Notification />,
+          headerShown: false,
+        }}
+      />
+            <Stack.Screen
+            name="Notification"
+            component={NotiFincation}
+            options={{
+              headerShown: true,
+            }}
+          />
             </Stack.Navigator>
             <StatusBar style='dark' />
             </NavigationContainer>

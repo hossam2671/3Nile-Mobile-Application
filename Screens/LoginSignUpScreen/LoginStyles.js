@@ -123,7 +123,7 @@ modalContainer_card_con:{
   height:270,
   borderRadius:40,
   alignItems: 'center',
-  left:60,
+  left:30,
   // top:-400,
 },
 
@@ -131,7 +131,6 @@ modalContainer_card_con:{
 succ:{
   width:70,
   height:70,
-
 },
 
 modaltitle:{

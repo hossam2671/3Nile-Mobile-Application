@@ -37,8 +37,8 @@ const slides = [
   },
   {
     id: '4',
-    image: require('../assets/top.jpg'),
-    title: 'Increase Your Value',
+    image: require('../assets/aaaa.jpg'),
+    title: '3Nile Bus',
     subtitle: ' a large range of types and sizes, but generally smaller than a ship.',
   },
   

@@ -5,12 +5,15 @@ import  { useRef } from 'react';
 import { ResizeMode, Video } from 'expo-av'
 import * as Animatable from 'react-native-animatable';
 
+
 // import bk from '../assets/ice-3_cleanupp_auto_x2.jpg'
 // import boat from '../assets/ice-3-removebg-preview.png'
-import bk from '../assets/homecardimg.png'
-import boat from '../assets/login.jpg'
+import bk from '../assets/ady.jpg'
+import bkk from '../assets/adytoww.jpg'
+import bkkk from '../assets/viplll.jpg'
+import boat from '../assets/homeheader.jpg'
 
-
+import Iconn from "react-native-vector-icons/FontAwesome"
 const HomeCards = (props) => {
   const vid = React.useRef(null);
   let [viewed, setViewed] = useState(false)
@@ -45,19 +48,24 @@ const HomeCards = (props) => {
 
 
      <View style={styles.container} >
-        <View>
-      <View style={styles.home__cards}>
-          <Image source={bk} style={styles.bk__style} />
-        </View>
+     <View>
+   
         <View style={styles.card__content}>
-          <Text style={styles.card__text}>Hi this 22222ory, Hi this is my category, Hi this is my category</Text>
+        <View style={styles.home__cards}>
+        <Image source={bk} style={styles.bk__style} />
+        </View>
+          <Text style={styles.card__text_h}> 3Nile </Text>
+          <Text style={styles.card__text}>sailing boat or yacht is a boat that has sails. Wind blows against the sails, pushing the boat through the water.</Text>
           <TouchableOpacity onPressIn={() => {
              props.navigation.navigate('Filter', { num: 1 });
           }}>
-            <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
+            <View style={styles.card__button}>  
+            <Iconn name="arrow-right" color={'#000'} size={20} style={styles.book_arrow} />
+       
+             </View>
           </TouchableOpacity>
         </View>
-
+      
       </View>
 
     
@@ -66,38 +74,46 @@ const HomeCards = (props) => {
    
 
       <View style={styles.home__cards_container}>
-      <View style={styles.home__cards}>
-          <Image source={bk} style={styles.bk__style} />
-        </View>
+
         <View style={styles.card__content}>
-          <Text style={styles.card__text}>Hi this 22222ory, Hi this is my category, Hi this is my category</Text>
+        <View style={styles.home__cards}>
+        <Image source={bkkk} style={styles.bk__style} />
+      </View>
+      <Text style={styles.card__text_h}> 3Nile VIP </Text>
+      <Text style={styles.card__text}>sailing boat or yacht is a boat that has sails. Wind blows against the sails, pushing the boat through the water.</Text>
           <TouchableOpacity onPressIn={() => {
             props.navigation.navigate('Filter', { num: 2 })
           }}>
-            <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
+            <View style={styles.card__button}>
+               <Iconn name="arrow-right" color={'#000'} size={20} style={styles.book_arrow} />
+               </View>
           </TouchableOpacity>
         </View>
-     
+    
       </View>
 
 
 
 
       <View>
-      <View style={styles.home__cards}>
-          <Image source={bk} style={styles.bk__style} />
-       
-        </View>
+ 
 
         <View style={styles.card__content}>
-          <Text style={styles.card__text}>Hi this is my category, Hi this is my category, Hi this is my category</Text>
+        <View style={styles.home__cards}>
+        <Image source={bkk} style={styles.bk__style} />
+     
+      </View>
+      <Text style={styles.card__text_h}> 3Nile Bus </Text>
+      <Text style={styles.card__text}>sailing boat or yacht is a boat that has sails. Wind blows against the sails, pushing the boat through the water.</Text>
           <TouchableOpacity onPressIn={() => {
             props.navigation.navigate('Filter', { num: 3 })
           }}>
-            <View style={styles.card__button}><Text style={styles.card__botton__text}>See more</Text></View>
+            <View style={styles.card__button}>  
+             <Iconn name="arrow-right" color={'#000'} size={20} style={styles.book_arrow} />
+             </View>
           </TouchableOpacity>
         </View>
-       
+  
         <View>
          
         </View>
@@ -126,7 +142,7 @@ const styles = StyleSheet.create({
     top:420,
     width:360,
     height:240,
-    backgroundColor:"#64646483",
+    backgroundColor:"#056e9e83",
     left:45,
     borderRadius:40,
   },
@@ -150,7 +166,7 @@ const styles = StyleSheet.create({
   },
   container:{
     alignItems: 'center',
-    paddingBottom:120,
+    paddingBottom:50,
   },
   // home__cards_container:{
   //   display:"flex",
@@ -162,19 +178,27 @@ const styles = StyleSheet.create({
   //   paddingBottom:120,
   // },
   home__cards: {
-    marginTop: 90,
+    // marginTop: 90,
     width: 350,
     height: 180,
-    marginLeft:10,
-    marginBottom: 150,
- 
+    left:42,
+    bottom:80,
+    // marginLeft:10,
+    // marginBottom: 50,
+    // position:"absolute",
+    // position:"relative",
   },
   bk__style: {
-    width: 355,
-    height: 310,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    position:"relative",
+    width: 275,
+    height: 190,
+    borderRadius: 40,
+    // backgroundColor: 'rgba(117, 183, 236, 0.562)',
+    // borderTopRightRadius: 10,
+    // position:"relative",
+    // top:-380,
+    // position:"absolute",
+    // position:"relative",
+    // bottom:300,
   },
   boat__style: {
     width: 430,
@@ -184,43 +208,54 @@ const styles = StyleSheet.create({
    
   },
   card__content: {
-    backgroundColor: 'rgba(241, 241, 241, 1)',
+    backgroundColor: 'rgba(255, 255, 255, 1)',
     width: 365,
-    height: 220,
-    // left: 15,
-    borderTopRightRadius: 200,
-    borderTopLeftRadius: 200,
+    height: 340,
+    // left: 10,
+    borderRadius: 20,
+    // borderTopLeftRadius: 20,
     // borderBottomRightRadius: 10,
     // borderBottomLeftRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
     // borderTopRadius:70,
-    position:"absolute",
-    top:300,
-//     borderBottomColor:"black",
-// borderBottomWidth:1,
-
+    // position:"absolute",
+    top:90,
+    borderColor:"#b1aeae",
+borderWidth:1,
+marginBottom:130,
+marginTop:130,
+  },card__text_h:{
+    width: 300,
+    textAlign: 'center',
+    alignItems: 'center',
+    fontSize: 35,
+    fontWeight: 'bold',
+    bottom:50,
+    color:"#0391e4",
   },
   card__text: {
     width: 300,
     textAlign: 'center',
     alignItems: 'center',
-    fontSize: 17,
-    top: 30,
+    fontSize: 20,
+    bottom:40,
+    // top: 30,
   },
   card__button: {
-    width: 80,
-    height: 80,
-    backgroundColor: '#0481e7',
+    width: 60,
+    height: 60,
+    backgroundColor: "#0391e4",
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    top: -135,
-    color:"white",
+    top: -25,
+    color:"#04b7ee",
+    left:110,
   },
-  card__botton__text: {
+  card_botton_text: {
     textAlign: 'center',
-    color:"white",
+    color:"#0069f3",
   },
   homeVBtn: {
     color: 'red',
@@ -232,7 +267,7 @@ const styles = StyleSheet.create({
 
 
 arrow: {
-    color: '#0566cd',
+    color: "#0391e4",
     backgroundColor:"#fff",
     borderRadius:50,
     width:50,
@@ -243,7 +278,15 @@ arrow: {
 
 },
 
-
+book_arrow: {
+  color:"#0391e4",
+  backgroundColor: "#fff",
+  borderRadius: 50,
+  width: 40,
+  height: 40,
+  padding: 10,
+  // marginTop: 10,
+},
 
 
 })

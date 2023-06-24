@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { IconButton, Modal, RadioButton } from 'react-native-paper';
+import { IconButton,RadioButton } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { register , login } from '../../redux/slices/UserSlice';
 import { useSelector } from "react-redux";
 import Iconnnnnn from 'react-native-vector-icons/FontAwesome';
-
+import Modal from 'react-native-modal';
 import {
   StyleSheet,
   Text,
@@ -30,19 +30,23 @@ import Animated, {
   withSequence,
   withSpring,
 } from "react-native-reanimated";
-import succ from '../../assets/succsses.png'
-import errorImage from '../../assets/error.png'
+import succ from './succsses.png'
+import errorImage from './error.png'
 
 
 
 const LoginSignUp = (props) => {
-  const succ = require('../../assets/succsses.png');
-  const errorImage = require('../../assets/error.png');
+  // const succ = require('../../assets/succsses.png');
+  // const errorImage = require('../../assets/error.png');
 
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [loginMessage, SetLoginMessage] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   const [LoginStatus,SetLoginStatus] = useState(null);
 
   const { user } = useSelector(state => state.UserSlice)
@@ -295,7 +299,7 @@ const LoginSignUp = (props) => {
         </Animated.View>
       </Animated.View>
       <View style={styles.bottomContainer}>
-      <Modal style={styles.modalContainer_al} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
+      <Modal  visible={isModalVisible} onRequestClose={() => setModalVisible(false)}>
     
         {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
         <View style={styles.modalContainer_card_con}>

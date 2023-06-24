@@ -22,6 +22,7 @@ import LoginSignUp from './Screens/LoginSignUpScreen/LoginSignUp'
 import { Provider } from 'react-redux'
 import { Store } from './redux/Store';
 import OnboardingScreen from './Screens/OnboardingScreen'
+import Notification from './Screens/Notification';
 
 
 
@@ -40,6 +41,7 @@ const MyBottomNav = () => {
           <Tab.Screen
             name="home"
             options={{
+              headerRight: () => <Notification />,
               // @ts-ignore
               tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/home.icon.json')} style={styles.icon} />,
             }}
@@ -49,6 +51,7 @@ const MyBottomNav = () => {
           <Tab.Screen
             name="chat"
             options={{
+              headerRight: () => <Notification />,
               // @ts-ignore
               tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/chat.icon.json')} style={styles.icon} />,
             }}
@@ -57,6 +60,7 @@ const MyBottomNav = () => {
           <Tab.Screen
             name="profile"
             options={{
+              headerRight: () => <Notification />,
               // @ts-ignore
               tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/profile.icon.json')} style={styles.icon} />,
             }}
