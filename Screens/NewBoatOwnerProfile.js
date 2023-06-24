@@ -27,7 +27,7 @@ import cardboat from '../assets/Nile.jpg'
 import boat from '../assets/Nile.jpg';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
-import { ownerUpdateInfo, SwvlDetails, getOwnerBoats, getOwnerCurrentTrips, getOwnerPreviousTrips, getOwnerRequests, addBoat, ownerAcceptTrip, ownerCancelTrip, ownerFinishTrip,  fireSwvl, ownerSwvl, logoutt } from '../redux/slices/UserSlice';
+import { ownerUpdateInfo, SwvlDetails, getOwnerBoats, getOwnerCurrentTrips, getOwnerPreviousTrips, getOwnerRequests, addBoat, ownerAcceptTrip, ownerCancelTrip, ownerFinishTrip,  fireSwvl, ownerSwvl, logoutt, OwnerdeleteBoat } from '../redux/slices/UserSlice';
 import { SelectList } from 'react-native-dropdown-select-list'
 //modal
 import Modal from "react-native-modal";
@@ -193,6 +193,7 @@ function NewBoatOwnerProfile(props) {
       }
     function fire(){
         dispatch(fireSwvl({boatId:boatId,time:time , port:swvlType , targetPlace:targetPlace , date:date , priceForTrip:swvlPrice}))
+        setswVlVisibleModal(0)
     }
 
     function closeModal() {
@@ -1018,6 +1019,15 @@ function NewBoatOwnerProfile(props) {
                                             <Text style={styles.card__date}>{item.type}</Text>
                                             <Text style={styles.card__price}>{item.portName}</Text>
                                         </View>
+                                        <TouchableOpacity onPress={() => {
+                                                dispatch(OwnerdeleteBoat({ownerId:boatOwner._id,id:item._id})).then((res)=>{
+                                                    dispatch(getOwnerBoats(boatOwner._id)).then((first) => {
+                                                        setAllBoats(first.payload.data)
+                                                    })
+                                                })
+                                            }}>
+                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Delete Boat</Text></View>
+                                            </TouchableOpacity>
                                         {
                                             item.category == "swvl" &&
                                             <TouchableOpacity onPress={() => {
