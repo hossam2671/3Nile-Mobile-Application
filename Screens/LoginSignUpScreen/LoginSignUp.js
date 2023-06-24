@@ -204,9 +204,9 @@ const LoginSignUp = (props) => {
     // console.log(logEmail,logPassword)
     dispatch(login({email:logEmail,password:logPassword}))
     .then((res)=>{
-        console.log(LoginStatus)
+        console.log(res.payload,"fghdfshfsd")
+        SetLoginMessage(res.payload.data ? res.payload.data.message:"Welcome Back")
       if(res.payload.data===400){
-        SetLoginMessage(res.payload.data.message)
         SetLoginStatus(false)
 
         setModalVisible(true)
@@ -215,25 +215,26 @@ const LoginSignUp = (props) => {
         },2000)
       }
 
-      else if(res.payload){
+      else if(res.payload.data !==400){
         console.log(res.payload,"res.payloadasdsayload")
 
         SetLoginStatus(true)
         setModalVisible(true)
         console.log(LoginStatus)
+        // SetLoginMessage("Welcome Back")
 
           setTimeout(()=>{
 
             if(res.payload.user){
-              SetLoginMessage("Welcome Back")
 
               setModalVisible(false)
 
+              // SetLoginMessage("Welcome Back")
               setLoggedIn(true)
               props.navigation.navigate('HomeCards')
             }
             else if(res.payload.boatOwner){
-              SetLoginMessage("Welcome Back")
+                // SetLoginMessage("Welcome Back")
 
               setModalVisible(false)
 
@@ -242,7 +243,7 @@ const LoginSignUp = (props) => {
             }
             else{
 
-              SetLoginMessage(res.payload.data.message)
+              // SetLoginMessage(res.payload.data.message)
 
               SetLoginStatus(true)
               setModalVisible(true)

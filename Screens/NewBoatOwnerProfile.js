@@ -173,6 +173,11 @@ function NewBoatOwnerProfile(props) {
             },
           }).then((ress)=>{
             setAllBoats(ress.data)
+            setAddBoatModal(1)
+            setTimeout(()=>{
+                setAddBoatModal(0)
+                
+              },3000)
           });
       
         
@@ -217,7 +222,7 @@ function NewBoatOwnerProfile(props) {
 
 
                 <TextInput style={styles.modal__input}
-                   placeholder='Your Name' 
+                   placeholder={boatOwner.name} 
                     placeholderTextColor="#0000006a"
                     onChangeText={(e) => {
                         setEditboatOwnerName(e);
@@ -225,7 +230,7 @@ function NewBoatOwnerProfile(props) {
                     }}
                 />
                 <TextInput style={styles.modal__input}
-                  placeholder='Your Phone'
+                  placeholder={boatOwner.phone ? boatOwner.phone : "Your Phone"}
                     placeholderTextColor="0000006a"
                     onChangeText={(e) => setEditboatOwnerPhone(e)}
 
@@ -244,6 +249,10 @@ function NewBoatOwnerProfile(props) {
                     setVisibleModal(false)
                     console.log(res.payload.data, "ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
                     setboatOwnerState(res.payload.data)
+                    setEditModal(1)
+                    setTimeout(()=>{                        
+                        setEditModal(0)
+                      },3000)
                 })
             })}
 
@@ -352,7 +361,37 @@ function NewBoatOwnerProfile(props) {
             {addBoatrenderButton('Apply', submit)}
         </View>
     );
+    const [editModal , setEditModal] = useState(0)
+    const editInfoModal = () => (
+        <View style={styles.modalContent}>
+            <Text>Your Information has Changed successfully </Text>
+        </View>
+    );
 
+
+
+    const [editImageModal , setEditImageModal] = useState(0)
+    const EditImageModal = () => (
+        <View style={styles.modalContent}>
+            <Text>Your Image has Changed successfully </Text>
+        </View>
+    );
+
+
+    const [addBoatModal , setAddBoatModal] = useState(0)
+    const AddBoatModal = () => (
+        <View style={styles.modalContent}>
+            <Text>Your boat has been Added successfully </Text>
+        </View>
+    );
+    
+    
+    const [deleteBoatModal , setDeleteBoatModal] = useState(0)
+    const DeleteBoatModal = () => (
+        <View style={styles.modalContent}>
+            <Text>Your boat has been Deleted </Text>
+        </View>
+    );
     //SWVL Modal
 
     const SwvlModalContent = () => (
@@ -480,6 +519,12 @@ function NewBoatOwnerProfile(props) {
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },
+              }).then(()=>{
+                setEditImageModal(1)
+                setTimeout(()=>{
+                    setEditImageModal(0)
+                   
+                  },3000)
               });
         }
     };
@@ -592,7 +637,26 @@ function NewBoatOwnerProfile(props) {
 
                 {SwvlModalContent()}
             </Modal>
+            <Modal isVisible={editModal === 1} style={styles.bottomModal}>
 
+                {editInfoModal()}
+            </Modal>
+
+            <Modal isVisible={editImageModal === 1} style={styles.bottomModal}>
+
+                {EditImageModal()}
+            </Modal>
+
+
+            <Modal isVisible={addBoatModal === 1} style={styles.bottomModal}>
+
+                {AddBoatModal()}
+            </Modal>
+
+            <Modal isVisible={deleteBoatModal === 1} style={styles.bottomModal}>
+
+                {DeleteBoatModal()}
+            </Modal>
             <View style={{ justifyContent: 'flex-start', padding: 15 }}>
                 <Image source={{ uri: image }} style={{
                     width: 60,
@@ -1021,6 +1085,10 @@ function NewBoatOwnerProfile(props) {
                                         </View>
                                         <TouchableOpacity onPress={() => {
                                                 dispatch(OwnerdeleteBoat({ownerId:boatOwner._id,id:item._id})).then((res)=>{
+                                                    setDeleteBoatModal(1)
+                                                    setTimeout(()=>{
+                                                        setDeleteBoatModal(0)
+                                                      },3000)
                                                     dispatch(getOwnerBoats(boatOwner._id)).then((first) => {
                                                         setAllBoats(first.payload.data)
                                                     })

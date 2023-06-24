@@ -146,8 +146,10 @@ export const UserProfile = () => {
             img: image || user.img,
           };
             console.log(updatedUser,"Ussssss")
-          dispatch(editUserInfo(updatedUser));
-          setVisibleModal(null);
+          dispatch(editUserInfo(updatedUser)).then(()=>{
+            setVisibleModal(0);
+            setEditModal(1)
+          });
           ; setVisibleModal(null)
       })}
 
@@ -181,6 +183,19 @@ export const UserProfile = () => {
 
    }
 
+   const [editModal , setEditModal] = useState(0)
+    const editInfoModal = () => (
+        <View style={styles.modalContent}>
+            <Text>Your Information has Changed successfully </Text>
+        </View>
+    );
+    const [editImageModal , setEditImageModal] = useState(0)
+    const EditImageModal = () => (
+        <View style={styles.modalContent}>
+            <Text>Your Image has Changed successfully </Text>
+        </View>
+    );
+
   return (
     <ScrollView contentContainerStyle={styles.profile__container}>
 
@@ -189,8 +204,15 @@ export const UserProfile = () => {
         {renderModalContent()}
       </Modal>
 
+      <Modal isVisible={editModal === 1} style={styles.bottomModal}>
 
+                {editInfoModal()}
+      </Modal>
 
+      <Modal isVisible={editImageModal === 1} style={styles.bottomModal}>
+
+        {EditImageModal()}
+      </Modal>
 
       <View>
         <Image source={coverImage} style={styles.profile__cover__image} />
