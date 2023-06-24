@@ -18,18 +18,11 @@ const COLORS = {primary: '#ffffffff', black: '#fff'};
 const slides = [
   {
     id: '1',
-<<<<<<< Updated upstream
-    image: require('../assets/onboard.jpg'),
+    image: require('../assets/vec.png'),
     title: 'Welcome  ',
     subtitle: ' Hello Hello It\'s meHello Hello It\'s meHello Hello It\'s meHello Hello It\'s me.',
   },
-=======
-    image: require('../assets/vec.png'),
-    title: 'Hello',
-    subtitle: 'Unlock a World of Possibilities and Find Your Perfect Boat Adventure with our Innovative Boat Booking App.',
-  },
 
->>>>>>> Stashed changes
   {
     id: '2',
     image: require('../assets/image3.jpg'),

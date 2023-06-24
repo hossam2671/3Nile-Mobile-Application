@@ -479,13 +479,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     card: {
-        height: 265,
+        height: 275,
         width: 415,
         position: "absolute",
         marginHorizontal: 20,
         // marginVertical: 10,
-        bottom: 220,
-        padding: 20,
+        bottom: 200,
+        padding: 5,
         // borderRadius: 10,
         backgroundColor: '#F8F8F8',
         shadowColor: '#000',
@@ -546,8 +546,8 @@ const styles = StyleSheet.create({
         // marginVertical: 10,
         // borderRadius: 10,
         // overflow: 'hidden',
-        bottom: 40,
-        left: 45,
+        bottom: 10,
+        left: 43,
         zIndex: 99,
         shadowColor: 'blue',
         shadowOffset: {
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
         bottom: 100,
         left: 22,
         right: 50,
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
   
@@ -585,6 +585,7 @@ const styles = StyleSheet.create({
         width: 50,
         height: 140,
         borderRadius: 10,
+        top:20,
   
     },
     btn: {
