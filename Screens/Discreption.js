@@ -294,7 +294,7 @@ console.log(formattedTime,"Te4eeeee2");
                     <Icon name="check" color={'#000'} size={20} style={styles.book_arrow} />
                 </TouchableOpacity>
             </View> 
-
+{/* ///////////////////////////////////////////////////// */}
          
 <Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
       <View style={styles.modalContainer}>

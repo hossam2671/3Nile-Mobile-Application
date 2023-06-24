@@ -101,25 +101,30 @@ const styles = StyleSheet.create({
     width:130,
     marginRight:40,
   },
-  
-modalContainer: {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: 'rgba(255, 255, 255, 0.5)',
-  width:480,
-  // marginRight:-60,
-  right:30,
-  top:30,
-  // height:700,
-},
+  modalContainer_al:{
+    backgroundColor: 'rgba(137, 136, 136, 0.29)',
+    // height:900,
+    top: -600,
+  },
+// modalContainer: {
+//   flex: 1,
+//   // justifyContent: 'center',
+//   // alignItems: 'center',
+//   backgroundColor: 'rgba(248, 248, 248, 0.5)',
+//   width:280,
+//   // marginRight:60,
+//   left:90,
+//   top:-90,
+//   height:700,
+// },
 modalContainer_card_con:{
   backgroundColor: 'rgba(247, 247, 247, 1)',
-  width:380,
-  height:300,
-  borderRadius:20,
-
+  width:320,
+  height:270,
+  borderRadius:40,
   alignItems: 'center',
+  left:60,
+  // top:-400,
 },
 
 

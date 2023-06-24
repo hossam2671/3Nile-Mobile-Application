@@ -62,13 +62,13 @@ function NewUserProfile(props) {
 
 
                 <TextInput style={styles.modal__input}
-                    placeholder={userState.name}
+                    placeholder='Your Name' 
                     placeholderTextColor="#0000006a"
                     onChangeText={(e) => {setName(e) ; console.log(editName)}}
                 />
                 <TextInput style={styles.modal__input}
-                    placeholder={userState.phone}
-                    placeholderTextColor="0000006a"
+                    placeholder='Your Phone'
+                    placeholderTextColor="#0000006a"
                     onChangeText={(e) => setPhone(e)}
 
                 />

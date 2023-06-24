@@ -95,11 +95,11 @@ const ReservedList = ({ reserved }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 60,
+    padding: 50,
     position: "absolute",
     left: 210,
     zIndex: 5000,
-    top: 105,
+    top: 150,
   },
   heading: {
     fontSize: 20,
@@ -116,7 +116,8 @@ const styles = StyleSheet.create({
     aspectRatio: 2,
     borderWidth: 3,
     borderColor: '#060706',
-    margin: 5,
+    marginTop: 5,
+    marginLeft:15,
     flex: 1,
     // height: 8,
     backgroundColor: '#bccdc9',

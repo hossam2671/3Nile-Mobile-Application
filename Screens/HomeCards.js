@@ -31,7 +31,7 @@ const HomeCards = (props) => {
   <View style={styles.vidio_con_header}>
   <Text style={styles.vidio_con_header_text}>Embark on a River Journey, Where History Unfolds </Text>
     <Text style={styles.vidio_con_header_text_bottom}>Embark on a River Journey, Where History Unfolds </Text>
-    <TouchableOpacity style={styles.bookBtn}  onPress={()=>scrollToSection(800)}>
+    <TouchableOpacity style={styles.bookBtn}  onPress={()=>scrollToSection(700)}>
                   
    <Icon name="arrowdown" color={'#000'} size={30} style={styles.arrow} />
    </TouchableOpacity>
@@ -65,7 +65,7 @@ const HomeCards = (props) => {
 {/* nnnnnnnnnnnnnnnnnnnnnnnnnn */}
    
 
-      <View>
+      <View style={styles.home__cards_container}>
       <View style={styles.home__cards}>
           <Image source={bk} style={styles.bk__style} />
         </View>
@@ -118,12 +118,12 @@ const styles = StyleSheet.create({
   },
   vidio_con:{
     width:510,
-    height:800,
+    height:690,
 
   },
   vidio_con_header:{
     position: 'absolute',
-    top:480,
+    top:420,
     width:360,
     height:240,
     backgroundColor:"#64646483",
@@ -150,21 +150,31 @@ const styles = StyleSheet.create({
   },
   container:{
     alignItems: 'center',
-    paddingBottom:20,
+    paddingBottom:120,
   },
+  // home__cards_container:{
+  //   display:"flex",
+  //   flexDirection:"column",
+  //   marginBottom: 300,
+  //   width: 350,
+  //   height: 180,
+  //   marginTop:200,
+  //   paddingBottom:120,
+  // },
   home__cards: {
-    marginTop: 50,
+    marginTop: 90,
     width: 350,
     height: 180,
-    marginLeft:20,
-
+    marginLeft:10,
+    marginBottom: 150,
+ 
   },
   bk__style: {
     width: 355,
-    height: 210,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    
+    height: 310,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    position:"relative",
   },
   boat__style: {
     width: 430,
@@ -174,30 +184,38 @@ const styles = StyleSheet.create({
    
   },
   card__content: {
-    backgroundColor: 'rgba(25, 25, 25, 0.162)',
-    width: 355,
-    height: 150,
-    left: 20,
-    borderBottomRightRadius: 20,
-    borderBottomLeftRadius: 20,
+    backgroundColor: 'rgba(241, 241, 241, 1)',
+    width: 365,
+    height: 220,
+    // left: 15,
+    borderTopRightRadius: 200,
+    borderTopLeftRadius: 200,
+    // borderBottomRightRadius: 10,
+    // borderBottomLeftRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    // borderTopRadius:70,
+    position:"absolute",
+    top:300,
+//     borderBottomColor:"black",
+// borderBottomWidth:1,
+
   },
   card__text: {
     width: 300,
     textAlign: 'center',
     alignItems: 'center',
     fontSize: 17,
-    // top: -,
+    top: 30,
   },
   card__button: {
     width: 80,
-    height: 30,
-    backgroundColor: '#114B5F',
-    borderRadius: 10,
+    height: 80,
+    backgroundColor: '#0481e7',
+    borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    top: 19,
+    top: -135,
     color:"white",
   },
   card__botton__text: {

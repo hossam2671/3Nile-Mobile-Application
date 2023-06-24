@@ -512,15 +512,16 @@ export default function Filter(props) {
 const styles = StyleSheet.create({
   scroll:{
     height: 805,
-    width: 600,
+    // width: 600,
     backgroundColor: "#fdfdfd",
+    // paddingBottom:230,
   },
   container: {
     backgroundColor: "#ffffff",
     borderRadius: 20,
-    height: 805,
+    height: 850,
     marginLeft: 45,
-   
+    paddingBottom:230,
     width: 600,
   },
   container_left: {
@@ -582,7 +583,7 @@ const styles = StyleSheet.create({
     color: "#2090f9",
     fontSize: 15,
     marginTop: 15,
-    marginLeft: 25,
+    marginLeft: 28,
   },
   div: {
     width: 120,

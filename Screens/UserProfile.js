@@ -106,12 +106,12 @@ export const UserProfile = () => {
 
 
         <TextInput style={styles.modal__profile__input}
-          placeholder={user.name}
+          placeholder="name"
           placeholderTextColor="black"
           onChangeText={(e) => setName(e)}
         />
         <TextInput style={styles.modal__profile__input}
-          placeholder={user.phone}
+          placeholder="phone"
           placeholderTextColor="black"
           onChangeText={(e) => setPhone(e)}
 

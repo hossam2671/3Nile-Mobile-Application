@@ -36,7 +36,10 @@ import errorImage from '../../assets/error.png'
 
 
 const LoginSignUp = (props) => {
- 
+  const succ = require('../../assets/succsses.png');
+  const errorImage = require('../../assets/error.png');
+
+
   const [loggedIn, setLoggedIn] = useState(false);
   const [loginMessage, SetLoginMessage] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -198,7 +201,7 @@ const LoginSignUp = (props) => {
     dispatch(login({email:logEmail,password:logPassword}))
     .then((res)=>{
         console.log(LoginStatus)
-      if(res.payload.data===401){
+      if(res.payload.data===400){
         SetLoginMessage(res.payload.data.message)
         SetLoginStatus(false)
 
@@ -292,15 +295,15 @@ const LoginSignUp = (props) => {
         </Animated.View>
       </Animated.View>
       <View style={styles.bottomContainer}>
-      <Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
-      <View style={styles.modalContainer}>
+      <Modal style={styles.modalContainer_al} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
+    
         {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
         <View style={styles.modalContainer_card_con}>
         <IconButton
-        icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
+        icon={() => <Iconnnnnn name="close" size={20} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
         
         
-        style={{marginLeft:-330}}
+        style={{marginLeft:-300}}
         onPress={() => setModalVisible(false)}
       />
        <Image  source={LoginStatus?succ:errorImage} style={styles.succ} />
@@ -311,7 +314,7 @@ const LoginSignUp = (props) => {
       
          
     
-        </View>
+     
       </View>
     </Modal>
         <Animated.View style={buttonsAnimatedStyle}>

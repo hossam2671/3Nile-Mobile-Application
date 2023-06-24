@@ -216,7 +216,7 @@ function NewBoatOwnerProfile(props) {
 
 
                 <TextInput style={styles.modal__input}
-                    placeholder={boatOwnerState.name}
+                   placeholder='Your Name' 
                     placeholderTextColor="#0000006a"
                     onChangeText={(e) => {
                         setEditboatOwnerName(e);
@@ -224,7 +224,7 @@ function NewBoatOwnerProfile(props) {
                     }}
                 />
                 <TextInput style={styles.modal__input}
-                    placeholder={boatOwnerState.phone}
+                  placeholder='Your Phone'
                     placeholderTextColor="0000006a"
                     onChangeText={(e) => setEditboatOwnerPhone(e)}
 
@@ -550,7 +550,7 @@ function NewBoatOwnerProfile(props) {
                         style={{
                             width: 25,
                             height: 25,
-                            tintColor: currentTab === title ? "#0c8df7" : "white",
+                            tintColor: currentTab === title ? "#0c8df7" : "#fdfdfd",
                         }}
                     />
                     <Text
@@ -927,6 +927,8 @@ function NewBoatOwnerProfile(props) {
                         width: 90,
                         height: 90,
                         borderRadius: 50,
+                        borderColor:"black",
+                        borderWidth:1,
                         bottom: 45,
                         left: 165,
                     }}></Image>
@@ -944,7 +946,7 @@ function NewBoatOwnerProfile(props) {
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => { pickImage() }}>
-                        <Icon name="camera" size={20} color="#0c8df7" style={styles.icon__button} />
+                        <Icon name="camera" size={20} color="#7c7d7e" style={styles.icon__button} />
                     </TouchableOpacity>
 
 
