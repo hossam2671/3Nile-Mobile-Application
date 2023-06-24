@@ -13,7 +13,7 @@ import { useRoute } from '@react-navigation/native';
 import bk from '../assets/homecardimg.png'
 import boatSeats from '../assets/card.jpeg';
 import boatswvl from '../assets/swvlboatnew.png'
-import { OwnerdeleteBoat, SwvlDetails, bookSwvl} from '../redux/slices/UserSlice'
+import { OwnerdeleteBoat, SwvlDetails, bookSwvl, getSwvl, getSwvlById} from '../redux/slices/UserSlice'
 import { ResizeMode, Video } from 'expo-av'
 import { Button } from 'react-native-elements';
 import QRCode from 'react-native-qrcode-svg';
@@ -70,8 +70,10 @@ const renderPagination = (index, total, context) => {
 const [modalVisible, setModalVisible] = useState(false);
 const [iscoming,setIsComing]=useState(false)
 const [Deatils,setDeatils]=useState({})
+let [Data,setData]=useState()
 
 useEffect(()=>{
+    
 },[])
 // modal recite
 
@@ -121,14 +123,19 @@ useEffect(()=>{
     const route = useRoute();
     const { data } = route.params;
     useEffect(() => {
-   
-
+        console.log(data._id,"ljlfsjeoeorj")
+          dispatch(getSwvlById(data._id)).then((res)=>{
+            
+            setData(res.payload.data)
+          });
+        
     }, [])
     const vid = React.useRef(null);
     let [viewed, setViewed] = useState(false)
     function hello() {
       props.navigation.navigate('Filter')
     }
+    console.log(Data,"hhhhhhhhhhhhhhhhhhhhhhhhhhh")
     return (
         <View style={styles.container}>
         
@@ -152,29 +159,35 @@ useEffect(()=>{
         />
              <Seats />
        <Image source={boatswvl} style={styles.boatswvl}  />
-        <Text style={styles.cardItems_name}> {data.boat.name}</Text>
-       <Text style={styles.cardItems_date}> {data.date.slice(0,10)}</Text>
+        <Text style={styles.cardItems_name}> {Data?.boat.name}</Text>
+       <Text style={styles.cardItems_date}> {Data?.date.slice(0,10)}</Text>
        <Iconn name="date" color={'#000'} size={20} style={styles.cardItems_date_icon} />
-        <Text style={styles.cardItems_time}> {data.time}</Text>
+        <Text style={styles.cardItems_time}> {Data?.time}</Text>
         <Iconnn name="time-outline" color={'#000'} size={20} style={styles.cardItems_time_icon} />
         <View style={styles.card}>
         <Text style={styles.cardItems_availableSeats}>Available Seats</Text>
-        <Text style={styles.cardItems_availableSeats_val}>{data.availableSeats}</Text>
-        <Text style={styles.cardItems_Price}>Price</Text>
-        <Text style={styles.cardItems_price_val}>{data.priceForTrip}</Text>
+        <Text style={styles.cardItems_availableSeats_val}>{Data?.availableSeats}</Text>
+        <Text style={styles.cardItems_Pricd}>Price</Text>
+        <Text style={styles.cardItems_price_val}>{Data?.priceForTrip}</Text>
         <Iconnnn name="money" color={'#000'} size={20} style={styles.cardItems_price_icon} />
         <Text style={styles.cardItems_place}>Target Place</Text>
-        <Text style={styles.cardItems_place_val}>{data.targetPlace}</Text>
+        <Text style={styles.cardItems_place_val}>{Data?.targetPlace}</Text>
         <Text style={styles.cardItems_port}>Port </Text>
-        <Text style={styles.cardItems_port_val}>{data.port}</Text>
+        <Text style={styles.cardItems_port_val}>{Data?.port}</Text>
         <Iconnnnn name="anchor" color={'#000'} size={20} style={styles.cardItems_port_icon} />
         <View style={styles.fixToText}>
         <TouchableOpacity
   style={styles.bookBtn}
   onPress={() => {
-    dispatch(bookSwvl({ swvlId:data._id,userId:user._id, numberOfSeats:seatReserved })).then((res=>{
-            setDeatils(res.payload.data)
-        }))
+    
+               
+        dispatch(bookSwvl({ swvlId:data._id,userId:user._id, numberOfSeats:seatReserved })).then((res=>{
+                setDeatils(res.payload.data)
+                dispatch(getSwvlById(data._id)).then((res)=>{
+            
+                    setData(res.payload.data)
+            })}))
+    
         setModalVisible(true);
   }}
 >
@@ -200,6 +213,8 @@ useEffect(()=>{
       <View style={styles.modalContainer}>
         {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
         <View style={styles.modalContainer_card_con}>
+            { Deatils.TripDetails ? 
+            <>
         <IconButton
         icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
         
@@ -210,8 +225,7 @@ useEffect(()=>{
             <Image source={succ} style={styles.succ} />
         <Text style={styles.TotalPrice_text}>bookingBarcode :{Deatils?.TripDetails?.TotalPrice}</Text>
         <Text style={styles.numberOfSeats_text}>numberOfSeats :{Deatils?.TripDetails?.numberOfSeats}</Text>
-        <View>
-        <View style={styles.barCode}>
+       
       <Text style={styles.barCode_text}>bookingBarcode:</Text>
         <QRCode
         value={Deatils?.TripDetails?.bookingBarcode}
@@ -220,7 +234,22 @@ useEffect(()=>{
         backgroundColor="#ffffff"
         
       />
-        </View>
+        
+        </>
+        :
+        <>
+        <IconButton
+        icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
+        
+        
+        style={{marginLeft:-230}}
+        onPress={() => setModalVisible(false)}
+      />
+        <Text style={styles.numberOfSeats_text}>There is No Available Seats</Text>
+        </>
+            }
+        <View>
+        
     </View>
   
       
@@ -431,7 +460,22 @@ const styles = StyleSheet.create({
         top:353,
         left:96 ,
     },
-
+    cardItems_Pricd:{
+        marginTop:10,
+        fontSize: 19,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        position: 'absolute',
+        top:110,
+        left:10 ,
+        borderRadius: 10,
+        borderColor:"white",
+        borderWidth:1, 
+        width:150,
+        height:90,
+        padding:13,
+     
+    },
     fixToText: {
         position: 'absolute',
         height: 80,

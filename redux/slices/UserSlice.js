@@ -367,7 +367,7 @@ console.log(payload,"timetimetime")
 // bookswvl 
 export const bookSwvl = createAsyncThunk("user/bookswvl",async(payload)=>{
   console.log(payload)
-  const res = axios.post(`http://${ip}:5000/swvl/userBooking`,{
+  const res =await axios.post(`http://${ip}:5000/swvl/userBooking`,{
     swvlId:payload.swvlId,
     userId:payload.userId,
     numberOfSeats:payload.numberOfSeats,
@@ -375,6 +375,15 @@ export const bookSwvl = createAsyncThunk("user/bookswvl",async(payload)=>{
   console.log(res,"test")
   return res 
 })
+
+// get swvl by id
+export const getSwvlById = createAsyncThunk("swvl/get",async(payload)=>{
+  console.log(payload,"ljflkjsldjflsdjfska")
+  const res = await axios.get(`http://${ip}:5000/swvl/swvlTrip/${payload}`)
+  console.log(res,"lkrjdgldfjlsjlfgd")
+  return res
+})
+
 
 // Boat Owner Edit Info 
 export const ownerUpdateInfo= createAsyncThunk ("/editOwnerInfo", async(payload )=>{
@@ -798,6 +807,7 @@ console.log(state.seatReserved)
 [bookSwvl.fulfilled]:(state,action) => {
   state.swvlRecit = action.payload.data
   console.log(state.swvlRecit,"swvlRecit")
+  state.seatReserved = 0
 },
 
 
@@ -808,6 +818,7 @@ console.log(state.seatReserved)
 
 
         [bookTrip.fulfilled]: (state, action) => {
+
        },
        [addBoat.fulfilled]: (state, action) => {
         console.log("first")
@@ -831,6 +842,9 @@ console.log(state.seatReserved)
           console.log("first")
       },
        [ownerSwvl.fulfilled]: (state, action) => {
+          console.log("first")
+      },
+       [getSwvlById.fulfilled]: (state, action) => {
           console.log("first")
       },
     }
