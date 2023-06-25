@@ -67,13 +67,16 @@ export const login = createAsyncThunk("allUser/login", async (payload) => {
 });
 
 export const editUserInfo= createAsyncThunk ("/editUserInfo", async(payload )=>{
-console.log(payload,"payload")
+console.log(payload,"paydswwwwvsaasdload")
 
 const result = await axios.put(`http://${ip}:5000/user/editUserinfo/${payload.updatedUser.id}`,{
       name: payload.updatedUser.name,
       // address:payload.address,
       phone:payload.updatedUser.phone,
-      // img:payload.img
+      img:payload.updatedUser.image
+},{
+  'Content-Type': 'image/png',
+
 })
 return result
 })
@@ -444,7 +447,8 @@ const UserSlice = createSlice({
         filteredcategoryThree : [],
       radioButtonValue:"",boatOwner:null,anyUser:null,ownerBoats:[],swvlRecit:null,
       seatReserved:0,
-      filteredData:null
+      filteredData:null,
+      notify:false
       
     },
 
@@ -457,7 +461,11 @@ state.seatReserved=action.payload
 console.log(state.seatReserved)
       },
 
-
+      notify(state,action){
+        console.log("ay7aga");
+        console.log(action.payload,"notiiii");
+        state.notify = action.payload
+      },
       search(state, action) {
         const searchQuery = action.payload.toLowerCase(); 
         const filteredSwvl = state.swvl.filter((item) =>
@@ -852,7 +860,7 @@ console.log(state.seatReserved)
 })
 
 
-export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt , filter , filter2 ,filterTaps,filterTaps2, search,seatResearv} = UserSlice.actions;
+export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt , filter , filter2 ,filterTaps,filterTaps2, search,seatResearv,notify} = UserSlice.actions;
 
 export default UserSlice.reducer;
 

@@ -506,7 +506,7 @@ function NewBoatOwnerProfile(props) {
     const { ownerSwvlTrip } = useSelector(state => state.UserSlice)
 
     useEffect(() => {
-        
+       
         dispatch(getOwnerBoats(boatOwner._id)).then((first) => {
             setAllBoats(first.payload.data)
             setTap("allBoats")
