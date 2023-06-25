@@ -78,7 +78,7 @@ const Notification= () => {
       </TouchableOpacity>
 
       <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
-        <View style={{ backgroundColor: 'white', padding: 20 }}>
+        <View style={{ backgroundColor: 'white', padding: 50,borderRadius:30,bottom:30, }}>
           {
 notifications.length >0  ?
            notifications.map((item,index) => {

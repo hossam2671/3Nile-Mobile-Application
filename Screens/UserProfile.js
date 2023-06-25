@@ -262,12 +262,12 @@ export const UserProfile = () => {
                     <Image source={cardboat} style={styles.cardboat__img} />
                 </View>
                 <View style={styles.card__content}>
-                    <Text style={styles.card__name}>Feloka</Text>
+                    <Text style={styles.card__name}>{item.boatId.name}</Text>
                     <Icon name="location" size={13} style={styles.loc__icon} />
-                    <Text style={styles.card__location}>Port: MAC</Text>
+                    <Text style={styles.card__location}>{item.boatId.portName}</Text>
                     <IIcon name="date-range" size={13} />
                     <Text style={styles.card__date}>27 June 2023</Text>
-                    <Text style={styles.card__price}>200$</Text>
+                    <Text style={styles.card__price}>{item.price}$</Text>
                 </View>
             </View>
       )}
