@@ -1271,7 +1271,7 @@ const styles = StyleSheet.create({
     edit__button: {
         width: 80,
         height: 35,
-        borderRadius: 10,
+        borderRadius: 50,
         backgroundColor: '#0c8df7',
         left: 320,
         bottom: 80,
@@ -1316,13 +1316,15 @@ const styles = StyleSheet.create({
     },
 
     card__box: {
-        borderColor: '#000000',
-        borderWidth: 1,
+        // borderColor: '#000000',
+        //  borderWidth: 1,
         marginLeft: 60,
         width: 300,
         height: 300,
         borderRadius: 20,
-        marginBottom: 15
+        marginBottom: 15,
+        elevation:20,
+        backgroundColor: '#fff'
     },
     card__image: {
         width: 270,
@@ -1359,14 +1361,16 @@ const styles = StyleSheet.create({
         fontWeight: 600,
     },
     cancel__button: {
-        width: 70,
-        height: 35,
-        borderRadius: 5,
+        width: 100,
+        height: 45,
+        borderRadius: 150,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#0c8df7',
-        left: 200,
-        bottom: 27,
+        left: 180,
+        bottom: 50,
+        lineHeight:45,
+        marginBottom:10
 
     },
     cancel__button__text: {
@@ -1377,7 +1381,7 @@ const styles = StyleSheet.create({
     add__boat__button: {
         width: 85,
         height: 35,
-        borderRadius: 10,
+        borderRadius: 50,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#0c8df7',

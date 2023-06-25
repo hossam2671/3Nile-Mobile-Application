@@ -13,6 +13,7 @@ import {
   View,
   Dimensions,
   TextInput,
+  Image as Img,
   Pressable,
   Touchable,
 } from "react-native";
@@ -206,8 +207,9 @@ const LoginSignUp = (props) => {
     .then((res)=>{
         console.log(res.payload,"fghdfshfsd")
         SetLoginMessage(res.payload.data ? res.payload.data.message:"Welcome Back")
+        SetLoginStatus(res.payload.data ? false : true)
       if(res.payload.data===400){
-        SetLoginStatus(false)
+        // SetLoginStatus(false)
 
         setModalVisible(true)
         setTimeout(()=>{
@@ -218,7 +220,7 @@ const LoginSignUp = (props) => {
       else if(res.payload.data !==400){
         console.log(res.payload,"res.payloadasdsayload")
 
-        SetLoginStatus(true)
+        // SetLoginStatus(true)
         setModalVisible(true)
         console.log(LoginStatus)
         // SetLoginMessage("Welcome Back")
@@ -245,7 +247,7 @@ const LoginSignUp = (props) => {
 
               // SetLoginMessage(res.payload.data.message)
 
-              SetLoginStatus(true)
+              // SetLoginStatus(true)
               setModalVisible(true)
 
               
@@ -311,7 +313,7 @@ const LoginSignUp = (props) => {
         style={{marginLeft:-300}}
         onPress={() => setModalVisible(false)}
       />
-       <Image  source={LoginStatus?succ:errorImage} style={styles.succ} />
+       <Img source={LoginStatus?succ:errorImage} style={styles.succ} />
          <Text style={styles.modaltitle}>{loginMessage}</Text>
        
 
