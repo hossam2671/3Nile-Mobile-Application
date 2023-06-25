@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign'
 import  { useRef } from 'react';
 import { ResizeMode, Video } from 'expo-av'
@@ -14,6 +14,7 @@ import bkkk from '../assets/viplll.jpg'
 import boat from '../assets/homeheader.jpg'
 
 import Iconn from "react-native-vector-icons/FontAwesome"
+import { notify } from '../redux/slices/UserSlice';
 const HomeCards = (props) => {
   const vid = React.useRef(null);
   let [viewed, setViewed] = useState(false)
@@ -25,6 +26,10 @@ const HomeCards = (props) => {
   const scrollToSection = (y) => {
     scrollViewRef.current.scrollTo({ y, animated: true });
   };
+  useEffect(()=>{
+   
+
+  },[])
   return (
     <ScrollView contentContainerStyle={styles.scrollView} ref={scrollViewRef}>
      

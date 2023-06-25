@@ -535,14 +535,14 @@ function NewUserProfile(props) {
                     <Image source={cardboat} style={styles.cardboat__img} />
                 </View>
                 <View style={styles.card__content}>
-                    <Text style={styles.card__name}>Feloka</Text>
+                    <Text style={styles.card__name}>{item.boatId.name}</Text>
                     <Icona name="location" size={13} style={styles.loc__icon} />
-                    <Text style={styles.card__location}>Port: MAC</Text>
+                    <Text style={styles.card__location}>{item.boatId.portName}</Text>
                     <IIcon name="date-range" size={13} />
-                    <Text style={styles.card__date}>27 June 2023</Text>
-                    <Text style={styles.card__price}>200$</Text>
+                    <Text style={styles.card__date}>{item.boatId.tripData}</Text>
+                    <Text style={styles.card__price}>{item.price}$</Text>
                     <TouchableOpacity onPress={() => cancel(item._id)}>
-                        <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>x Cancel</Text></View>
+                        <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Cancel</Text></View>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -562,12 +562,12 @@ function NewUserProfile(props) {
                     <Image source={cardboat} style={styles.cardboat__img} />
                 </View>
                 <View style={styles.card__content}>
-                    <Text style={styles.card__name}>Feloka</Text>
+                    <Text style={styles.card__name}>{item.boatId.name}</Text>
                     <Icona name="location" size={13} style={styles.loc__icon} />
-                    <Text style={styles.card__location}>Port: MAC</Text>
+                    <Text style={styles.card__location}>{item.boatId.portName}</Text>
                     <IIcon name="date-range" size={13} />
                     <Text style={styles.card__date}>27 June 2023</Text>
-                    <Text style={styles.card__price}>200$</Text>
+                    <Text style={styles.card__price}>{item.price}$</Text>
                     
                 </View>
                 {
@@ -608,14 +608,14 @@ function NewUserProfile(props) {
                     <Image source={cardboat} style={styles.cardboat__img} />
                 </View>
                 <View style={styles.card__content}>
-                    <Text style={styles.card__name}>Feloka</Text>
+                    <Text style={styles.card__name}>{item.boatId.name}</Text>
                     <Icona name="location" size={13} style={styles.loc__icon} />
-                    <Text style={styles.card__location}>Port: MAC</Text>
+                    <Text style={styles.card__location}>{item.boatId.portName}</Text>
                     <IIcon name="date-range" size={13} />
                     <Text style={styles.card__date}>27 June 2023</Text>
-                    <Text style={styles.card__price}>200$</Text>
+                    <Text style={styles.card__price}>{item.price}$</Text>
                     <TouchableOpacity onPress={() => {cancel(item.id)}}>
-                        <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>x Cancel</Text></View>
+                        <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Cancel</Text></View>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -686,7 +686,7 @@ const styles = StyleSheet.create({
     edit__button: {
         width: 80,
         height: 35,
-        borderRadius: 10,
+        borderRadius: 50,
         backgroundColor: '#0c8df7',
         left: 320,
         bottom: 80,
@@ -726,7 +726,7 @@ const styles = StyleSheet.create({
         width: 300,
         height: 300,
         borderRadius: 20,
-        backgroundColor: '#878585',
+        backgroundColor: '#ffffff',
         shadowColor: '#171717',
         shadowOffset: { width: -2, height: 4 },
         shadowOpacity: 0.2,
@@ -768,20 +768,23 @@ const styles = StyleSheet.create({
         fontWeight: 600,
     },
     cancel__button:{
-        width: 70,
-        height: 35,
+        width: 60,
+        height: 60,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#0c8df7',
         left: 200,
-        bottom: 27,
+        bottom: 47,
+        borderRadius:90,
+        color:"white",
         
     },
     cancel__button__text:{
         fontSize: 15,
         fontWeight: 600,
         textAlign: 'center',
+        color:"white",
     },
     book_fixToText: {
         // height: 100,
@@ -809,9 +812,9 @@ const styles = StyleSheet.create({
         color: '#000000',
         backgroundColor: "#fff",
         borderRadius: 50,
-        padding: 10,
-        marginTop: -15,
-        marginRight:20,
+        padding: 12,
+        marginTop: -13,
+        marginRight:10,
       },
       add__boat__close__icon:{
         fontSize: 20,
