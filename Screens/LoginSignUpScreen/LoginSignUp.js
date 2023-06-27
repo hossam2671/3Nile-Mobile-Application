@@ -400,6 +400,7 @@ const LoginSignUp = (props) => {
   <View  style={styles.radios_user}>
    <Text style={styles.radios_user_text}>User</Text>
       <RadioButton
+      color="#0a79e1fc"
         value="user"
         status={ checked === 'user' ? 'checked' : 'unchecked' }
         onPress={() => setChecked('user')}
@@ -408,7 +409,7 @@ const LoginSignUp = (props) => {
         <View style={styles.radios_owner}>
          <Text style={styles.radios_user_text}>Boat Owner</Text>
       <RadioButton
-      
+        color="#0a79e1fc"
         value="boatOwner"
         status={ checked === 'boatOwner' ? 'checked' : 'unchecked' }
         onPress={() => setChecked('boatOwner')}

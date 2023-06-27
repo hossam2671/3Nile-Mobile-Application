@@ -31,7 +31,11 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import BottomNavBar from './BottomNavBar'
 import NewBoatOwnerProfile from './Screens/NewBoatOwnerProfile';
+// For ignore Errors
+import { LogBox } from 'react-native';
 
+LogBox.ignoreAllLogs()
+// For ignore Errors End
 
 
 export default function App() {

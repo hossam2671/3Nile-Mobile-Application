@@ -141,6 +141,7 @@ modaltitle:{
   marginTop:20,
   marginLeft:20,   
    color: '#0b4227',
+   textAlign:'center'
 },
 Total_text:{
   color: '#0c8df7',

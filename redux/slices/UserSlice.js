@@ -178,6 +178,7 @@ export const pendingTrips = createAsyncThunk("user/pendingTrips", async (payload
 export const acceptedTrips = createAsyncThunk("user/acceptedTrips", async (payload) => {
   try {
       let res = await axios.get(`http://${ip}:5000/user/userTrips/accepted/${payload.id}`);
+      console.log(res,"cxczxzxcczc");
       return res;
   }
   catch (err) {
@@ -291,7 +292,6 @@ export const getOwnerPreviousTrips = createAsyncThunk("boatOwner/Boats", async (
 export const getOwnerRequests = createAsyncThunk("boatOwner/reqss", async (payload) => {
   
         let res = await axios.get(`http://${ip}:5000/boatOwner/getAllPendingTrips/${payload}`);
-      // console.log(res,"fatma")
         return res;
   
 

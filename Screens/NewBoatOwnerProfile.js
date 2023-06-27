@@ -560,7 +560,7 @@ function NewBoatOwnerProfile(props) {
             setPrevBoats(first)
         })
         dispatch(getOwnerRequests(boatOwner._id)).then((first) => {
-            console.log(first, "iiiiiiiiiii")
+            console.log(first, "iiisadiiiiiiii")
             setOwnerReqs(first)
 
         })
@@ -621,39 +621,59 @@ function NewBoatOwnerProfile(props) {
     
 
     return (
+        
         <SafeAreaView style={styles.container}>
 
-            <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
+            <Modal
+            key="modal1"
+            isVisible={visibleModal === 1} style={styles.bottomModal}>
 
                 {renderModalContent()}
             </Modal>
 
-            <Modal isVisible={addvisibleModal === 1} style={styles.bottomModal}>
+            <Modal
+            
+            key="modal2"
+            isVisible={addvisibleModal === 1} style={styles.bottomModal}>
 
                 {addBoatrenderModalContent()}
             </Modal>
 
-            <Modal isVisible={swVlvisibleModal === 1} style={styles.bottomModal}>
+            <Modal
+            key="modal3"
+            isVisible={swVlvisibleModal === 1} style={styles.bottomModal}>
 
                 {SwvlModalContent()}
             </Modal>
-            <Modal isVisible={editModal === 1} style={styles.bottomModal}>
+            <Modal 
+            key="modal4"
+            
+            isVisible={editModal === 1} style={styles.bottomModal}>
 
                 {editInfoModal()}
             </Modal>
 
-            <Modal isVisible={editImageModal === 1} style={styles.bottomModal}>
+            <Modal 
+            key="modal5"
+            
+            isVisible={editImageModal === 1} style={styles.bottomModal}>
 
                 {EditImageModal()}
             </Modal>
 
 
-            <Modal isVisible={addBoatModal === 1} style={styles.bottomModal}>
+            <Modal
+            key="modal6"
+            
+            isVisible={addBoatModal === 1} style={styles.bottomModal}>
 
                 {AddBoatModal()}
             </Modal>
 
-            <Modal isVisible={deleteBoatModal === 1} style={styles.bottomModal}>
+            <Modal
+            key="modal7"
+            
+            isVisible={deleteBoatModal === 1} style={styles.bottomModal}>
 
                 {DeleteBoatModal()}
             </Modal>
@@ -797,6 +817,11 @@ function NewBoatOwnerProfile(props) {
                         icon={reqI}
                         onPress={() => {
                             setTap("req")
+                    
+                            dispatch(getOwnerRequests(boatOwner._id)).then((first) => {
+                                console.log(first, "iiisadiiiiiiii")
+                                setOwnerReqs(first)
+                            })                           
                             console.log(tap)
                             setCurrentTab("Owner Requests")
                             Animated.timing(scaleValue, {
@@ -911,9 +936,7 @@ function NewBoatOwnerProfile(props) {
 
             </View>
 
-            {
-                // Over lay View...
-            }
+        
 
             <Animated.View style={{
                 flexGrow: 1,
@@ -1014,17 +1037,23 @@ function NewBoatOwnerProfile(props) {
                         <Icon name="camera" size={20} color="#7c7d7e" style={styles.icon__button} />
                     </TouchableOpacity>
 
+                
 
+                    
+<>
 
                     {
                         tap == "req" && (
-                            <FlatList
+                    
+
+<FlatList
                                 data={ownerReqs.payload.data}
                                 keyExtractor={(item) => item._id}
                                 renderItem={({ item }) => (
                                     <View style={styles.card__box}>
                                         <View style={styles.card__image}>
-                                            <Image source={cardboat} style={styles.cardboat__img} />
+                                        <Image  source={{
+                            uri: `http://${ip}:5000/${item?.boatId?.images[0]}`}} style={styles.cardboat__img} /> 
                                         </View>
                                         <View style={styles.card__content}>
                                             <Text style={styles.card__name}>{item.boatId.name}</Text>
@@ -1043,6 +1072,7 @@ function NewBoatOwnerProfile(props) {
                                                             setCurrBoats(res)
                                                         })
                                                     })
+                                                  
                                                 }); console.log("first")
 
                                             }}>
@@ -1062,18 +1092,25 @@ function NewBoatOwnerProfile(props) {
                                     </View>
                                 )}
                             />
+                       
                         )
 
                     }
                     {
                         tap == "allBoats" && (
-                            <FlatList
+                
+
+<FlatList
                                 data={allBoats}
                                 keyExtractor={(item) => item._id}
                                 renderItem={({ item }) => (
                                     <View style={styles.card__box}>
                                         <View style={styles.card__image}>
-                                            <Image source={cardboat} style={styles.cardboat__img} />
+                                            <Image  source={{
+                                uri: `http://${ip}:5000/${item?.images[0]}`}} style={styles.cardboat__img} /> 
+
+
+
                                         </View>
                                         <View style={styles.card__content}>
                                             <Text style={styles.card__name}>{item.name}</Text>
@@ -1108,18 +1145,22 @@ function NewBoatOwnerProfile(props) {
                                     </View>
                                 )}
                             />
+                        
                         )
 
                     }
                     {
                         tap == "prev" && (
-                            <FlatList
+                        
+                              <FlatList
                                 data={prevBoats.payload.data}
                                 keyExtractor={(item) => item._id}
                                 renderItem={({ item }) => (
                                     <View style={styles.card__box}>
                                         <View style={styles.card__image}>
-                                            <Image source={cardboat} style={styles.cardboat__img} />
+                                        <Image  source={{
+                            uri: `http://${ip}:5000/${item?.boatId?.images[0]}`}} style={styles.cardboat__img} /> 
+
                                         </View>
                                         <View style={styles.card__content}>
                                             <Text style={styles.card__name}>{item.boatId.name}</Text>
@@ -1145,18 +1186,22 @@ function NewBoatOwnerProfile(props) {
                                     </View>
                                 )}
                             />
+                      
                         )
 
                     }
                     {
                         tap == "curr" && (
-                            <FlatList
+                        
+
+<FlatList
                                 data={currBoats.payload.data}
                                 keyExtractor={(item) => item._id}
                                 renderItem={({ item }) => (
                                     <View style={styles.card__box}>
                                         <View style={styles.card__image}>
-                                            <Image source={cardboat} style={styles.cardboat__img} />
+                                        <Image  source={{
+                            uri: `http://${ip}:5000/${item?.boatId?.images[0]}`}} style={styles.cardboat__img} /> 
                                         </View>
                                         <View style={styles.card__content}>
                                             <Text style={styles.card__name}>{item.boatId.name}</Text>
@@ -1182,12 +1227,14 @@ function NewBoatOwnerProfile(props) {
                                     </View>
                                 )}
                             />
+                         
                         )
 
                     }
                      {
                         tap == "Swvl" && (
-                            <FlatList
+                     
+                             <FlatList
                                 data={swvlTrips.payload.data}
                                 keyExtractor={(item) => item._id}
                                 renderItem={({ item }) => (
@@ -1207,11 +1254,12 @@ function NewBoatOwnerProfile(props) {
                                     </View>
                                 )}
                             />
+                         
                         )
 
                     }
 
-
+</>
 
                 </Animated.View>
 

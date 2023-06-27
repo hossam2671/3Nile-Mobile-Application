@@ -145,12 +145,13 @@ function NewUserProfile(props) {
 
 
     const [tap, setTap] = useState("accepted")
+    const [daaata, setData] = useState([])
     const { accepted } = useSelector(state => state.UserSlice)
     const { finished } = useSelector(state => state.UserSlice)
     const { pending } = useSelector(state => state.UserSlice)
 
 
-
+console.log(accepted,"axxcc");
     useEffect(() => {
 
 
@@ -206,8 +207,18 @@ function NewUserProfile(props) {
 
     function cancel(id){
         // console.log("first")
-        // dispatch(pendingTrips({id:user._id})) 
-         dispatch(canceltrip(id)).then(() =>dispatch(pendingTrips({id:user._id})) )
+       
+         dispatch(canceltrip(id)).then(() =>
+         
+         
+         dispatch(pendingTrips({id:user._id})).then((res)=>{
+            console.log(res.payload.data,"vcxvxcvcx");
+            setData(res.payload.data)
+        })          
+         
+         
+         )
+
     }
  //rating
  const [rating , setRating] = useState(0)
@@ -228,9 +239,15 @@ function NewUserProfile(props) {
 } 
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView
+        
+        
+        contentContainerStyle={styles.container}>
 
-            <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
+            <Modal
+            
+            
+            isVisible={visibleModal === 1} style={styles.bottomModal}>
 
                 {renderModalContent()}
             </Modal>
@@ -299,9 +316,13 @@ function NewUserProfile(props) {
                     <TabButton
                         currentTab={currentTab}
                         setCurrentTab={setCurrentTab}
-                        title="Accept"
+                        title="Accepted"
                         icon={accept}
                         onPress={() => {
+                            dispatch(acceptedTrips({ id: user._id })).then((res)=>{
+                                console.log(res.payload.data,"dsadsadcxz");
+                                setData(res.payload.data)
+                            })
                             setTap("accepted")
                             console.log(tap)
                             setCurrentTab("Accept")
@@ -338,6 +359,11 @@ function NewUserProfile(props) {
                         title="Pending"
                         icon={pendingg}
                         onPress={() => {
+                            dispatch(pendingTrips({id:user._id})).then((res)=>{
+                                console.log(res.payload.data,"vcxvxcvcx");
+                                setData(res.payload.data)
+                            }) 
+
                             setTap("pending")
                             console.log(tap)
                             setCurrentTab("Pending")
@@ -373,6 +399,11 @@ function NewUserProfile(props) {
                         title="Finished"
                         icon={finishedd}
                         onPress={() => {
+                            dispatch(finishedTrips({ id: user._id })).then((res)=>{
+                                console.log(res.payload.data,"xcxcvbcxvbcvb")
+                                setData(res.payload.data)
+                            })
+
                             setTap("finished")
                             console.log(tap)
                             setCurrentTab("Finished")
@@ -527,12 +558,14 @@ function NewUserProfile(props) {
                     {
   tap == "pending" && (
     <FlatList
-      data={pending}
+      data={daaata}
       keyExtractor={(item) => item._id}
       renderItem={({ item }) => (
         <View style={styles.card__box}>
                 <View style={styles.card__image}>
-                    <Image source={cardboat} style={styles.cardboat__img} />
+                <Image  source={{
+                            uri: `http://${ip}:5000/${item.boatId.images[0]}`,
+                          }} style={styles.cardboat__img} />
                 </View>
                 <View style={styles.card__content}>
                     <Text style={styles.card__name}>{item.boatId.name}</Text>
@@ -541,7 +574,12 @@ function NewUserProfile(props) {
                     <IIcon name="date-range" size={13} />
                     <Text style={styles.card__date}>{item.boatId.tripData}</Text>
                     <Text style={styles.card__price}>{item.price}$</Text>
-                    <TouchableOpacity onPress={() => cancel(item._id)}>
+                    <TouchableOpacity onPress={() =>
+                        
+
+                            
+                            cancel(item._id)}>
+                        
                         <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Cancel</Text></View>
                     </TouchableOpacity>
                 </View>
@@ -554,12 +592,14 @@ function NewUserProfile(props) {
 {
   tap == "finished" && (
     <FlatList
-      data={finished}
+      data={daaata}
       keyExtractor={(item) => item._id}
       renderItem={({ item }) => (
         <View style={styles.card__box}>
                 <View style={styles.card__image}>
-                    <Image source={cardboat} style={styles.cardboat__img} />
+                <Image  source={{
+                            uri: `http://${ip}:5000/${item.boatId.images[0]}`,
+                          }} style={styles.cardboat__img} />
                 </View>
                 <View style={styles.card__content}>
                     <Text style={styles.card__name}>{item.boatId.name}</Text>
@@ -601,11 +641,13 @@ function NewUserProfile(props) {
 {
   tap == "accepted" && (
     <FlatList
-      data={accepted.data}
+      data={daaata}
       renderItem={({ item }) => (
         <View style={styles.card__box}>
                 <View style={styles.card__image}>
-                    <Image source={cardboat} style={styles.cardboat__img} />
+                    <Image  source={{
+                            uri: `http://${ip}:5000/${item.boatId.images[0]}`,
+                          }} style={styles.cardboat__img} />
                 </View>
                 <View style={styles.card__content}>
                     <Text style={styles.card__name}>{item.boatId.name}</Text>
@@ -614,9 +656,9 @@ function NewUserProfile(props) {
                     <IIcon name="date-range" size={13} />
                     <Text style={styles.card__date}>27 June 2023</Text>
                     <Text style={styles.card__price}>{item.price}$</Text>
-                    <TouchableOpacity onPress={() => {cancel(item.id)}}>
-                        <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Cancel</Text></View>
-                    </TouchableOpacity>
+                    {/* <TouchableOpacity onPress={() => {cancel(item.id)}}>
+                        <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Finish</Text></View>
+                    </TouchableOpacity> */}
                 </View>
             </View>
       )}
