@@ -87,7 +87,7 @@ console.log(formattedTime,"Te4eeeee2");
             setDate(params.date);
             console.log(params)
             setDateisPicked(true)
-            const datepi=[...params.date.toString().split(" ")[1]," ",...params.date.toString().split(" ")[2]," ",...params.date.toString().split(" ")[3]].join("")
+            const datepi=[...params?.date?.toString().split(" ")[1]," ",...params?.date?.toString().split(" ")[2]," ",...params.date.toString().split(" ")[3]].join("")
         
             setdateOnly(datepi)
             console.log(dateOnly,"dateOnlydateOnly")
@@ -145,10 +145,10 @@ console.log(formattedTime,"Te4eeeee2");
             clientId: user._id,
         })).then((res) => {
             console.log(res);
-            if (res.payload.status === 200) {
+            if (res?.payload?.status === 200) {
                 SetBookStatus(true)
             //   openSuccussfullModal();
-              SetBookMessage(res.payload.message);
+              SetBookMessage(res?.payload?.message);
               setTimeout(() => {
                
                 // succussfullmodalClose();
@@ -157,10 +157,10 @@ console.log(formattedTime,"Te4eeeee2");
               }, 2500);
               console.log(bookMessage,"(bookMessage)")
             }
-              else if (res.payload.status === 201) {
+              else if (res?.payload?.status === 201) {
                 SetBookStatus(false)
                 // openErrorModal();
-                SetBookMessage(res.payload.message);    
+                SetBookMessage(res?.payload?.message);    
                             setTimeout(() => {
                 //   closeErrorModal();
                 setModalVisible(false)
@@ -168,10 +168,10 @@ console.log(formattedTime,"Te4eeeee2");
                 }, 2500);
                 console.log(bookMessage,"  console.log(bookMessage)")
               }
-              else if (res.payload.status === 202) {
+              else if (res?.payload?.status === 202) {
                 SetBookStatus(false)
                 // openErrorModal();
-                SetBookMessage(res.payload.message);    
+                SetBookMessage(res?.payload?.message);    
                             setTimeout(() => {
                 //   closeErrorModal();
                 setModalVisible(false)
@@ -195,8 +195,8 @@ console.log(formattedTime,"Te4eeeee2");
     };
 
     const renderModalContent = () => (
-        <View style={styles.modalContent}>
-            <View style={styles.select}>
+        <View style={styles?.modalContent}>
+            <View style={styles?.select}>
             <View style={{flexDirection:"row" , justifyContent:"center" , alignItems:"center"}}>
             <IconButton
         icon={() => <Iconnn name="arrow-back" size={25} color="#000" style={{marginLeft:20,zIndex:1000}} />}
@@ -205,10 +205,10 @@ console.log(formattedTime,"Te4eeeee2");
         style={{marginLeft:200}}
         onPress={() => setVisibleModal(null)}
       />
-                <Text style={styles.Header_filter}>Submit You Trip</Text>
+                <Text style={styles?.Header_filter}>Submit You Trip</Text>
                 </View>
             </View>
-            <View style={styles.modalBtn}>
+            <View style={styles?.modalBtn}>
 
                 <TouchableOpacity onPress={() => 
                    {
@@ -226,9 +226,9 @@ console.log(formattedTime,"Te4eeeee2");
 
                     }
 
-                <Iconnn name="time-outline" color={'#000'} size={20} style={styles.cardItems_time_icon} />
+                <Iconnn name="time-outline" color={'#000'} size={20} style={styles?.cardItems_time_icon} />
                 </TouchableOpacity>
-                <Iconn name="date" color={'#000'} size={20} style={styles.cardItems_date_icon} />
+                <Iconn name="date" color={'#000'} size={20} style={styles?.cardItems_date_icon} />
                 <TouchableOpacity onPress={() => 
                     {
                         setOpen(true)
@@ -236,9 +236,9 @@ console.log(formattedTime,"Te4eeeee2");
 
                     }
                     
-                    } uppercase={false} mode="outlined" title='Pick Date' style={styles.dataBtn} >
+                    } uppercase={false} mode="outlined" title='Pick Date' style={styles?.dataBtn} >
                           {
-                        DateisPicked ? <Text style={styles.date} >{dateOnly}</Text> : <Text style={styles.date} >Pick Date</Text>
+                        DateisPicked ? <Text style={styles?.date} >{dateOnly}</Text> : <Text style={styles?.date} >Pick Date</Text>
 
                     }
                 </TouchableOpacity>
@@ -288,10 +288,10 @@ console.log(formattedTime,"Te4eeeee2");
                 </View>
             </SafeAreaProvider>
             {/* Date Picker  End */}
-            <View style={styles.book_fixToText}>
-                <TouchableOpacity style={styles.book_bookBtn} onPress={handleSubmit}>
-                    <Text style={styles.book_btn}>{'Book'}</Text>
-                    <Icon name="check" color={'#000'} size={20} style={styles.book_arrow} />
+            <View style={styles?.book_fixToText}>
+                <TouchableOpacity style={styles?.book_bookBtn} onPress={handleSubmit}>
+                    <Text style={styles?.book_btn}>{'Book'}</Text>
+                    <Icon name="check" color={'#000'} size={20} style={styles?.book_arrow} />
                 </TouchableOpacity>
             </View> 
 {/* ///////////////////////////////////////////////////// */}
@@ -299,7 +299,7 @@ console.log(formattedTime,"Te4eeeee2");
 <Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
       <View style={styles.modalContainer}>
         {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
-        <View style={styles.modalContainer_card_con}>
+        <View style={styles?.modalContainer_card_con}>
         <IconButton
         icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
         
@@ -307,8 +307,8 @@ console.log(formattedTime,"Te4eeeee2");
         style={{marginLeft:-330}}
         onPress={() => setModalVisible(false)}
       />
-       <Image source={bookStatus?succ:errorImage} style={styles.succ} />
-         <Text style={styles.modaltitle}>{bookMessage}</Text>
+       <Image source={bookStatus?succ:errorImage} style={styles?.succ} />
+         <Text style={styles?.modaltitle}>{bookMessage}</Text>
        
 
   
@@ -321,9 +321,9 @@ console.log(formattedTime,"Te4eeeee2");
 
        
     <Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
-      <View style={styles.modalContainer}>
+      <View style={styles?.modalContainer}>
         {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
-        <View style={styles.modalContainer_card_con}>
+        <View style={styles?.modalContainer_card_con}>
         <IconButton
         icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
         
@@ -331,8 +331,8 @@ console.log(formattedTime,"Te4eeeee2");
         style={{marginLeft:-330}}
         onPress={() => setModalVisible(false)}
       />
-       <Image  source={bookStatus?succ:errorImage} style={styles.succ} />
-         <Text style={styles.modaltitle}>{bookMessage}</Text>
+       <Image  source={bookStatus?succ:errorImage} style={styles?.succ} />
+         <Text style={styles?.modaltitle}>{bookMessage}</Text>
        
 
   
@@ -349,57 +349,57 @@ console.log(formattedTime,"Te4eeeee2");
 
 
     const route = useRoute();
-    const { data } = route.params;
+    const { data } = route?.params;
     useEffect(() => {
         console.log(data)
 
 
     }, [])
     return (
-        <View style={styles.container}>
+        <View style={styles?.container}>
             <Swiper
-                style={styles.wrapper}
+                style={styles?.wrapper}
                 renderPagination={renderPagination}
                 loop={false}>
                 {
-                    data.images.map((item) => {
+                    data?.images?.map((item) => {
                         return (
-                            <View style={styles.slide} key={item}>
-                                <Image style={styles.image} source={{ uri: `http://${ip}:5000/${item}` }} />
+                            <View style={styles?.slide} key={item}>
+                                <Image style={styles?.image} source={{ uri: `http://${ip}:5000/${item}` }} />
                             </View>
                         );
                     })}
 
             </Swiper>
 
-            <View style={styles.card}>
+            <View style={styles?.card}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={styles.cardTitle}>{data.name}</Text>
-                    <Text style={styles.cardItemsRate}>{data.rate}</Text>
+                    <Text style={styles?.cardTitle}>{data?.name}</Text>
+                    <Text style={styles?.cardItemsRate}>{data?.rate}</Text>
                 </View>
 
-                <Text style={styles.cardText}>{data.description}</Text>
+                <Text style={styles?.cardText}>{data?.description}</Text>
 
-                <View style={styles.itemContainer}>
-                    <View style={styles.item}>
-                        <Text style={styles.cardItems}>Number of people:</Text>
-                        <Text style={styles.cardItems}>Price Per Hour:</Text>
-                        <Text style={styles.cardItems}>Boat Type:</Text>
-                        <Text style={styles.cardItems}>Port Name:</Text>
+                <View style={styles?.itemContainer}>
+                    <View style={styles?.item}>
+                        <Text style={styles?.cardItems}>Number of people:</Text>
+                        <Text style={styles?.cardItems}>Price Per Hour:</Text>
+                        <Text style={styles?.cardItems}>Boat Type:</Text>
+                        <Text style={styles?.cardItems}>Port Name:</Text>
                     </View>
 
-                    <View style={styles.vlaue}>
-                        <Text style={styles.cardItemsVlaue}>{data.numberOfpeople}</Text>
-                        <Text style={styles.cardItemsVlaue}>{data.price}</Text>
-                        <Text style={styles.cardItemsVlaue}>{data.type}</Text>
-                        <Text style={styles.cardItemsVlaue}>{data.portName}</Text>
+                    <View style={styles?.vlaue}>
+                        <Text style={styles?.cardItemsVlaue}>{data?.numberOfpeople}</Text>
+                        <Text style={styles?.cardItemsVlaue}>{data?.price}</Text>
+                        <Text style={styles?.cardItemsVlaue}>{data?.type}</Text>
+                        <Text style={styles?.cardItemsVlaue}>{data?.portName}</Text>
                     </View>
                 </View>
             </View>
 
                 {
                     data.portName == "KFC" &&
-            <View style={styles.map}>
+            <View style={styles?.map}>
                 <MapView
                     style={{ flex: 1, height: 180, }}
                     initialRegion={{
@@ -418,7 +418,7 @@ console.log(formattedTime,"Te4eeeee2");
             </View>
                 }
                 {
-                    data.portName == "MAC" &&
+                    data?.portName == "MAC" &&
             <View style={styles.map}>
                 <MapView
                     style={{ flex: 1, height: 180, }}
@@ -438,14 +438,14 @@ console.log(formattedTime,"Te4eeeee2");
             </View>
                 }
 
-            <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
+            <Modal isVisible={visibleModal === 1} style={styles?.bottomModal}>
                 {renderModalContent()}
             </Modal>
 
-            <View style={styles.fixToText}>
-                <TouchableOpacity style={styles.bookBtn} onPress={handleBookPress}>
-                    <Text style={styles.btn}>{'B\nO\nO\nK'}</Text>
-                    <Icon name="arrow-right" color={'#000'} size={20} style={styles.arrow} />
+            <View style={styles?.fixToText}>
+                <TouchableOpacity style={styles?.bookBtn} onPress={handleBookPress}>
+                    <Text style={styles?.btn}>{'B\nO\nO\nK'}</Text>
+                    <Icon name="arrow-right" color={'#000'} size={20} style={styles?.arrow} />
                 </TouchableOpacity>
             </View>
         </View>

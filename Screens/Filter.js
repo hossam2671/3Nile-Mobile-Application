@@ -108,7 +108,7 @@ export default function Filter(props) {
 
 
         />
-        <Text style={styles.Header_filter_price_lapel}>price value: {sliderValue1}</Text>
+        <Text style={styles?.Header_filter_price_lapel}>price value: {sliderValue1}</Text>
         <Slider
           style={{ width: 380, height: 20, marginTop: 10 }}
           minimumValue={0}
@@ -122,8 +122,8 @@ export default function Filter(props) {
 
 
 
-        <View style={styles.book_fixToText}>
-          <TouchableOpacity style={styles.book_bookBtn} onPress={() => {
+        <View style={styles?.book_fixToText}>
+          <TouchableOpacity style={styles?.book_bookBtn} onPress={() => {
             if (num === 1) {
               dispatch(filter({ type: selectedItems1, port: selectedItems, numOFPeople: sliderValue, price: sliderValue1 }))
             }
@@ -132,8 +132,8 @@ export default function Filter(props) {
             }
             ; setVisibleModal(null)
           }}>
-            <Text style={styles.book_btn}>{'filter '}</Text>
-            <Icon name="arrow-right" color={'#000'} size={20} style={styles.book_arrow} />
+            <Text style={styles?.book_btn}>{'filter '}</Text>
+            <Icon name="arrow-right" color={'#000'} size={20} style={styles?.book_arrow} />
           </TouchableOpacity>
         </View>
 
@@ -177,11 +177,11 @@ export default function Filter(props) {
       
         <View >
           {/* modal */}
-          <View style={styles.container_left}>
+          <View style={styles?.container_left}>
         
 
               <TouchableOpacity
-                style={[styles.kfc, activeButton === 'all' && styles.activeButton]}
+                style={[styles?.kfc, activeButton === 'all' && styles?.activeButton]}
                 onPress={() => 
                   {
 
@@ -193,18 +193,18 @@ export default function Filter(props) {
                 {
                   activeButton === 'all' ? (<>
 
-                    <Animated.View style={[styles.div]}>
-                      <Text style={styles.Mac_btnActive}>{'All'}</Text>
+                    <Animated.View style={[styles?.div]}>
+                      <Text style={styles?.Mac_btnActive}>{'All'}</Text>
                     </Animated.View>
 
                   </>) : (
-                    <Text style={styles.Mac_btn}>{'All'}</Text>
+                    <Text style={styles?.Mac_btn}>{'All'}</Text>
 
                   )
                 }
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.kfc, activeButton === 'Mac' && styles.activeButton]}
+                style={[styles?.kfc, activeButton === 'Mac' && styles?.activeButton]}
                 onPress={() => 
                   {
 
@@ -216,12 +216,12 @@ export default function Filter(props) {
                 {
                   activeButton === 'Mac' ? (<>
 
-                    <Animated.View style={[styles.div]}>
-                      <Text style={styles.Mac_btnActive}>{'Mac'}</Text>
+                    <Animated.View style={[styles?.div]}>
+                      <Text style={styles?.Mac_btnActive}>{'Mac'}</Text>
                     </Animated.View>
 
                   </>) : (
-                    <Text style={styles.Mac_btn}>{'Mac'}</Text>
+                    <Text style={styles?.Mac_btn}>{'Mac'}</Text>
 
                   )
                 }
@@ -229,25 +229,25 @@ export default function Filter(props) {
 
 
               <TouchableOpacity
-                style={[styles.kfc, activeButton === 'El-mahata' && styles.activeButton]}
+                style={[styles?.kfc, activeButton === 'El-mahata' && styles?.activeButton]}
                 onPress={() => handlePress('El-mahata')}
               >
                 {
                   activeButton === 'El-mahata' ? (<>
 
-                    <Animated.View style={styles.div}> 
-                      <Text style={styles.mahata_btnActive}>{'El-mahata'}</Text>
+                    <Animated.View style={styles?.div}> 
+                      <Text style={styles?.mahata_btnActive}>{'El-mahata'}</Text>
                     </Animated.View>
 
                   </>) : (
-                    <Text style={styles.mahata_btn}>{'El-mahata'}</Text>
+                    <Text style={styles?.mahata_btn}>{'El-mahata'}</Text>
 
                   )
                 }
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.kfc, activeButton === 'KFC' && styles.activeButton]}
+                style={[styles?.kfc, activeButton === 'KFC' && styles?.activeButton]}
                 onPress={() => handlePress('KFC')
                  }
               >
@@ -255,12 +255,12 @@ export default function Filter(props) {
                 {
                   activeButton === 'KFC' ? (<>
 
-                    <View style={styles.div}>
-                      <Text style={styles.kfc_btnActive}>{'KFC'}</Text>
+                    <View style={styles?.div}>
+                      <Text style={styles?.kfc_btnActive}>{'KFC'}</Text>
                     </View>
 
                   </>) : (
-                    <Text style={styles.kfc_btn}>{'KFC'}</Text>
+                    <Text style={styles?.kfc_btn}>{'KFC'}</Text>
 
                   )
                 }
@@ -280,13 +280,13 @@ export default function Filter(props) {
         
           <View style={styles.container}>
             {num == 2 &&
-              <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
+              <Modal isVisible={visibleModal === 1} style={styles?.bottomModal}>
 
                 {renderModalContent()}
               </Modal>
             }
             {num == 1 &&
-              <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
+              <Modal isVisible={visibleModal === 1} style={styles?.bottomModal}>
 
                 {renderModalContent()}
               </Modal>
@@ -297,12 +297,12 @@ export default function Filter(props) {
             {num == 2 &&
            
             
-                   <View style={styles.ffixToText}>
-                <TouchableOpacity style={styles.fbookBtn}
+                   <View style={styles?.ffixToText}>
+                <TouchableOpacity style={styles?.fbookBtn}
                   onPress={() => { setVisibleModal(1); setSelectedItems([]); setSelectedItems1([]); setSliderValue(1000); setSliderValue1(1000) }}
                 >
-                    <Text style={styles.fbtn}>{'Filter'}</Text>
-                    <Icon name="filter" color={'#000'} size={20} style={styles.farrow} />
+                    <Text style={styles?.fbtn}>{'Filter'}</Text>
+                    <Icon name="filter" color={'#000'} size={20} style={styles?.farrow} />
                 </TouchableOpacity>
             </View> 
                
@@ -312,12 +312,12 @@ export default function Filter(props) {
             {num == 1 &&
 
 
-<View style={styles.ffixToText}>
-<TouchableOpacity style={styles.fbookBtn}
+<View style={styles?.ffixToText}>
+<TouchableOpacity style={styles?.fbookBtn}
     onPress={() => { setVisibleModal(1); setSelectedItems([]); setSelectedItems1([]); setSliderValue(1000); setSliderValue1(1000) }}
 >
-    <Text style={styles.fbtn}>{'Filter'}</Text>
-    <Icon name="filter" color={'#000'} size={20} style={styles.farrow} />
+    <Text style={styles?.fbtn}>{'Filter'}</Text>
+    <Icon name="filter" color={'#000'} size={20} style={styles?.farrow} />
 </TouchableOpacity>
 </View> 
 
@@ -326,7 +326,7 @@ export default function Filter(props) {
             {
               num == 3 &&
               <Searchbar
-                style={styles.filter_search}
+                style={styles?.filter_search}
                 placeholder="Target Place"
                 onChangeText={onChangeSearch}
                 value={searchQuery}
@@ -338,55 +338,55 @@ export default function Filter(props) {
 
 
             {/* cards */}
-            <View style={styles.cards}>
+            <View style={styles?.cards}>
            
               {
                 num === 1 && (
                   <FlatList
-                    style={styles.FlatList}
+                    style={styles?.FlatList}
                     data={filteredcategoryOne}
                     renderItem={({ item }) => (
 
-                      <View style={styles.card_con}>
+                      <View style={styles?.card_con}>
                         <Image
-                          style={styles.card_con_img}
+                          style={styles?.card_con_img}
                           width={170}
                           height={170}
                           source={{
-                            uri: `http://${ip}:5000/${item.images[0]}`,
+                            uri: `http://${ip}:5000/${item?.images[0]}`,
                           }}
                         />
 
-                        <View style={styles.card_con_info}>
-                          <View style={styles.card_con_info_row}>
-                            <Text style={styles.card_con_info_row_name}>{item.name}</Text>
+                        <View style={styles?.card_con_info}>
+                          <View style={styles?.card_con_info_row}>
+                            <Text style={styles?.card_con_info_row_name}>{item?.name}</Text>
                           </View>
-                          <View style={styles.card_con_info_row}>
-                            <Text style={styles.card_con_info_row_price}>{item.price} per Hour</Text>
+                          <View style={styles?.card_con_info_row}>
+                            <Text style={styles?.card_con_info_row_price}>{item?.price} per Hour</Text>
 
                           </View>
-                          <View style={styles.card_con_info_row}>
-                            <Text style={styles.card_con_info_row_port}>{item.type}</Text>
+                          <View style={styles?.card_con_info_row}>
+                            <Text style={styles?.card_con_info_row_port}>{item?.type}</Text>
                           </View>
-                          <View style={styles.card_con_info_row}>
+                          <View style={styles?.card_con_info_row}>
                             <Icon name='anchor' size={18} color={'#166582'} />
-                            <Text style={styles.card_con_info_row_type}> {item.portName} </Text>
+                            <Text style={styles?.card_con_info_row_type}> {item?.portName} </Text>
 
                           </View>
                         </View>
-                        <View style={styles.fixToText}>
-                        <TouchableOpacity style={styles.bookBtn} onPressIn={() => {
+                        <View style={styles?.fixToText}>
+                        <TouchableOpacity style={styles?.bookBtn} onPressIn={() => {
                           console.log("first");
                           props.navigation.navigate('Discreption', { data: item });
                         }}>
-                          <Text style={styles.arrow}>See Details</Text>
+                          <Text style={styles?.arrow}>See Details</Text>
                         </TouchableOpacity>
                         </View>
                       
                       </View>
                       
                     )}
-                    keyExtractor={(item) => item._id}
+                    keyExtractor={(item) => item?._id}
                   />
                 )
               }
@@ -394,52 +394,52 @@ export default function Filter(props) {
               {
                 num === 2 && (
                   <FlatList
-                  style={styles.FlatList}
+                  style={styles?.FlatList}
                     data={filteredcategoryTwo}
                     renderItem={({ item }) => (
 
-                      <View style={styles.card_con}>
+                      <View style={styles?.card_con}>
                         <Image
-                          style={styles.card_con_img}
+                          style={styles?.card_con_img}
                           width={170}
                           height={170}
                           source={{
-                            uri: `http://${ip}:5000/${item.images[0]}`,
+                            uri: `http://${ip}:5000/${item?.images[0]}`,
                           }}
                         />
 
-                        <View style={styles.card_con_info}>
-                          <View style={styles.card_con_info_row}>
-                            <Text style={styles.card_con_info_row_name}>{item.name}</Text>
+                        <View style={styles?.card_con_info}>
+                          <View style={styles?.card_con_info_row}>
+                            <Text style={styles?.card_con_info_row_name}>{item?.name}</Text>
                           </View>
-                          <View style={styles.card_con_info_row}>
-                            <Text style={styles.card_con_info_row_price}>{item.price} per Hour</Text>
+                          <View style={styles?.card_con_info_row}>
+                            <Text style={styles?.card_con_info_row_price}>{item?.price} per Hour</Text>
 
                           </View>
-                          <View style={styles.card_con_info_row}>
-                            <Text style={styles.card_con_info_row_port}>{item.type}</Text>
+                          <View style={styles?.card_con_info_row}>
+                            <Text style={styles?.card_con_info_row_port}>{item?.type}</Text>
                           </View>
-                          <View style={styles.card_con_info_row}>
+                          <View style={styles?.card_con_info_row}>
                             <Icon name='anchor' size={18} color={'#166582'} />
-                            <Text style={styles.card_con_info_row_type}> {item.portName} </Text>
+                            <Text style={styles?.card_con_info_row_type}> {item?.portName} </Text>
 
                           </View>
                         </View>
 
 
-                        <View style={styles.fixToText}>
+                        <View style={styles?.fixToText}>
                       
-                        <TouchableOpacity style={styles.bookBtn} onPressIn={() => {
+                        <TouchableOpacity style={styles?.bookBtn} onPressIn={() => {
                           console.log("first");
-                          props.navigation.navigate('Discreption', { data: item });
+                          props?.navigation.navigate('Discreption', { data: item });
                         }}>
-                          <Text style={styles.arrow}>See Details</Text>
+                          <Text style={styles?.arrow}>See Details</Text>
                         </TouchableOpacity>
                         </View>
                       </View>
 
                     )}
-                    keyExtractor={(item) => item._id}
+                    keyExtractor={(item) => item?._id}
 
                   />
                 )
@@ -449,48 +449,48 @@ export default function Filter(props) {
                   <FlatList
                     data={filteredswvl}
                     renderItem={({ item }) => (
-                      <View style={styles.card_con}>
+                      <View style={styles?.card_con}>
                         <Image
-                          style={styles.card_con_img}
+                          style={styles?.card_con_img}
                           width={170}
                           height={170}
                           source={{
-                            uri: `http://${ip}:5000/${item.boat.images[0]}`,
+                            uri: `http://${ip}:5000/${item?.boat?.images[0]}`,
                           }}
                         />
 
-                        <View style={styles.card_con_info}>
-                          <View style={styles.card_con_info_row}>
-                            <Text style={styles.card_con_info_row_name}>{item.boat.name}</Text>
+                        <View style={styles?.card_con_info}>
+                          <View style={styles?.card_con_info_row}>
+                            <Text style={styles?.card_con_info_row_name}>{item?.boat?.name}</Text>
                           </View>
-                          <View style={styles.card_con_info_row}>
-                            <Text style={styles.card_con_info_row_price}>{item.priceForTrip}L.E/ Hour</Text>
+                          <View style={styles?.card_con_info_row}>
+                            <Text style={styles?.card_con_info_row_price}>{item?.priceForTrip}L.E/ Hour</Text>
 
                           </View>
-                          <View style={styles.card_con_info_row}>
-                            <Text style={styles.card_con_info_row_port}>{item.date.slice(0, 10)}</Text>
+                          <View style={styles?.card_con_info_row}>
+                            <Text style={styles?.card_con_info_row_port}>{item?.date?.slice(0, 10)}</Text>
                           </View>
-                          <View style={styles.card_con_info_row}>
+                          <View style={styles?.card_con_info_row}>
                             {/* <Icon  name='anchor' size={18} color={'#166582'} /> */}
-                            <Text style={styles.card_con_info_row_item}> {item.time} </Text>
-                            <Text style={styles.card_con_info_row_targetPlace}> {item.targetPlace} </Text>
+                            <Text style={styles?.card_con_info_row_item}> {item?.time} </Text>
+                            <Text style={styles?.card_con_info_row_targetPlace}> {item?.targetPlace} </Text>
 
                           </View>
                         </View>
 
-                        <View style={styles.fixToText}>
+                        <View style={styles?.fixToText}>
                       
                 
-                        <TouchableOpacity style={styles.bookBtn} onPressIn={() => {
+                        <TouchableOpacity style={styles?.bookBtn} onPressIn={() => {
                           console.log("first");
-                          props.navigation.navigate('swvl', { data: item });
+                          props?.navigation.navigate('swvl', { data: item });
                         }}>
-                          <Text style={styles.arrow}>See Details</Text>
+                          <Text style={styles?.arrow}>See Details</Text>
                         </TouchableOpacity>
                       </View>
                       </View>
                     )}
-                    keyExtractor={(item) => item._id}
+                    keyExtractor={(item) => item?._id}
                   />
                 )
               }

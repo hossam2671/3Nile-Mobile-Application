@@ -34,9 +34,9 @@ import Seats from './Seats/Seats';
 
 const renderPagination = (index, total, context) => {
     return (
-        <View style={styles.paginationStyle}>
+        <View style={styles?.paginationStyle}>
             <Text style={{ color: '#000' }}>
-                <Text style={styles.paginationText}>{index + 1}</Text>/{total}
+                <Text style={styles?.paginationText}>{index + 1}</Text>/{total}
             </Text>
         </View>
     );
@@ -98,9 +98,9 @@ useEffect(()=>{
     );
 
     const renderModalContent = () => (
-        <View style={styles.modalContent}>
-            <View style={styles.select}>
-                <Text style={styles.Header_filter}>Submit You Trip</Text>
+        <View style={styles?.modalContent}>
+            <View style={styles?.select}>
+                <Text style={styles?.Header_filter}>Submit You Trip</Text>
             </View>
 
 
@@ -121,23 +121,23 @@ useEffect(()=>{
 
 
     const route = useRoute();
-    const { data } = route.params;
+    const { data } = route?.params;
     useEffect(() => {
-        console.log(data._id,"ljlfsjeoeorj")
+        console.log(data?._id,"ljlfsjeoeorj")
           dispatch(getSwvlById(data._id)).then((res)=>{
             
-            setData(res.payload.data)
+            setData(res?.payload?.data)
           });
         
     }, [])
     const vid = React.useRef(null);
     let [viewed, setViewed] = useState(false)
     function hello() {
-      props.navigation.navigate('Filter')
+      props?.navigation.navigate('Filter')
     }
     console.log(Data,"hhhhhhhhhhhhhhhhhhhhhhhhhhh")
     return (
-        <View style={styles.container}>
+        <View style={styles?.container}>
         
         <Video
           ref={vid}
@@ -155,44 +155,44 @@ useEffect(()=>{
           source={require('../assets/swvlvidio.mp4')
           }
 
-          style={styles.container}
+          style={styles?.container}
         />
              <Seats />
-       <Image source={boatswvl} style={styles.boatswvl}  />
-        <Text style={styles.cardItems_name}> {Data?.boat.name}</Text>
-       <Text style={styles.cardItems_date}> {Data?.date.slice(0,10)}</Text>
-       <Iconn name="date" color={'#000'} size={20} style={styles.cardItems_date_icon} />
-        <Text style={styles.cardItems_time}> {Data?.time}</Text>
-        <Iconnn name="time-outline" color={'#000'} size={20} style={styles.cardItems_time_icon} />
-        <View style={styles.card}>
-        <Text style={styles.cardItems_availableSeats}>Available Seats</Text>
-        <Text style={styles.cardItems_availableSeats_val}>{Data?.availableSeats}</Text>
-        <Text style={styles.cardItems_Pricd}>Price</Text>
-        <Text style={styles.cardItems_price_val}>{Data?.priceForTrip}</Text>
-        <Iconnnn name="money" color={'#000'} size={20} style={styles.cardItems_price_icon} />
-        <Text style={styles.cardItems_place}>Target Place</Text>
-        <Text style={styles.cardItems_place_val}>{Data?.targetPlace}</Text>
-        <Text style={styles.cardItems_port}>Port </Text>
-        <Text style={styles.cardItems_port_val}>{Data?.port}</Text>
-        <Iconnnnn name="anchor" color={'#000'} size={20} style={styles.cardItems_port_icon} />
-        <View style={styles.fixToText}>
+       <Image source={boatswvl} style={styles?.boatswvl}  />
+        <Text style={styles?.cardItems_name}> {Data?.boat?.name}</Text>
+       <Text style={styles?.cardItems_date}> {Data?.date?.slice(0,10)}</Text>
+       <Iconn name="date" color={'#000'} size={20} style={styles?.cardItems_date_icon} />
+        <Text style={styles?.cardItems_time}> {Data?.time}</Text>
+        <Iconnn name="time-outline" color={'#000'} size={20} style={styles?.cardItems_time_icon} />
+        <View style={styles?.card}>
+        <Text style={styles?.cardItems_availableSeats}>Available Seats</Text>
+        <Text style={styles?.cardItems_availableSeats_val}>{Data?.availableSeats}</Text>
+        <Text style={styles?.cardItems_Pricd}>Price</Text>
+        <Text style={styles?.cardItems_price_val}>{Data?.priceForTrip}</Text>
+        <Iconnnn name="money" color={'#000'} size={20} style={styles?.cardItems_price_icon} />
+        <Text style={styles?.cardItems_place}>Target Place</Text>
+        <Text style={styles?.cardItems_place_val}>{Data?.targetPlace}</Text>
+        <Text style={styles?.cardItems_port}>Port </Text>
+        <Text style={styles?.cardItems_port_val}>{Data?.port}</Text>
+        <Iconnnnn name="anchor" color={'#000'} size={20} style={styles?.cardItems_port_icon} />
+        <View style={styles?.fixToText}>
         <TouchableOpacity
-  style={styles.bookBtn}
+  style={styles?.bookBtn}
   onPress={() => {
     
                
-        dispatch(bookSwvl({ swvlId:data._id,userId:user._id, numberOfSeats:seatReserved })).then((res=>{
-                setDeatils(res.payload.data)
-                dispatch(getSwvlById(data._id)).then((res)=>{
+        dispatch(bookSwvl({ swvlId:data?._id,userId:user?._id, numberOfSeats:seatReserved })).then((res=>{
+                setDeatils(res?.payload?.data)
+                dispatch(getSwvlById(data?._id)).then((res)=>{
             
-                    setData(res.payload.data)
+                    setData(res?.payload?.data)
             })}))
     
         setModalVisible(true);
   }}
 >
-<Text style={styles.btn}>{'Book Now'}</Text>
-                    <Icon name="arrow-right" color={'#000'} size={20} style={styles.arrow} />
+<Text style={styles?.btn}>{'Book Now'}</Text>
+                    <Icon name="arrow-right" color={'#000'} size={20} style={styles?.arrow} />
 </TouchableOpacity>
             </View> 
         </View>
@@ -200,7 +200,7 @@ useEffect(()=>{
 
 
 
-{/*    
+{/*   
 
             <Modal isVisible={visibleModal === 1} style={styles.bottomModal}>
                 {renderModalContent()}
@@ -210,10 +210,10 @@ useEffect(()=>{
       
     
 <Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
-      <View style={styles.modalContainer}>
+      <View style={styles?.modalContainer}>
         {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
-        <View style={styles.modalContainer_card_con}>
-            { Deatils.TripDetails ? 
+        <View style={styles?.modalContainer_card_con}>
+            { Deatils?.TripDetails ? 
             <>
         <IconButton
         icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
@@ -222,11 +222,11 @@ useEffect(()=>{
         style={{marginLeft:-230}}
         onPress={() => setModalVisible(false)}
       />
-            <Image source={succ} style={styles.succ} />
-        <Text style={styles.TotalPrice_text}>bookingBarcode :{Deatils?.TripDetails?.TotalPrice}</Text>
-        <Text style={styles.numberOfSeats_text}>numberOfSeats :{Deatils?.TripDetails?.numberOfSeats}</Text>
+            <Image source={succ} style={styles?.succ} />
+        <Text style={styles?.TotalPrice_text}>bookingBarcode :{Deatils?.TripDetails?.TotalPrice}</Text>
+        <Text style={styles?.numberOfSeats_text}>numberOfSeats :{Deatils?.TripDetails?.numberOfSeats}</Text>
        
-      <Text style={styles.barCode_text}>bookingBarcode:</Text>
+      <Text style={styles?.barCode_text}>bookingBarcode:</Text>
         <QRCode
         value={Deatils?.TripDetails?.bookingBarcode}
         size={50} 
@@ -245,7 +245,7 @@ useEffect(()=>{
         style={{marginLeft:-230}}
         onPress={() => setModalVisible(false)}
       />
-        <Text style={styles.numberOfSeats_text}>There is No Available Seats</Text>
+        <Text style={styles?.numberOfSeats_text}>There is No Available Seats</Text>
         </>
             }
         <View>

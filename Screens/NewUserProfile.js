@@ -593,44 +593,64 @@ console.log(accepted,"axxcc");
   tap == "finished" && (
     <FlatList
       data={daaata}
-      keyExtractor={(item) => item._id}
+      keyExtractor={(item) => item?._id}
       renderItem={({ item }) => (
-        <View style={styles.card__box}>
-                <View style={styles.card__image}>
+        <View style={styles?.card__box}>
+                <View style={styles?.card__image}>
                 <Image  source={{
-                            uri: `http://${ip}:5000/${item.boatId.images[0]}`,
-                          }} style={styles.cardboat__img} />
+                            uri: `http://${ip}:5000/${item?.boatId?.images[0]}`,
+                          }} style={styles?.cardboat__img} />
                 </View>
-                <View style={styles.card__content}>
-                    <Text style={styles.card__name}>{item.boatId.name}</Text>
-                    <Icona name="location" size={13} style={styles.loc__icon} />
-                    <Text style={styles.card__location}>{item.boatId.portName}</Text>
+                <View style={styles?.card__content}>
+                    <Text style={styles?.card__name}>{item?.boatId?.name}</Text>
+                    <Icona name="location" size={13} style={styles?.loc__icon} />
+                    <Text style={styles?.card__location}>{item.boatId.portName}</Text>
                     <IIcon name="date-range" size={13} />
-                    <Text style={styles.card__date}>27 June 2023</Text>
-                    <Text style={styles.card__price}>{item.price}$</Text>
+                    <Text style={styles?.card__date}>27 June 2023</Text>
+                    <Text style={styles?.card__price}>{item?.price}$</Text>
                     
                 </View>
                 {
-              !item.rate ?
+              !item?.rate ?
+              <View
+              style={styles?.card__Rate}
+
+              > 
             <StarRating
-              key={item._id}
+              key={item?._id}
               disabled={false}
               maxStars={5}
-              rating={item.rating}
-              selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
-              starSize={20}
-              fullStarColor="#ffc107"
+              rating={item?.rating}
+              selectedStar={(rating) => handleRatingChange(item?._id, rating , item?.boatId?._id)}
+              starSize={15}
+              fullStarColor="orange"
               emptyStarColor="#e4e5e9"
-            /> : <StarRating
-            key={item._id}
+              
+
+            /> 
+            
+          
+            </View>
+            
+            : 
+            
+            <View
+            
+            
+                style={styles?.card__Rate}
+            > 
+            <StarRating
+
+            key={item?._id}
             disabled={false}
             maxStars={5}
-            rating={item.rate.rating}
+            rating={item?.rate?.rating}
             // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
-            starSize={20}
-            fullStarColor="#ffc107"
+            starSize={15}
+            fullStarColor="orange"
             emptyStarColor="#e4e5e9"
           />
+            </View>
             }
             </View>
       )}
@@ -868,6 +888,14 @@ const styles = StyleSheet.create({
         fontWeight: 600,
         textAlign: 'center',
         alignItems: 'center',
+      },
+      card__Rate:{
+        justifyContent:'center',
+        width:100,
+       
+        borderRadius:50,
+        marginTop:20,
+        marginLeft:160,
       }
 });
 
