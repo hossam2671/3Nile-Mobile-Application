@@ -16,6 +16,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+import { convertToAmPm, formatDate, formatTime } from '../functions';
 const data = [
   { key: '1', value: 'KFC' },
   { key: '2', value: 'shra3 2' },
@@ -468,11 +469,11 @@ export default function Filter(props) {
 
                           </View>
                           <View style={styles?.card_con_info_row}>
-                            <Text style={styles?.card_con_info_row_port}>{item?.date?.slice(0, 10)}</Text>
+                            <Text style={styles?.card_con_info_row_port}>{formatDate(item?.date)}</Text>
                           </View>
                           <View style={styles?.card_con_info_row}>
                             {/* <Icon  name='anchor' size={18} color={'#166582'} /> */}
-                            <Text style={styles?.card_con_info_row_item}> {item?.time} </Text>
+                            <Text style={styles?.card_con_info_row_item}> {convertToAmPm(item?.time)} </Text>
                             <Text style={styles?.card_con_info_row_targetPlace}> {item?.targetPlace} </Text>
 
                           </View>

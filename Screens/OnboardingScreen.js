@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-
+import Lottie from 'lottie-react-native';
 const {width, height} = Dimensions.get('window');
 
 const COLORS = {primary: '#ffffffff', black: '#fff'};

@@ -30,11 +30,12 @@ import { addReview, canceltrip, pendingTrips, finishedTrips, editUserInfo, accep
 import Modal from "react-native-modal";
 import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { formatDate, formatTime } from '../functions';
 
 function NewUserProfile(props) {
     //get user data
     const { user } = useSelector(state => state.UserSlice)
-    const [userState , setUserState] = useState(user)
+    const [userState, setUserState] = useState(user)
     const dispatch = useDispatch();
 
 
@@ -47,10 +48,10 @@ function NewUserProfile(props) {
 
     const renderButton = (text, onPress) => (
         <View style={styles.book_fixToText}>
-          <TouchableOpacity style={styles.book_bookBtn} onPress={onPress}>
-            <Text style={styles.book_btn}>{text}</Text>
-            <Icon name="arrow-right" color={'#000'} size={15} style={styles.book_arrow} />
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.book_bookBtn} onPress={onPress}>
+                <Text style={styles.book_btn}>{text}</Text>
+                <Icon name="arrow-right" color={'#000'} size={15} style={styles.book_arrow} />
+            </TouchableOpacity>
         </View>
     );
 
@@ -62,9 +63,9 @@ function NewUserProfile(props) {
 
 
                 <TextInput style={styles.modal__input}
-                    placeholder='Your Name' 
+                    placeholder='Your Name'
                     placeholderTextColor="#0000006a"
-                    onChangeText={(e) => {setName(e) ; console.log(editName)}}
+                    onChangeText={(e) => { setName(e); console.log(editName) }}
                 />
                 <TextInput style={styles.modal__input}
                     placeholder='Your Phone'
@@ -86,9 +87,9 @@ function NewUserProfile(props) {
                     id: user._id
                 };
 
-                dispatch(editUserInfo({ updatedUser })).then((res) => { 
+                dispatch(editUserInfo({ updatedUser })).then((res) => {
                     setVisibleModal(false)
-                    console.log(res.payload.data,"ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
+                    console.log(res.payload.data, "ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
                     setUserState(res.payload.data)
                 })
             })}
@@ -120,13 +121,13 @@ function NewUserProfile(props) {
                 uri: image,
                 name: `image_${timestamp}.jpeg`,
                 type: `image/${fileExtension}`,
-              });
-           
+            });
+
             const response = await axios.put(`http://${ip}:5000/user/editImage/${user._id}`, formData, {
                 headers: {
-                  'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'multipart/form-data',
                 },
-              });
+            });
         }
     };
 
@@ -151,7 +152,7 @@ function NewUserProfile(props) {
     const { pending } = useSelector(state => state.UserSlice)
 
 
-console.log(accepted,"axxcc");
+    console.log(accepted, "axxcc");
     useEffect(() => {
 
 
@@ -160,7 +161,7 @@ console.log(accepted,"axxcc");
 
 
         dispatch(acceptedTrips({ id: user._id }))
-        dispatch(pendingTrips({ id: user._id })).then(()=>{
+        dispatch(pendingTrips({ id: user._id })).then(() => {
             setTap("pending")
         })
         console.log(pending)
@@ -168,7 +169,7 @@ console.log(accepted,"axxcc");
     }, []);
     const TabButton = ({ currentTab, setCurrentTab, title, icon, onPress }) => {
         return (
-            
+
             <TouchableOpacity onPress={onPress}>
                 <View
                     style={{
@@ -205,49 +206,50 @@ console.log(accepted,"axxcc");
         );
     };
 
-    function cancel(id){
+    function cancel(id) {
         // console.log("first")
-       
-         dispatch(canceltrip(id)).then(() =>
-         
-         
-         dispatch(pendingTrips({id:user._id})).then((res)=>{
-            console.log(res.payload.data,"vcxvxcvcx");
-            setData(res.payload.data)
-        })          
-         
-         
-         )
+
+        dispatch(canceltrip(id)).then(() =>
+
+
+            dispatch(pendingTrips({ id: user._id })).then((res) => {
+                console.log(res.payload.data, "vcxvxcvcx");
+                setData(res.payload.data)
+            })
+
+
+        )
 
     }
- //rating
- const [rating , setRating] = useState(0)
- const handleRatingChange = (itemId, newRating,boatId) => {
-    console.log('New rating:', newRating);
-    console.log('Item ID:', itemId);
-  
+    //rating
+    const [rating, setRating] = useState(0)
+    const handleRatingChange = (itemId, newRating, boatId) => {
+        console.log('New rating:', newRating);
+        console.log('Item ID:', itemId);
 
-    const updatedFinished = finished.map((item) => {
-      if (item._id === itemId) {
-        setRating(newRating)
-        dispatch(addReview({boatId:boatId,clientId:user._id,tripId:itemId,rate:newRating})).then(()=>{
-          dispatch(finishedTrips({id:user._id}))
+
+        const updatedFinished = finished.map((item) => {
+            if (item._id === itemId) {
+                setRating(newRating)
+                dispatch(addReview({ boatId: boatId, clientId: user._id, tripId: itemId, rate: newRating })).then(() => {
+                    dispatch(finishedTrips({ id: user._id }))
+                })
+            }
         })
-    }})
-  
 
-} 
+
+    }
 
     return (
         <ScrollView
-        
-        
-        contentContainerStyle={styles.container}>
+
+
+            contentContainerStyle={styles.container}>
 
             <Modal
-            
-            
-            isVisible={visibleModal === 1} style={styles.bottomModal}>
+
+
+                isVisible={visibleModal === 1} style={styles.bottomModal}>
 
                 {renderModalContent()}
             </Modal>
@@ -293,7 +295,7 @@ console.log(accepted,"axxcc");
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             Animated.timing(offsetValue, {
                                 // YOur Random Value...
                                 toValue: showMenu ? 0 : 200,
@@ -308,7 +310,7 @@ console.log(accepted,"axxcc");
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             setShowMenu(!showMenu);
 
                         }}
@@ -319,21 +321,21 @@ console.log(accepted,"axxcc");
                         title="Accepted"
                         icon={accept}
                         onPress={() => {
-                            dispatch(acceptedTrips({ id: user._id })).then((res)=>{
-                                console.log(res.payload.data,"dsadsadcxz");
+                            dispatch(acceptedTrips({ id: user._id })).then((res) => {
+                                console.log(res.payload.data, "dsadsadcxz");
                                 setData(res.payload.data)
                             })
                             setTap("accepted")
                             console.log(tap)
                             setCurrentTab("Accept")
-                         
+
                             Animated.timing(scaleValue, {
                                 toValue: showMenu ? 1 : 1,
                                 duration: 300,
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             Animated.timing(offsetValue, {
                                 // YOur Random Value...
                                 toValue: showMenu ? 0 : 200,
@@ -348,7 +350,7 @@ console.log(accepted,"axxcc");
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             setShowMenu(!showMenu);
 
                         }}
@@ -359,10 +361,12 @@ console.log(accepted,"axxcc");
                         title="Pending"
                         icon={pendingg}
                         onPress={() => {
-                            dispatch(pendingTrips({id:user._id})).then((res)=>{
-                                console.log(res.payload.data,"vcxvxcvcx");
+                            dispatch(pendingTrips({ id: user._id })).then((res) => {
+                                console.log(res.payload.data, "vcxvxcvcx");
                                 setData(res.payload.data)
-                            }) 
+                                console.log(daaata,"ddddddddczxxz")
+
+                            })
 
                             setTap("pending")
                             console.log(tap)
@@ -373,7 +377,7 @@ console.log(accepted,"axxcc");
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             Animated.timing(offsetValue, {
                                 // YOur Random Value...
                                 toValue: showMenu ? 0 : 200,
@@ -388,7 +392,7 @@ console.log(accepted,"axxcc");
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             setShowMenu(!showMenu);
 
                         }}
@@ -399,8 +403,8 @@ console.log(accepted,"axxcc");
                         title="Finished"
                         icon={finishedd}
                         onPress={() => {
-                            dispatch(finishedTrips({ id: user._id })).then((res)=>{
-                                console.log(res.payload.data,"xcxcvbcxvbcvb")
+                            dispatch(finishedTrips({ id: user._id })).then((res) => {
+                                console.log(res.payload.data, "xcxcvbcxvbcvb")
                                 setData(res.payload.data)
                             })
 
@@ -413,7 +417,7 @@ console.log(accepted,"axxcc");
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             Animated.timing(offsetValue, {
                                 // YOur Random Value...
                                 toValue: showMenu ? 0 : 200,
@@ -428,7 +432,7 @@ console.log(accepted,"axxcc");
                                 useNativeDriver: true
                             })
                                 .start()
-    
+
                             setShowMenu(!showMenu);
                         }}
                     />
@@ -447,7 +451,7 @@ console.log(accepted,"axxcc");
                         icon={logout}
                         onPress={() => {
                             setTap("logout")
-                           
+
                             setCurrentTab("Logout")
                             props.navigation.navigate("LoginSignUp")
                         }}
@@ -525,169 +529,186 @@ console.log(accepted,"axxcc");
                         }}></Image>
 
                     </TouchableOpacity>
-
-                    <Image source={photo} style={{
-                        width: '100%',
-                        height: 190,
-                        borderRadius: 20,
-                        marginTop: 5
-                    }}></Image>
-
-                    <Image source={{ uri: image }} style={{
-                        width: 90,
-                        height: 90,
-                        borderRadius: 50,
-                        bottom: 45,
-                        left: 165,
-                    }}></Image>
-
-                    <TouchableOpacity
-                        isVisible={visibleModal === 1}
-                        onPress={() => { setVisibleModal(1) }}>
-                        <View style={styles.edit__button}><Text style={styles.edit__button__style}>+ Edit</Text></View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => { pickImage() }}>
-                        <Icon name="camera" size={20} color="#0c8df7" style={styles.icon__button} />
-                    </TouchableOpacity>
+                    <View
+                        style={{
+                            width: '100%',
+                            height: 200,
+                            marginBottom: 50
 
 
+                        }} >
 
-<View style={{paddingBottom: 300}}>
 
-                    {
-  tap == "pending" && (
-    <FlatList
-      data={daaata}
-      keyExtractor={(item) => item._id}
-      renderItem={({ item }) => (
-        <View style={styles.card__box}>
-                <View style={styles.card__image}>
-                <Image  source={{
-                            uri: `http://${ip}:5000/${item.boatId.images[0]}`,
-                          }} style={styles.cardboat__img} />
-                </View>
-                <View style={styles.card__content}>
-                    <Text style={styles.card__name}>{item.boatId.name}</Text>
-                    <Icona name="location" size={13} style={styles.loc__icon} />
-                    <Text style={styles.card__location}>{item.boatId.portName}</Text>
-                    <IIcon name="date-range" size={13} />
-                    <Text style={styles.card__date}>{item.boatId.tripData}</Text>
-                    <Text style={styles.card__price}>{item.price}$</Text>
-                    <TouchableOpacity onPress={() =>
-                        
+                        <Image source={photo} style={{
+                            width: '100%',
+                            height: 150,
+                            borderRadius: 20,
+                            marginTop: 5
+                        }}></Image>
 
-                            
-                            cancel(item._id)}>
-                        
-                        <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Cancel</Text></View>
-                    </TouchableOpacity>
-                </View>
-            </View>
-      )}
-    />
-  )
-  
-}
-{
-  tap == "finished" && (
-    <FlatList
-      data={daaata}
-      keyExtractor={(item) => item?._id}
-      renderItem={({ item }) => (
-        <View style={styles?.card__box}>
-                <View style={styles?.card__image}>
-                <Image  source={{
-                            uri: `http://${ip}:5000/${item?.boatId?.images[0]}`,
-                          }} style={styles?.cardboat__img} />
-                </View>
-                <View style={styles?.card__content}>
-                    <Text style={styles?.card__name}>{item?.boatId?.name}</Text>
-                    <Icona name="location" size={13} style={styles?.loc__icon} />
-                    <Text style={styles?.card__location}>{item.boatId.portName}</Text>
-                    <IIcon name="date-range" size={13} />
-                    <Text style={styles?.card__date}>27 June 2023</Text>
-                    <Text style={styles?.card__price}>{item?.price}$</Text>
-                    
-                </View>
-                {
-              !item?.rate ?
-              <View
-              style={styles?.card__Rate}
+                        <Image source={{ uri: image }} style={{
+                            width: 90,
+                            height: 90,
+                            borderRadius: 50,
+                            bottom: 45,
+                            left: 165,
+                        }}></Image>
 
-              > 
-            <StarRating
-              key={item?._id}
-              disabled={false}
-              maxStars={5}
-              rating={item?.rating}
-              selectedStar={(rating) => handleRatingChange(item?._id, rating , item?.boatId?._id)}
-              starSize={15}
-              fullStarColor="orange"
-              emptyStarColor="#e4e5e9"
-              
+                        <TouchableOpacity
+                            isVisible={visibleModal === 1}
+                            onPress={() => { setVisibleModal(1) }}>
+                            <View style={styles.edit__button}><Text style={styles.edit__button__style}>+ Edit</Text></View>
+                        </TouchableOpacity>
 
-            /> 
-            
-          
-            </View>
-            
-            : 
-            
-            <View
-            
-            
-                style={styles?.card__Rate}
-            > 
-            <StarRating
+                        <TouchableOpacity onPress={() => { pickImage() }}>
+                            <Icon name="camera" size={20} color="#0c8df7" style={styles.icon__button} />
+                        </TouchableOpacity>
 
-            key={item?._id}
-            disabled={false}
-            maxStars={5}
-            rating={item?.rate?.rating}
-            // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
-            starSize={15}
-            fullStarColor="orange"
-            emptyStarColor="#e4e5e9"
-          />
-            </View>
-            }
-            </View>
-      )}
-    />
-  )
-  
-}
-{
-  tap == "accepted" && (
-    <FlatList
-      data={daaata}
-      renderItem={({ item }) => (
-        <View style={styles.card__box}>
-                <View style={styles.card__image}>
-                    <Image  source={{
-                            uri: `http://${ip}:5000/${item.boatId.images[0]}`,
-                          }} style={styles.cardboat__img} />
-                </View>
-                <View style={styles.card__content}>
-                    <Text style={styles.card__name}>{item.boatId.name}</Text>
-                    <Icona name="location" size={13} style={styles.loc__icon} />
-                    <Text style={styles.card__location}>{item.boatId.portName}</Text>
-                    <IIcon name="date-range" size={13} />
-                    <Text style={styles.card__date}>27 June 2023</Text>
-                    <Text style={styles.card__price}>{item.price}$</Text>
-                    {/* <TouchableOpacity onPress={() => {cancel(item.id)}}>
+                    </View>
+
+                    <View style={{ paddingTop: 0 }}>
+
+                        {
+                            tap == "pending" && (
+                                <FlatList
+                                style={{
+                                    marginBottom: 250}}   
+                                    
+                                    data={daaata}
+                                    keyExtractor={(item) => item._id}
+                                    renderItem={({ item }) => (
+                                        <View style={styles.card__box}>
+                                            <View style={styles.card__image}>
+                                                <Image source={{
+                                                    uri: `http://${ip}:5000/${item.boatId.images[0]}`,
+                                                }} style={styles.cardboat__img} />
+                                            </View>
+                                            <View style={styles.card__content}>
+                                                <Text style={styles.card__name}>{item.boatId.name}</Text>
+                                                <Icona name="location" size={13} style={styles.loc__icon} />
+                                                <Text style={styles.card__location}>{item.boatId.portName}</Text>
+                                                <IIcon name="date-range" size={13} />
+                                                <Text style={styles.card__date}>{formatDate(item.startTime)}  At   {formatTime(item.startTime)} </Text>
+                                             
+                                                <Text style={styles.card__price}>{item.price}$</Text>
+                                                <TouchableOpacity onPress={() =>
+
+
+
+                                                    cancel(item._id)}>
+
+                                                    <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Cancel</Text></View>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    )}
+                                />
+                            )
+
+                        }
+                        {
+                            tap == "finished" && (
+                                <FlatList
+                                style={{
+                                    marginBottom: 250}}
+                                    data={daaata}
+                                    keyExtractor={(item) => item?._id}
+                                    renderItem={({ item }) => (
+                                        <View style={styles?.card__box}>
+                                            <View style={styles?.card__image}>
+                                                <Image source={{
+                                                    uri: `http://${ip}:5000/${item?.boatId?.images[0]}`,
+                                                }} style={styles?.cardboat__img} />
+                                            </View>
+                                            <View style={styles?.card__content}>
+                                                <Text style={styles?.card__name}>{item?.boatId?.name}</Text>
+                                                <Icona name="location" size={13} style={styles?.loc__icon} />
+                                                <Text style={styles?.card__location}>{item.boatId.portName}</Text>
+                                                <IIcon name="date-range" size={13} />
+                                                <Text style={styles.card__date}>{formatDate(item.startTime)}  At   {formatTime(item.startTime)} </Text>
+                                                <Text style={styles?.card__price}>{item?.price}$</Text>
+
+                                            </View>
+                                            {
+                                                !item?.rate ?
+                                                    <View
+                                                        style={styles?.card__Rate}
+
+                                                    >
+                                                        <StarRating
+                                                            key={item?._id}
+                                                            disabled={false}
+                                                            maxStars={5}
+                                                            rating={item?.rating}
+                                                            selectedStar={(rating) => handleRatingChange(item?._id, rating, item?.boatId?._id)}
+                                                            starSize={15}
+                                                            fullStarColor="orange"
+                                                            emptyStarColor="#e4e5e9"
+
+
+                                                        />
+
+
+                                                    </View>
+
+                                                    :
+
+                                                    <View
+
+
+                                                        style={styles?.card__Rate}
+                                                    >
+                                                        <StarRating
+
+                                                            key={item?._id}
+                                                            disabled={false}
+                                                            maxStars={5}
+                                                            rating={item?.rate?.rating}
+                                                            // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
+                                                            starSize={15}
+                                                            fullStarColor="orange"
+                                                            emptyStarColor="#e4e5e9"
+                                                        />
+                                                    </View>
+                                            }
+                                        </View>
+                                    )}
+                                />
+                            )
+
+                        }
+                        {
+                            tap == "accepted" && (
+                                < FlatList
+                                    style={{
+                                        marginBottom: 250}}
+                                    data={daaata}
+                                    renderItem={({ item }) => (
+                                        <View style={styles.card__box}>
+                                            <View style={styles.card__image}>
+                                                <Image source={{
+                                                    uri: `http://${ip}:5000/${item.boatId.images[0]}`,
+                                                }} style={styles.cardboat__img} />
+                                            </View>
+                                            <View style={styles.card__content}>
+                                                <Text style={styles.card__name}>{item.boatId.name}</Text>
+                                                <Icona name="location" size={13} style={styles.loc__icon} />
+                                                <Text style={styles.card__location}>{item.boatId.portName}</Text>
+                                                <IIcon name="date-range" size={13} />
+                                                <Text style={styles.card__date}>{formatDate(item.startTime)}  At   {formatTime(item.startTime)} </Text>
+                                                <Text style={styles.card__price}>{item.price}$</Text>
+                                                {/* <TouchableOpacity onPress={() => {cancel(item.id)}}>
                         <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Finish</Text></View>
                     </TouchableOpacity> */}
-                </View>
-            </View>
-      )}
-    />
-  )
-  
-}
-</View>
-            
+                                            </View>
+                                        </View>
+                                    )}
+                                />
+                            )
+
+                        }
+                    </View>
+
 
                 </Animated.View>
 
@@ -732,7 +753,7 @@ const TabButton = (currentTab, setCurrentTab, title, image) => {
 
             </View>
         </TouchableOpacity>
-       
+
     );
 }
 
@@ -760,6 +781,7 @@ const styles = StyleSheet.create({
         top: 7,
         textAlign: 'center',
         alignItems: 'center',
+        color:'#fff'
     },
     modalContent: {
         backgroundColor: '#fff',
@@ -783,7 +805,7 @@ const styles = StyleSheet.create({
     },
 
     card__box: {
-        marginLeft:60,
+        marginLeft: 60,
         elevation: 4,
         width: 300,
         height: 300,
@@ -793,9 +815,9 @@ const styles = StyleSheet.create({
         shadowOffset: { width: -2, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 3,
-        marginBottom:150
+        marginBottom: 50
     },
-    card__image:{
+    card__image: {
         width: 270,
         height: 120,
         alignItems: 'center',
@@ -808,7 +830,7 @@ const styles = StyleSheet.create({
         height: 120,
         borderRadius: 10,
     },
-    card__content:{
+    card__content: {
         top: 40,
         left: 15,
     },
@@ -817,19 +839,19 @@ const styles = StyleSheet.create({
         fontWeight: 600,
         bottom: 15,
     },
-    card__location:{
+    card__location: {
         bottom: 18,
         left: 16,
     },
-    card__date:{
+    card__date: {
         bottom: 17,
         left: 16,
     },
-    card__price:{
+    card__price: {
         fontSize: 20,
         fontWeight: 600,
     },
-    cancel__button:{
+    cancel__button: {
         width: 60,
         height: 60,
         borderRadius: 5,
@@ -838,15 +860,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
         left: 200,
         bottom: 47,
-        borderRadius:90,
-        color:"white",
-        
+        borderRadius: 90,
+        color: "white",
+
     },
-    cancel__button__text:{
+    cancel__button__text: {
         fontSize: 15,
         fontWeight: 600,
         textAlign: 'center',
-        color:"white",
+        color: "white",
     },
     book_fixToText: {
         // height: 100,
@@ -854,49 +876,49 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
         borderRadius: 55,
         marginTop: 30,
-      },
-      book_bookBtn: {
+    },
+    book_bookBtn: {
         justifyContent: "space-between",
         flexDirection: 'row',
         alignItems: 'center',
         width: 150,
         height: 50,
         paddingTop: 15,
-      },
-      book_btn: {
+    },
+    book_btn: {
         color: '#ffffff',
         fontWeight: 600,
         fontSize: 20,
         paddingLeft: 20,
         marginTop: -17,
-      },
-      book_arrow: {
+    },
+    book_arrow: {
         color: '#000000',
         backgroundColor: "#fff",
         borderRadius: 50,
         padding: 12,
         marginTop: -13,
-        marginRight:10,
-      },
-      add__boat__close__icon:{
+        marginRight: 10,
+    },
+    add__boat__close__icon: {
         fontSize: 20,
         fontWeight: 600,
         left: 200,
-      },
-      edit__text:{
+    },
+    edit__text: {
         fontSize: 20,
         fontWeight: 600,
         textAlign: 'center',
         alignItems: 'center',
-      },
-      card__Rate:{
-        justifyContent:'center',
-        width:100,
-       
-        borderRadius:50,
-        marginTop:20,
-        marginLeft:160,
-      }
+    },
+    card__Rate: {
+        justifyContent: 'center',
+        width: 100,
+
+        borderRadius: 50,
+        marginTop: 20,
+        marginLeft: 160,
+    }
 });
 
 export default NewUserProfile

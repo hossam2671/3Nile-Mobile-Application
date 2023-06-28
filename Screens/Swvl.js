@@ -31,6 +31,8 @@ import { useSelector ,useDispatch} from 'react-redux';
 
 import ip from '../config'
 import Seats from './Seats/Seats';
+import { formatDate } from '../functions';
+import { convertToAmPm } from '../functions';
 
 const renderPagination = (index, total, context) => {
     return (
@@ -160,9 +162,9 @@ useEffect(()=>{
              <Seats />
        <Image source={boatswvl} style={styles?.boatswvl}  />
         <Text style={styles?.cardItems_name}> {Data?.boat?.name}</Text>
-       <Text style={styles?.cardItems_date}> {Data?.date?.slice(0,10)}</Text>
+       <Text style={styles?.cardItems_date}> {formatDate(Data?.date)}</Text>
        <Iconn name="date" color={'#000'} size={20} style={styles?.cardItems_date_icon} />
-        <Text style={styles?.cardItems_time}> {Data?.time}</Text>
+        <Text style={styles?.cardItems_time}> {convertToAmPm(Data?.time)}</Text>
         <Iconnn name="time-outline" color={'#000'} size={20} style={styles?.cardItems_time_icon} />
         <View style={styles?.card}>
         <Text style={styles?.cardItems_availableSeats}>Available Seats</Text>

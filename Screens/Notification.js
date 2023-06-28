@@ -34,7 +34,6 @@ const Notification= () => {
     useEffect(()=>{
       setnotificnotifyColor(notify)
       let id = AsyncStorage.getItem('user')
-      console.log(id,"ssxzzx");
       axios.get(`http://${ip}:5000/user/notifications/${user._id}`).then((res)=>{
         console.log(res,"userNooot");
         setNotifications(res.data.unreadNotifications)
@@ -74,7 +73,7 @@ const Notification= () => {
   return (
     <View>
       <TouchableOpacity onPress={toggleModal}>
-      <Icon name="notification" size={24}  color={notificnotifyColor?"#333":"#871616"}/>
+      <Icon name="notification" size={24}  color={notifications?"#333":"#871616"}/>
       </TouchableOpacity>
 
       <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>

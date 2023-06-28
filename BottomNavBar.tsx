@@ -40,10 +40,11 @@ const MyBottomNav = () => {
         >
           <Tab.Screen
             name="home"
+            
             options={{
               headerRight: () => <Notification />,
               // @ts-ignore
-              tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./assets/lottie/home.icon.json')} style={styles.icon} />,
+              tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={true} source={require('./assets/lottie/home.icon.json')} style={styles.icon} />,
             }}
             component={HomeCards}
           />
@@ -128,7 +129,7 @@ const AnimatedTabBar = ({ state: { index: activeIndex, routes }, navigation, des
         style={[styles.activeBackground, animatedStyles]}
       >
         <Path
-          fill="#2353d9"
+          fill="#0391e4"
           d="M20 0H0c11.046 0 20 8.953 20 20v5c0 19.33 15.67 35 35 35s35-15.67 35-35v-5c0-11.045 8.954-20 20-20H20z"
         />
       </AnimatedSvg>
@@ -144,7 +145,13 @@ const AnimatedTabBar = ({ state: { index: activeIndex, routes }, navigation, des
               active={active}
               options={options}
               onLayout={(e) => handleLayout(e, index)}
-              onPress={() => navigation.navigate(route.name)}
+              onPress={() =>{
+                
+                navigation.navigate(route.name)
+              }
+              
+              
+              }
             />
           )
         })}
