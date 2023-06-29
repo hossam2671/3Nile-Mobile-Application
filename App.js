@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import UserProfile from './Screens/UserProfile'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -36,10 +36,47 @@ import { LogBox } from 'react-native';
 
 LogBox.ignoreAllLogs()
 // For ignore Errors End
+import * as Notifications from 'expo-notifications';
+import io from 'socket.io-client';
+import ip from './config'
 
+const socket = io(`http://${ip}:5000`);
 
 export default function App() {
+  useEffect(() => {
 
+
+    socket.on('Owner-accepted-Trip', (data) => {
+      console.log("vnxcmvnbmcxv")
+      const { message, status, _id } = data.notification;
+
+      Notifications.scheduleNotificationAsync({
+        content: {
+          title: "status",
+          body: "message",
+        },
+      })})
+    registerForPushNotificationsAsync();
+  }, []);
+  
+  const registerForPushNotificationsAsync = async () => {
+    const { status } = await Notifications.getPermissionsAsync();
+    let finalStatus = status;
+  
+    if (status !== 'granted') {
+      const { status: newStatus } = await Notifications.requestPermissionsAsync();
+      finalStatus = newStatus;
+      console.log(":dddddd")
+    }
+  
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notifications!');
+      return;
+    }
+  
+    const token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token,"cxzcxvcx"); // You can save the token to your backend for later use
+  };
   const Stack = createNativeStackNavigator();
 
   return (

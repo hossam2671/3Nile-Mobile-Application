@@ -43,7 +43,7 @@ const Notification= () => {
 
 
       socket.on('Owner-accepted-Trip', (data) => {
-      
+        
         dispatch(notify(true))
 
 
