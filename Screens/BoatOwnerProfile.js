@@ -194,7 +194,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  
   },
+
   profile__cover__image: {
     width: 420,
     height: 170,
@@ -215,6 +217,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     top: 6,
     left: -23,
+
   },
   user__profile__info__right: {
     display: 'flex',
@@ -325,6 +328,7 @@ borderTopLeftRadius:20,
 borderBottomLeftRadius:20,  
  height:150,
     width:160,
+   
   },
 
   chisp:{

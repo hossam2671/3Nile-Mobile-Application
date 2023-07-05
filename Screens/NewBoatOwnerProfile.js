@@ -1320,6 +1320,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
+     
     },
 
     edit__button: {
@@ -1383,6 +1384,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         marginBottom: 15
     },
+  
     card__image: {
         width: 270,
         height: 120,

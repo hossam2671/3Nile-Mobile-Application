@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 50,
     position: "absolute",
-    left: 210,
+    left: 200,
     zIndex: 5000,
     top: 150,
   },
@@ -113,11 +113,11 @@ const styles = StyleSheet.create({
     width: windowWidth - 330, // Adjust the width based on your requirements
   },
   seat: {
-    aspectRatio: 2,
+    aspectRatio: 1,
     borderWidth: 3,
     borderColor: '#060706',
-    marginTop: 5,
-    marginLeft:15,
+    marginTop: 2,
+    marginLeft:33,
     flex: 1,
     // height: 8,
     backgroundColor: '#bccdc9',

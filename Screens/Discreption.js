@@ -87,9 +87,9 @@ console.log(formattedTime,"Te4eeeee2");
             setDate(params.date);
             console.log(params)
             setDateisPicked(true)
-            const datepi=[...params?.date?.toString().split(" ")[1]," ",...params?.date?.toString().split(" ")[2]," ",...params.date.toString().split(" ")[3]].join("")
+            // const datepi=[...params?.date?.toString().split(" ")[1]," ",...params?.date?.toString().split(" ")[2]," ",...params.date.toString().split(" ")[3]].join("")
         
-            setdateOnly(datepi)
+            // setdateOnly(datepi)
             console.log(dateOnly,"dateOnlydateOnly")
         },
         [setOpen, setDate]

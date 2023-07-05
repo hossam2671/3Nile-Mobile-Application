@@ -806,13 +806,13 @@ bookBtn: {
 
 arrow: {
     color: '#000000',
-    backgroundColor: '#b5d6f172',
+    backgroundColor: '#d3d3d372',
     borderRadius:50,
     width:60,
     height:60,
     paddingTop:10,
     marginTop:80,
-    left:40,
+    left:50,
     top:60,
     color:"#010101",
     paddingLeft:10,

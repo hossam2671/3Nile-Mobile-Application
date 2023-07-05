@@ -32,7 +32,7 @@ import { useSelector ,useDispatch} from 'react-redux';
 import ip from '../config'
 import Seats from './Seats/Seats';
 import { formatDate } from '../functions';
-import { convertToAmPm } from '../functions';
+import { convertToAmPmFor3NileBus } from '../functions';
 
 const renderPagination = (index, total, context) => {
     return (
@@ -164,7 +164,7 @@ useEffect(()=>{
         <Text style={styles?.cardItems_name}> {Data?.boat?.name}</Text>
        <Text style={styles?.cardItems_date}> {formatDate(Data?.date)}</Text>
        <Iconn name="date" color={'#000'} size={20} style={styles?.cardItems_date_icon} />
-        <Text style={styles?.cardItems_time}> {convertToAmPm(Data?.time)}</Text>
+        <Text style={styles?.cardItems_time}> {convertToAmPmFor3NileBus(Data?.time)}</Text>
         <Iconnn name="time-outline" color={'#000'} size={20} style={styles?.cardItems_time_icon} />
         <View style={styles?.card}>
         <Text style={styles?.cardItems_availableSeats}>Available Seats</Text>
@@ -218,13 +218,13 @@ useEffect(()=>{
             { Deatils?.TripDetails ? 
             <>
         <IconButton
-        icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
+        icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:15,zIndex:1000}} />}
         
         
         style={{marginLeft:-230}}
         onPress={() => setModalVisible(false)}
       />
-            <Image source={succ} style={styles?.succ} />
+            {/* <Image source={succ} style={styles?.succ} /> */}
         <Text style={styles?.TotalPrice_text}>bookingBarcode :{Deatils?.TripDetails?.TotalPrice}</Text>
         <Text style={styles?.numberOfSeats_text}>numberOfSeats :{Deatils?.TripDetails?.numberOfSeats}</Text>
        
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         position: 'absolute',
         top:153,
-        left:85 ,
+        left:110 ,
     },
     card:{
         height: 490,
@@ -525,7 +525,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: 'rgba(34, 34, 34, 0.5)',
     width:480,
     // marginRight:-60,
     right:30,
@@ -535,7 +535,7 @@ const styles = StyleSheet.create({
   modalContainer_card_con:{
     backgroundColor: 'rgba(247, 247, 247, 1)',
     width:260,
-    height:270,
+    height:210,
     borderRadius:20,
     justifyContent: 'center',
     alignItems: 'center',
@@ -546,16 +546,16 @@ const styles = StyleSheet.create({
   },
   barCode_text:{
 paddingBottom:10,
-right:30,
-color: '#0c8df7',
+// right:30,
+color: '#000000',
   },
   TotalPrice_text:{
   
-    color: '#0c8df7',
+    color: '#000000',
   },
   numberOfSeats_text:{
     padding:10,
-    color: '#0c8df7',
+    color: '#000000',
   },
   succ:{
     width:70,
