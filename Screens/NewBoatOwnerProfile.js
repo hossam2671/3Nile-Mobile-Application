@@ -27,7 +27,7 @@ import cardboat from '../assets/Nile.jpg'
 import boat from '../assets/Nile.jpg';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
-import { ownerUpdateInfo, SwvlDetails, getOwnerBoats, getOwnerCurrentTrips, getOwnerPreviousTrips, getOwnerRequests, addBoat, ownerAcceptTrip, ownerCancelTrip, ownerFinishTrip,  fireSwvl, ownerSwvl, logoutt, OwnerdeleteBoat } from '../redux/slices/UserSlice';
+import { ownerUpdateInfo, SwvlDetails, getOwnerBoats, getOwnerCurrentTrips, getOwnerPreviousTrips, getOwnerRequests, addBoat, ownerAcceptTrip, ownerCancelTrip, ownerFinishTrip, fireSwvl, ownerSwvl, logoutt, OwnerdeleteBoat } from '../redux/slices/UserSlice';
 import { SelectList } from 'react-native-dropdown-select-list'
 //modal
 import Modal from "react-native-modal";
@@ -50,41 +50,41 @@ function NewBoatOwnerProfile(props) {
     const pickBoatImages = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
         });
         console.log(result);
 
         if (!result.canceled) {
-          setImage(result.assets[0].uri);
+            setImage(result.assets[0].uri);
         }
-      };
+    };
     const [date, setDate] = React.useState(undefined);
-  const [open, setOpen] = React.useState(false);
-  const onDismissSingle = React.useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
-  const onConfirmSingle = React.useCallback(
-    (params) => {
-      setOpen(false);
-      setDate(params.date);
-    },
-    [setOpen, setDate]
-  );
-  const [visible, setVisible] = React.useState(false)
-  const onDismiss = React.useCallback(() => {
-    setVisible(false)
-  }, [setVisible])
-  const onConfirm = React.useCallback(
-    ({ hours, minutes }) => {
-      setVisible(false);
-      console.log({ hours, minutes });
-      setTime(`${hours} - ${minutes}`)
-    },
-    [setVisible]
-  );
+    const [open, setOpen] = React.useState(false);
+    const onDismissSingle = React.useCallback(() => {
+        setOpen(false);
+    }, [setOpen]);
+    const onConfirmSingle = React.useCallback(
+        (params) => {
+            setOpen(false);
+            setDate(params.date);
+        },
+        [setOpen, setDate]
+    );
+    const [visible, setVisible] = React.useState(false)
+    const onDismiss = React.useCallback(() => {
+        setVisible(false)
+    }, [setVisible])
+    const onConfirm = React.useCallback(
+        ({ hours, minutes }) => {
+            setVisible(false);
+            console.log({ hours, minutes });
+            setTime(`${hours} - ${minutes}`)
+        },
+        [setVisible]
+    );
     const [selected, setSelected] = React.useState("");
     const [type, setType] = React.useState("");
     const [boatName, setBoatName] = useState("")
@@ -94,7 +94,7 @@ function NewBoatOwnerProfile(props) {
     const [allBoats, setAllBoats] = useState([])
     const [prevBoats, setPrevBoats] = useState([])
     const [currBoats, setCurrBoats] = useState([])
-    const [swvlTrips , setSwvlTrips] = useState([])
+    const [swvlTrips, setSwvlTrips] = useState([])
     const data = [
         { key: 'KFC', value: 'KFC' },
         { key: 'MAC', value: 'MAC' },
@@ -112,14 +112,14 @@ function NewBoatOwnerProfile(props) {
 
     const [boatOwnerState, setboatOwnerState] = useState(boatOwner)
     const dispatch = useDispatch();
- // add swvl
-    const [boatId , setBoatId] = useState(0)
-    const [time , setTime] = useState("")
-    const [targetPlace , setTargetPlace] = useState("")
-    const [swvlPrice , setSwvlPrice] = useState(0)
-    const [swvlType , setSwvlType] = useState("")
+    // add swvl
+    const [boatId, setBoatId] = useState(0)
+    const [time, setTime] = useState("")
+    const [targetPlace, setTargetPlace] = useState("")
+    const [swvlPrice, setSwvlPrice] = useState(0)
+    const [swvlType, setSwvlType] = useState("")
 
- // end add swvl
+    // end add swvl
 
     //modal
 
@@ -146,58 +146,58 @@ function NewBoatOwnerProfile(props) {
     async function submit() {
         const formData = new FormData();
         const timestamp = Date.now();
-      
+
         boatImages.forEach((image, index) => {
-          const uriParts = image.split('.');
-          const fileExtension = uriParts[uriParts.length - 1];
-          const imageName = `image_${timestamp}_${index}.${fileExtension}`;
-      
-          formData.append('images', {
-            uri: image,
-            name: imageName,
-            type: `image/${fileExtension}`,
-          });
+            const uriParts = image.split('.');
+            const fileExtension = uriParts[uriParts.length - 1];
+            const imageName = `image_${timestamp}_${index}.${fileExtension}`;
+
+            formData.append('images', {
+                uri: image,
+                name: imageName,
+                type: `image/${fileExtension}`,
+            });
         });
-      
+
         formData.append('id', boatOwner._id);
         formData.append('name', boatName);
         formData.append('description', boatDescription);
         formData.append('price', boatPrice);
         formData.append('portName', selected);
         formData.append('type', type);
-      console.log(formData)
+        console.log(formData)
         try {
-          let res = await axios.post(`http://${ip}:5000/boatOwner/addBoatt`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }).then((ress)=>{
-            setAllBoats(ress.data)
-            setAddBoatModal(1)
-            setTimeout(()=>{
-                setAddBoatModal(0)
-                
-              },3000)
-          });
-      
-        
-        
-      
-          // dispatch(addBoat({id:boatOwner._id,name:boatName,description:boatDescription,price:boatPrice,portName:selected,type:type}))
-          // .then((res)=>{
-          //     dispatch(getOwnerBoats(boatOwner._id)).then((res)=>{
-          //
-          //     })
-          // })
-      
-          setAddVisibleModal(0);
+            let res = await axios.post(`http://${ip}:5000/boatOwner/addBoatt`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }).then((ress) => {
+                setAllBoats(ress.data)
+                setAddBoatModal(1)
+                setTimeout(() => {
+                    setAddBoatModal(0)
+
+                }, 3000)
+            });
+
+
+
+
+            // dispatch(addBoat({id:boatOwner._id,name:boatName,description:boatDescription,price:boatPrice,portName:selected,type:type}))
+            // .then((res)=>{
+            //     dispatch(getOwnerBoats(boatOwner._id)).then((res)=>{
+            //
+            //     })
+            // })
+
+            setAddVisibleModal(0);
         } catch (error) {
-          // Handle error here
-          console.error(error);
+            // Handle error here
+            console.error(error);
         }
-      }
-    function fire(){
-        dispatch(fireSwvl({boatId:boatId,time:time , port:swvlType , targetPlace:targetPlace , date:date , priceForTrip:swvlPrice}))
+    }
+    function fire() {
+        dispatch(fireSwvl({ boatId: boatId, time: time, port: swvlType, targetPlace: targetPlace, date: date, priceForTrip: swvlPrice }))
         setswVlVisibleModal(0)
     }
 
@@ -222,7 +222,7 @@ function NewBoatOwnerProfile(props) {
 
 
                 <TextInput style={styles.modal__input}
-                   placeholder={boatOwner.name} 
+                    placeholder={boatOwner.name}
                     placeholderTextColor="#0000006a"
                     onChangeText={(e) => {
                         setEditboatOwnerName(e);
@@ -230,7 +230,7 @@ function NewBoatOwnerProfile(props) {
                     }}
                 />
                 <TextInput style={styles.modal__input}
-                  placeholder={boatOwner.phone ? boatOwner.phone : "Your Phone"}
+                    placeholder={boatOwner.phone ? boatOwner.phone : "Your Phone"}
                     placeholderTextColor="0000006a"
                     onChangeText={(e) => setEditboatOwnerPhone(e)}
 
@@ -243,16 +243,16 @@ function NewBoatOwnerProfile(props) {
 
 
             {renderButton('Apply', () => {
-                
 
-                dispatch(ownerUpdateInfo({ boatOwnerId:boatOwner._id , name:editboatOwnerName , phone:editeditboatOwnerPhone })).then((res) => {
+
+                dispatch(ownerUpdateInfo({ boatOwnerId: boatOwner._id, name: editboatOwnerName, phone: editeditboatOwnerPhone })).then((res) => {
                     setVisibleModal(false)
                     console.log(res.payload.data, "ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
                     setboatOwnerState(res.payload.data)
                     setEditModal(1)
-                    setTimeout(()=>{                        
+                    setTimeout(() => {
                         setEditModal(0)
-                      },3000)
+                    }, 3000)
                 })
             })}
 
@@ -275,28 +275,30 @@ function NewBoatOwnerProfile(props) {
         <View style={styles.modalContent}>
             <View style={styles.select}>
                 <Text style={styles.add__boat__text}>Add Boat</Text>
-               
+
                 {/* <Text style={styles.add__boat__close__icon} onPress={closeModal()}>X</Text> */}
-                <View style={{  alignItems: 'center', justifyContent: 'center' }}>
-                <TouchableOpacity onPress={() => { pickBoatImage() }}>
-                        <Text> Boat Image</Text>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <TouchableOpacity
+                    style={styles.upload__image__button}
+                    onPress={() => { pickBoatImage() }}>
+                        <Text><Icon name="upload" color={'#0c8df7'} size={15} style={styles.upload__image__icon} /> Upload Image</Text>
                     </TouchableOpacity>
                     <View style={styles.boatImages}>
-                    {boatImages && 
-  boatImages.map((item, index) => (
-    <>
-      <Image source={{ uri: item }} style={{ width: 100, height: 100 }} />
-      <TouchableOpacity style={{right:15}} onPress={() => {
-        boatImages.splice(index, 1);
-        setBoatImages([...boatImages]);
-      }}>
-        <Text>X</Text>
-      </TouchableOpacity>
-    </>
-  ))
-}
-</View>
-    </View>
+                        {boatImages &&
+                            boatImages.map((item, index) => (
+                                <>
+                                    <Image source={{ uri: item }} style={{ width: 100, height: 100 }} />
+                                    <TouchableOpacity style={{ right: 15 }} onPress={() => {
+                                        boatImages.splice(index, 1);
+                                        setBoatImages([...boatImages]);
+                                    }}>
+                                        <Text>X</Text>
+                                    </TouchableOpacity>
+                                </>
+                            ))
+                        }
+                    </View>
+                </View>
                 <TextInput
                     name="name"
                     style={styles.modal__input}
@@ -361,7 +363,7 @@ function NewBoatOwnerProfile(props) {
             {addBoatrenderButton('Apply', submit)}
         </View>
     );
-    const [editModal , setEditModal] = useState(0)
+    const [editModal, setEditModal] = useState(0)
     const editInfoModal = () => (
         <View style={styles.modalContent}>
             <Text>Your Information has Changed successfully </Text>
@@ -370,7 +372,7 @@ function NewBoatOwnerProfile(props) {
 
 
 
-    const [editImageModal , setEditImageModal] = useState(0)
+    const [editImageModal, setEditImageModal] = useState(0)
     const EditImageModal = () => (
         <View style={styles.modalContent}>
             <Text>Your Image has Changed successfully </Text>
@@ -378,15 +380,15 @@ function NewBoatOwnerProfile(props) {
     );
 
 
-    const [addBoatModal , setAddBoatModal] = useState(0)
+    const [addBoatModal, setAddBoatModal] = useState(0)
     const AddBoatModal = () => (
         <View style={styles.modalContent}>
             <Text>Your boat has been Added successfully </Text>
         </View>
     );
-    
-    
-    const [deleteBoatModal , setDeleteBoatModal] = useState(0)
+
+
+    const [deleteBoatModal, setDeleteBoatModal] = useState(0)
     const DeleteBoatModal = () => (
         <View style={styles.modalContent}>
             <Text>Your boat has been Deleted </Text>
@@ -405,7 +407,7 @@ function NewBoatOwnerProfile(props) {
                     style={styles.modal__input}
                     placeholder="Target place"
                     placeholderTextColor={'#0000006a'}
-                     onChangeText={(e) => setTargetPlace(e)}
+                    onChangeText={(e) => setTargetPlace(e)}
                     value={targetPlace}
                 />
 
@@ -415,13 +417,13 @@ function NewBoatOwnerProfile(props) {
                     style={styles.modal__input}
                     placeholder="Price"
                     placeholderTextColor={'#0000006a'}
-                     onChangeText={(e) => setSwvlPrice(e)}
+                    onChangeText={(e) => setSwvlPrice(e)}
                     required={true}
                     value={swvlPrice}
                 />
 
 
-               
+
                 <View style={styles.modal__dropdown}>
                     <SelectList
                         name="port"
@@ -432,39 +434,39 @@ function NewBoatOwnerProfile(props) {
                         arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
                         //   searchicon={<Icon name="search" size={12} color={'black'} />} 
                         search={false}
-                        boxStyles={{ borderRadius: 0 }} 
-                        defaultOption={{ key: 'KFC', value: 'KFC' }}  
+                        boxStyles={{ borderRadius: 0 }}
+                        defaultOption={{ key: 'KFC', value: 'KFC' }}
                     />
 
-                <SafeAreaProvider>
-      <View style={{justifyContent: 'center', flex: 1, alignItems: 'center'}}>
-        <Button onPress={() => setOpen(true)} uppercase={false} mode="outlined">
-          Pick single date
-        </Button>
-        <DatePickerModal
-          locale="en"
-          mode="single"
-          visible={open}
-          onDismiss={onDismissSingle}
-          date={date}
-          onConfirm={onConfirmSingle}
-        />
-      </View>
-    </SafeAreaProvider>
-    <SafeAreaProvider>
-      <View style={{justifyContent: 'center', flex: 1, alignItems: 'center'}}>
-        <Button onPress={() => setVisible(true)} uppercase={false} mode="outlined">
-          Pick time
-        </Button>
-        <TimePickerModal
-          visible={visible}
-          onDismiss={onDismiss}
-          onConfirm={onConfirm}
-          hours={12}
-          minutes={14}
-        />
-      </View>
-    </SafeAreaProvider>
+                    <SafeAreaProvider>
+                        <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+                            <Button onPress={() => setOpen(true)} uppercase={false} mode="outlined">
+                                Pick single date
+                            </Button>
+                            <DatePickerModal
+                                locale="en"
+                                mode="single"
+                                visible={open}
+                                onDismiss={onDismissSingle}
+                                date={date}
+                                onConfirm={onConfirmSingle}
+                            />
+                        </View>
+                    </SafeAreaProvider>
+                    <SafeAreaProvider>
+                        <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+                            <Button onPress={() => setVisible(true)} uppercase={false} mode="outlined">
+                                Pick time
+                            </Button>
+                            <TimePickerModal
+                                visible={visible}
+                                onDismiss={onDismiss}
+                                onConfirm={onConfirm}
+                                hours={12}
+                                minutes={14}
+                            />
+                        </View>
+                    </SafeAreaProvider>
                 </View>
 
             </View>
@@ -485,7 +487,7 @@ function NewBoatOwnerProfile(props) {
         console.log(result);
 
         if (!result.canceled) {
-            const newImages = [...boatImages,result.uri].slice(0,9);
+            const newImages = [...boatImages, result.uri].slice(0, 9);
             setBoatImages(newImages);
         }
     };
@@ -506,26 +508,26 @@ function NewBoatOwnerProfile(props) {
         if (!result.canceled) {
             const uriParts = result.uri.split('.');
             const fileExtension = uriParts[uriParts.length - 1];
-    const timestamp = Date.now();
+            const timestamp = Date.now();
             setImage(result.uri);
             const formData = new FormData();
             formData.append('img', {
                 uri: image,
                 name: `image_${timestamp}.jpeg`,
                 type: `image/${fileExtension}`,
-              });
-           
+            });
+
             const response = await axios.put(`http://${ip}:5000/boatOwner/editImage/${boatOwner._id}`, formData, {
                 headers: {
-                  'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'multipart/form-data',
                 },
-              }).then(()=>{
+            }).then(() => {
                 setEditImageModal(1)
-                setTimeout(()=>{
+                setTimeout(() => {
                     setEditImageModal(0)
-                   
-                  },3000)
-              });
+
+                }, 3000)
+            });
         }
     };
 
@@ -551,7 +553,7 @@ function NewBoatOwnerProfile(props) {
     const { ownerSwvlTrip } = useSelector(state => state.UserSlice)
 
     useEffect(() => {
-       
+
         dispatch(getOwnerBoats(boatOwner._id)).then((first) => {
             setAllBoats(first.payload.data)
             setTap("allBoats")
@@ -567,12 +569,12 @@ function NewBoatOwnerProfile(props) {
         dispatch(getOwnerCurrentTrips(boatOwner._id)).then((first) => {
             setCurrBoats(first)
         })
-        dispatch(ownerSwvl(boatOwner._id)).then((first)=>{
-            console.log(first.payload.data,"hoho@gmail.com")
+        dispatch(ownerSwvl(boatOwner._id)).then((first) => {
+            console.log(first.payload.data, "hoho@gmail.com")
             setSwvlTrips(first)
         })
-        console.log(ownerRequestsTrips,"checkreq")
-       
+        console.log(ownerRequestsTrips, "checkreq")
+
 
     }, []);
     const TabButton = ({ currentTab, setCurrentTab, title, icon, onPress }) => {
@@ -618,62 +620,62 @@ function NewBoatOwnerProfile(props) {
         dispatch(pendingTrips({ id: boatOwner._id }))
         dispatch(canceltrip(id)).then(() => dispatch(pendingTrips({ id: boatOwner._id })))
     }
-    
+
 
     return (
-        
+
         <SafeAreaView style={styles.container}>
 
             <Modal
-            key="modal1"
-            isVisible={visibleModal === 1} style={styles.bottomModal}>
+                key="modal1"
+                isVisible={visibleModal === 1} style={styles.bottomModal}>
 
                 {renderModalContent()}
             </Modal>
 
             <Modal
-            
-            key="modal2"
-            isVisible={addvisibleModal === 1} style={styles.bottomModal}>
+
+                key="modal2"
+                isVisible={addvisibleModal === 1} style={styles.bottomModal}>
 
                 {addBoatrenderModalContent()}
             </Modal>
 
             <Modal
-            key="modal3"
-            isVisible={swVlvisibleModal === 1} style={styles.bottomModal}>
+                key="modal3"
+                isVisible={swVlvisibleModal === 1} style={styles.bottomModal}>
 
                 {SwvlModalContent()}
             </Modal>
-            <Modal 
-            key="modal4"
-            
-            isVisible={editModal === 1} style={styles.bottomModal}>
+            <Modal
+                key="modal4"
+
+                isVisible={editModal === 1} style={styles.bottomModal}>
 
                 {editInfoModal()}
             </Modal>
 
-            <Modal 
-            key="modal5"
-            
-            isVisible={editImageModal === 1} style={styles.bottomModal}>
+            <Modal
+                key="modal5"
+
+                isVisible={editImageModal === 1} style={styles.bottomModal}>
 
                 {EditImageModal()}
             </Modal>
 
 
             <Modal
-            key="modal6"
-            
-            isVisible={addBoatModal === 1} style={styles.bottomModal}>
+                key="modal6"
+
+                isVisible={addBoatModal === 1} style={styles.bottomModal}>
 
                 {AddBoatModal()}
             </Modal>
 
             <Modal
-            key="modal7"
-            
-            isVisible={deleteBoatModal === 1} style={styles.bottomModal}>
+                key="modal7"
+
+                isVisible={deleteBoatModal === 1} style={styles.bottomModal}>
 
                 {DeleteBoatModal()}
             </Modal>
@@ -817,11 +819,11 @@ function NewBoatOwnerProfile(props) {
                         icon={reqI}
                         onPress={() => {
                             setTap("req")
-                    
+
                             dispatch(getOwnerRequests(boatOwner._id)).then((first) => {
                                 console.log(first, "iiisadiiiiiiii")
                                 setOwnerReqs(first)
-                            })                           
+                            })
                             console.log(tap)
                             setCurrentTab("Owner Requests")
                             Animated.timing(scaleValue, {
@@ -928,15 +930,15 @@ function NewBoatOwnerProfile(props) {
                         setCurrentTab={setCurrentTab}
                         title="Logout"
                         icon={logout}
-                        onPress={() => {                  
-                                props.navigation.navigate("LoginSignUp")
+                        onPress={() => {
+                            props.navigation.navigate("LoginSignUp")
                         }}
                     />
                 </View>
 
             </View>
 
-        
+
 
             <Animated.View style={{
                 flexGrow: 1,
@@ -1015,8 +1017,8 @@ function NewBoatOwnerProfile(props) {
                         width: 90,
                         height: 90,
                         borderRadius: 50,
-                        borderColor:"black",
-                        borderWidth:1,
+                        borderColor: "black",
+                        borderWidth: 1,
                         bottom: 45,
                         left: 165,
                     }}></Image>
@@ -1037,95 +1039,93 @@ function NewBoatOwnerProfile(props) {
                         <Icon name="camera" size={20} color="#7c7d7e" style={styles.icon__button} />
                     </TouchableOpacity>
 
-                
+                    <View style={{marginBottom:760 , bottom: 80}}>
+                        {
+                            tap == "req" && (
+                                <FlatList
+                                    data={ownerReqs.payload.data}
+                                    // contentContainerStyle={{ paddingBottom: 200 }}
+                                    keyExtractor={(item) => item._id}
+                                    renderItem={({ item }) => (
+                                        <View style={styles.card__box}>
+                                            <View style={styles.card__image}>
+                                                <Image source={{
+                                                    uri: `http://${ip}:5000/${item?.boatId?.images[0]}`
+                                                }} style={styles.cardboat__img} />
+                                            </View>
+                                            <View style={styles.card__content}>
+                                                <Text style={styles.card__name}>{item.boatId.name}</Text>
+                                                <Icona name="location" size={13} style={styles.loc__icon} />
+                                                <Text style={styles.card__location}>{item.price} EGP</Text>
+                                                <IIcon name="date-range" size={13} />
+                                                <Text style={styles.card__date}>{item.boatId.type}</Text>
+                                                <Text style={styles.card__price}>{item.boatId.portName}</Text>
+                                                <TouchableOpacity onPress={() => {
+                                                    dispatch(ownerAcceptTrip(item._id)).then((res) => {
+                                                        dispatch(getOwnerRequests(boatOwner._id)).then((res) => {
+                                                            setOwnerReqs(res)
 
-                    
-<>
-
-                    {
-                        tap == "req" && (
-                    
-
-<FlatList
-                                data={ownerReqs.payload.data}
-                                keyExtractor={(item) => item._id}
-                                renderItem={({ item }) => (
-                                    <View style={styles.card__box}>
-                                        <View style={styles.card__image}>
-                                        <Image  source={{
-                            uri: `http://${ip}:5000/${item?.boatId?.images[0]}`}} style={styles.cardboat__img} /> 
-                                        </View>
-                                        <View style={styles.card__content}>
-                                            <Text style={styles.card__name}>{item.boatId.name}</Text>
-                                            <Icona name="location" size={13} style={styles.loc__icon} />
-                                            <Text style={styles.card__location}>{item.price} EGP</Text>
-                                            <IIcon name="date-range" size={13} />
-                                            <Text style={styles.card__date}>{item.boatId.type}</Text>
-                                            <Text style={styles.card__price}>{item.boatId.portName}</Text>
-                                            <TouchableOpacity onPress={() => {
-                                                dispatch(ownerAcceptTrip(item._id)).then((res) => {
-                                                    dispatch(getOwnerRequests(boatOwner._id)).then((res) => {
-                                                        setOwnerReqs(res)
-
-                                                        dispatch(getOwnerCurrentTrips(boatOwner._id)).then((res) => {
-                                                            console.log(res, "ggggggggggggggggggggggggg")
-                                                            setCurrBoats(res)
+                                                            dispatch(getOwnerCurrentTrips(boatOwner._id)).then((res) => {
+                                                                console.log(res, "ggggggggggggggggggggggggg")
+                                                                setCurrBoats(res)
+                                                            })
                                                         })
-                                                    })
-                                                  
-                                                }); console.log("first")
 
-                                            }}>
-                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Accept</Text></View>
-                                            </TouchableOpacity>
+                                                    }); console.log("first")
+
+                                                }}>
+                                                    <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Accept</Text></View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() => {
+                                                    dispatch(ownerCancelTrip(item._id)).then((res) => {
+                                                        dispatch(getOwnerRequests(boatOwner._id)).then((res) => {
+                                                            setOwnerReqs(res)
+                                                        })
+                                                    }); console.log("first")
+
+                                                }}>
+                                                    <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>cancel</Text></View>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    )}
+                                />
+
+                            )
+
+                        }
+                        {
+                            tap == "allBoats" && (
+
+
+                                <FlatList
+                                style={{ marginBottom: 20 }}
+                                    data={allBoats}
+                                    keyExtractor={(item) => item._id}
+                                    renderItem={({ item }) => (
+                                        <View style={styles.card__box}>
+                                            <View style={styles.card__image}>
+                                                <Image source={{
+                                                    uri: `http://${ip}:5000/${item?.images[0]}`
+                                                }} style={styles.cardboat__img} />
+
+
+
+                                            </View>
+                                            <View style={styles.card__content}>
+                                                <Text style={styles.card__name}>{item.name}</Text>
+                                                <Icona name="location" size={13} style={styles.loc__icon} />
+                                                <Text style={styles.card__location}>{item.price}</Text>
+                                                <IIcon name="date-range" size={13} />
+                                                <Text style={styles.card__date}>{item.type}</Text>
+                                                <Text style={styles.card__price}>{item.portName}</Text>
+                                            </View>
                                             <TouchableOpacity onPress={() => {
-                                                dispatch(ownerCancelTrip(item._id)).then((res) => {
-                                                    dispatch(getOwnerRequests(boatOwner._id)).then((res) => {
-                                                        setOwnerReqs(res)
-                                                    })
-                                                }); console.log("first")
-
-                                            }}>
-                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>cancel</Text></View>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                )}
-                            />
-                       
-                        )
-
-                    }
-                    {
-                        tap == "allBoats" && (
-                
-
-<FlatList
-                                data={allBoats}
-                                keyExtractor={(item) => item._id}
-                                renderItem={({ item }) => (
-                                    <View style={styles.card__box}>
-                                        <View style={styles.card__image}>
-                                            <Image  source={{
-                                uri: `http://${ip}:5000/${item?.images[0]}`}} style={styles.cardboat__img} /> 
-
-
-
-                                        </View>
-                                        <View style={styles.card__content}>
-                                            <Text style={styles.card__name}>{item.name}</Text>
-                                            <Icona name="location" size={13} style={styles.loc__icon} />
-                                            <Text style={styles.card__location}>{item.price}</Text>
-                                            <IIcon name="date-range" size={13} />
-                                            <Text style={styles.card__date}>{item.type}</Text>
-                                            <Text style={styles.card__price}>{item.portName}</Text>
-                                        </View>
-                                        <TouchableOpacity onPress={() => {
-                                                dispatch(OwnerdeleteBoat({ownerId:boatOwner._id,id:item._id})).then((res)=>{
+                                                dispatch(OwnerdeleteBoat({ ownerId: boatOwner._id, id: item._id })).then((res) => {
                                                     setDeleteBoatModal(1)
-                                                    setTimeout(()=>{
+                                                    setTimeout(() => {
                                                         setDeleteBoatModal(0)
-                                                      },3000)
+                                                    }, 3000)
                                                     dispatch(getOwnerBoats(boatOwner._id)).then((first) => {
                                                         setAllBoats(first.payload.data)
                                                     })
@@ -1133,133 +1133,139 @@ function NewBoatOwnerProfile(props) {
                                             }}>
                                                 <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Delete Boat</Text></View>
                                             </TouchableOpacity>
-                                        {
-                                            item.category == "swvl" &&
+                                            {
+                                                item.category == "swvl" &&
+                                                <TouchableOpacity onPress={() => {
+                                                    setswVlVisibleModal(1)
+                                                    setBoatId(item._id)
+                                                }}>
+                                                    <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>+ Add swvl</Text></View>
+                                                </TouchableOpacity>
+                                            }
+                                        </View>
+                                    )}
+                                />
+
+                            )
+
+                        }
+                        {
+                            tap == "prev" && (
+
+                                <FlatList
+                                    data={prevBoats.payload.data}
+                                    keyExtractor={(item) => item._id}
+                                    renderItem={({ item }) => (
+                                        <View style={styles.card__box}>
+                                            <View style={styles.card__image}>
+                                                <Image source={{
+                                                    uri: `http://${ip}:5000/${item?.boatId?.images[0]}`
+                                                }} style={styles.cardboat__img} />
+
+                                            </View>
+                                            <View style={styles.card__content}>
+                                                <Text style={styles.card__name}>{item.boatId.name}</Text>
+                                                <Icona name="location" size={13} style={styles.loc__icon} />
+                                                <Text style={styles.card__location}>{item.price}</Text>
+                                                <IIcon name="date-range" size={13} />
+                                                <Text style={styles.card__date}>{item.boatId.type}</Text>
+                                                <Text style={styles.card__price}>{item.boatId.portName}</Text>
+                                            </View>
+                                            <View
+
+
+                                                        style={styles?.card__Rate}
+                                                    >
+                                                        <StarRating
+
+                                                            key={item?._id}
+                                                            disabled={false}
+                                                            maxStars={5}
+                                                            rating={item?.rate?.rating}
+                                                            // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
+                                                            starSize={15}
+                                                            fullStarColor="orange"
+                                                            emptyStarColor="#e4e5e9"
+                                                        />
+                                                    </View>
+                                        </View>
+                                    )}
+                                />
+
+                            )
+
+                        }
+                        {
+                            tap == "curr" && (
+
+
+                                <FlatList
+                                    data={currBoats.payload.data}
+                                    keyExtractor={(item) => item._id}
+                                    renderItem={({ item }) => (
+                                        <View style={styles.card__box}>
+                                            <View style={styles.card__image}>
+                                                <Image source={{
+                                                    uri: `http://${ip}:5000/${item?.boatId?.images[0]}`
+                                                }} style={styles.cardboat__img} />
+                                            </View>
+                                            <View style={styles.card__content}>
+                                                <Text style={styles.card__name}>{item.boatId.name}</Text>
+                                                <Icona name="location" size={13} style={styles.loc__icon} />
+                                                <Text style={styles.card__location}>{item.price}</Text>
+                                                <IIcon name="date-range" size={13} />
+                                                <Text style={styles.card__date}>{item.type}</Text>
+                                                <Text style={styles.card__price}>{item.portName}</Text>
+                                            </View>
                                             <TouchableOpacity onPress={() => {
-                                                setswVlVisibleModal(1)
-                                                setBoatId(item._id)
+                                                dispatch(ownerFinishTrip(item._id)).then((res) => {
+                                                    dispatch(getOwnerRequests(boatOwner._id)).then((res) => {
+                                                        setCurrBoats(res)
+                                                    })
+                                                    dispatch(getOwnerPreviousTrips(boatOwner._id)).then((res) => {
+                                                        setPrevBoats(res)
+                                                    })
+                                                }); console.log("first")
+
                                             }}>
-                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>+ Add swvl</Text></View>
+                                                <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Finish</Text></View>
                                             </TouchableOpacity>
-                                        }
-                                    </View>
-                                )}
-                            />
-                        
-                        )
+                                        </View>
+                                    )}
+                                />
 
-                    }
-                    {
-                        tap == "prev" && (
-                        
-                              <FlatList
-                                data={prevBoats.payload.data}
-                                keyExtractor={(item) => item._id}
-                                renderItem={({ item }) => (
-                                    <View style={styles.card__box}>
-                                        <View style={styles.card__image}>
-                                        <Image  source={{
-                            uri: `http://${ip}:5000/${item?.boatId?.images[0]}`}} style={styles.cardboat__img} /> 
+                            )
+
+                        }
+                        {
+                            tap == "Swvl" && (
+
+                                <FlatList
+                                    data={swvlTrips.payload.data}
+                                    keyExtractor={(item) => item._id}
+                                    renderItem={({ item }) => (
+                                        <View style={styles.card__box}>
+                                            <View style={styles.card__image}>
+                                                <Image source={cardboat} style={styles.cardboat__img} />
+                                            </View>
+                                            <View style={styles.card__content}>
+                                                <Text style={styles.card__name}>{item.boat.name}</Text>
+                                                <Icona name="location" size={13} style={styles.loc__icon} />
+                                                <Text style={styles.card__location}>{item.priceForTrip}</Text>
+                                                <IIcon name="date-range" size={13} />
+                                                <Text style={styles.card__date}>{item.time}</Text>
+                                                <Text style={styles.card__price}>{item.date}</Text>
+                                            </View>
 
                                         </View>
-                                        <View style={styles.card__content}>
-                                            <Text style={styles.card__name}>{item.boatId.name}</Text>
-                                            <Icona name="location" size={13} style={styles.loc__icon} />
-                                            <Text style={styles.card__location}>{item.price}</Text>
-                                            <IIcon name="date-range" size={13} />
-                                            <Text style={styles.card__date}>{item.boatId.type}</Text>
-                                            <Text style={styles.card__price}>{item.boatId.portName}</Text>
-                                        </View>
-                                        {
-                                            item.rate &&
-                                            <StarRating
-                                                key={item._id}
-                                                disabled={false}
-                                                maxStars={5}
-                                                rating={item.rate.rating}
-                                                // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
-                                                starSize={20}
-                                                fullStarColor="#ffc107"
-                                                emptyStarColor="#e4e5e9"
-                                            ></StarRating>
-                                        }
-                                    </View>
-                                )}
-                            />
-                      
-                        )
+                                    )}
+                                />
 
-                    }
-                    {
-                        tap == "curr" && (
-                        
+                            )
 
-<FlatList
-                                data={currBoats.payload.data}
-                                keyExtractor={(item) => item._id}
-                                renderItem={({ item }) => (
-                                    <View style={styles.card__box}>
-                                        <View style={styles.card__image}>
-                                        <Image  source={{
-                            uri: `http://${ip}:5000/${item?.boatId?.images[0]}`}} style={styles.cardboat__img} /> 
-                                        </View>
-                                        <View style={styles.card__content}>
-                                            <Text style={styles.card__name}>{item.boatId.name}</Text>
-                                            <Icona name="location" size={13} style={styles.loc__icon} />
-                                            <Text style={styles.card__location}>{item.price}</Text>
-                                            <IIcon name="date-range" size={13} />
-                                            <Text style={styles.card__date}>{item.type}</Text>
-                                            <Text style={styles.card__price}>{item.portName}</Text>
-                                        </View>
-                                        <TouchableOpacity onPress={() => {
-                                            dispatch(ownerFinishTrip(item._id)).then((res) => {
-                                                dispatch(getOwnerRequests(boatOwner._id)).then((res) => {
-                                                    setCurrBoats(res)
-                                                })
-                                                dispatch(getOwnerPreviousTrips(boatOwner._id)).then((res) => {
-                                                    setPrevBoats(res)
-                                                })
-                                            }); console.log("first")
+                        }
 
-                                        }}>
-                                            <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Finish</Text></View>
-                                        </TouchableOpacity>
-                                    </View>
-                                )}
-                            />
-                         
-                        )
-
-                    }
-                     {
-                        tap == "Swvl" && (
-                     
-                             <FlatList
-                                data={swvlTrips.payload.data}
-                                keyExtractor={(item) => item._id}
-                                renderItem={({ item }) => (
-                                    <View style={styles.card__box}>
-                                        <View style={styles.card__image}>
-                                            <Image source={cardboat} style={styles.cardboat__img} />
-                                        </View>
-                                        <View style={styles.card__content}>
-                                            <Text style={styles.card__name}>{item.boat.name}</Text>
-                                            <Icona name="location" size={13} style={styles.loc__icon} />
-                                            <Text style={styles.card__location}>{item.priceForTrip}</Text>
-                                            <IIcon name="date-range" size={13} />
-                                            <Text style={styles.card__date}>{item.time}</Text>
-                                            <Text style={styles.card__price}>{item.date}</Text>
-                                        </View>
-                                        
-                                    </View>
-                                )}
-                            />
-                         
-                        )
-
-                    }
-
-</>
+                    </View>
 
                 </Animated.View>
 
@@ -1331,6 +1337,7 @@ const styles = StyleSheet.create({
         top: 7,
         textAlign: 'center',
         alignItems: 'center',
+        color: '#ffffff',
     },
     modalContent: {
         backgroundColor: '#fff',
@@ -1364,15 +1371,17 @@ const styles = StyleSheet.create({
     },
 
     card__box: {
-        // borderColor: '#000000',
-        //  borderWidth: 1,
         marginLeft: 60,
+        elevation: 4,
         width: 300,
         height: 300,
         borderRadius: 20,
-        marginBottom: 15,
-        elevation:20,
-        backgroundColor: '#fff'
+        backgroundColor: '#ffffff',
+        shadowColor: '#171717',
+        shadowOffset: { width: -2, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        marginBottom: 15
     },
     card__image: {
         width: 270,
@@ -1417,14 +1426,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
         left: 180,
         bottom: 50,
-        lineHeight:45,
-        marginBottom:10
+        lineHeight: 45,
+        marginBottom: 10
 
     },
     cancel__button__text: {
         fontSize: 15,
         fontWeight: 600,
         textAlign: 'center',
+        color: '#ffffff'
     },
     add__boat__button: {
         width: 85,
@@ -1439,6 +1449,7 @@ const styles = StyleSheet.create({
     add__boat__button__style: {
         fontSize: 15,
         fontWeight: 600,
+        color: '#ffffff'
     },
     add__boat__image__button: {
         width: 85,
@@ -1519,10 +1530,25 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
     },
-    boatImages:{
+    boatImages: {
         flexWrap: 'wrap',
-        flexDirection:"row"
-        
+        flexDirection: "row"
+
+    },
+    card__Rate: {
+        justifyContent: 'center',
+        width: 100,
+        borderRadius: 50,
+        marginTop: 20,
+        marginLeft: 160,
+    },
+    upload__image__button:{
+        borderColor: '#0c8df7',
+        borderWidth: 1,
+        padding: 5,
+        marginTop: 15,
+        marginBottom: 15,
+        borderRadius: 15,
     }
 });
 

@@ -11,7 +11,7 @@ import * as Animatable from 'react-native-animatable';
 import bk from '../assets/ady.jpg'
 import bkk from '../assets/adytoww.jpg'
 import bkkk from '../assets/viplll.jpg'
-import boat from '../assets/homeheader.jpg'
+import boat from '../assets/home1.jpeg'
 
 import Iconn from "react-native-vector-icons/FontAwesome"
 import { notify } from '../redux/slices/UserSlice';

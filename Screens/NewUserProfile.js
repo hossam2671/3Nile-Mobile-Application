@@ -364,7 +364,7 @@ function NewUserProfile(props) {
                             dispatch(pendingTrips({ id: user._id })).then((res) => {
                                 console.log(res.payload.data, "vcxvxcvcx");
                                 setData(res.payload.data)
-                                console.log(daaata,"ddddddddczxxz")
+                                console.log(daaata, "ddddddddczxxz")
 
                             })
 
@@ -571,9 +571,8 @@ function NewUserProfile(props) {
                         {
                             tap == "pending" && (
                                 <FlatList
-                                style={{
-                                    marginBottom: 250}}   
-                                    
+                                
+                                    style={{ marginBottom: 250 }}
                                     data={daaata}
                                     keyExtractor={(item) => item._id}
                                     renderItem={({ item }) => (
@@ -589,7 +588,7 @@ function NewUserProfile(props) {
                                                 <Text style={styles.card__location}>{item.boatId.portName}</Text>
                                                 <IIcon name="date-range" size={13} />
                                                 <Text style={styles.card__date}>{formatDate(item.startTime)}  At   {formatTime(item.startTime)} </Text>
-                                             
+
                                                 <Text style={styles.card__price}>{item.price}$</Text>
                                                 <TouchableOpacity onPress={() =>
 
@@ -609,8 +608,9 @@ function NewUserProfile(props) {
                         {
                             tap == "finished" && (
                                 <FlatList
-                                style={{
-                                    marginBottom: 250}}
+                                    style={{
+                                        marginBottom: 250
+                                    }}
                                     data={daaata}
                                     keyExtractor={(item) => item?._id}
                                     renderItem={({ item }) => (
@@ -623,7 +623,7 @@ function NewUserProfile(props) {
                                             <View style={styles?.card__content}>
                                                 <Text style={styles?.card__name}>{item?.boatId?.name}</Text>
                                                 <Icona name="location" size={13} style={styles?.loc__icon} />
-                                                <Text style={styles?.card__location}>{item.boatId.portName}</Text>
+                                                {/* <Text style={styles?.card__location}>{item.boatId.portName}</Text> */}
                                                 <IIcon name="date-range" size={13} />
                                                 <Text style={styles.card__date}>{formatDate(item.startTime)}  At   {formatTime(item.startTime)} </Text>
                                                 <Text style={styles?.card__price}>{item?.price}$</Text>
@@ -681,7 +681,8 @@ function NewUserProfile(props) {
                             tap == "accepted" && (
                                 < FlatList
                                     style={{
-                                        marginBottom: 250}}
+                                        marginBottom: 250
+                                    }}
                                     data={daaata}
                                     renderItem={({ item }) => (
                                         <View style={styles.card__box}>
@@ -781,7 +782,7 @@ const styles = StyleSheet.create({
         top: 7,
         textAlign: 'center',
         alignItems: 'center',
-        color:'#fff'
+        color: '#fff'
     },
     modalContent: {
         backgroundColor: '#fff',
