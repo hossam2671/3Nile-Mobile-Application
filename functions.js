@@ -1,7 +1,7 @@
 
 // Convert this -> 17:00 to pm or 05:00 to am 
 export function convertToAmPm(timeString) {
-    const [hour, minute] = timeString.split(':');
+    const [hour, minute] = timeString?.split(':');
     let hourInt = parseInt(hour);
     const ampm = hourInt >= 12 ? 'PM' : 'AM';
   
@@ -12,6 +12,25 @@ export function convertToAmPm(timeString) {
     return formattedTime;
 
   }
+export function convertToAmPmFor3NileBus(timeString) {
+  const str = timeString;
+const separator = ':';
+
+if (str) {
+  const a = str.split(separator);
+  const hour = a[0];
+  const minute = a[1];
+
+  let hourInt = parseInt(hour);
+  const ampm = hourInt >= 12 ? 'PM' : 'AM';
+
+  hourInt = hourInt % 12;
+  hourInt = hourInt === 0 ? 12 : hourInt;
+
+  const formattedTime = `${hourInt}:${minute} ${ampm}`;
+  return formattedTime;
+
+  }}
 
 export function formatTime(utcTimeString) {
     const date = new Date(utcTimeString);

@@ -1047,6 +1047,7 @@ function NewBoatOwnerProfile(props) {
                     
 
 <FlatList
+
                                 data={ownerReqs.payload.data}
                                 keyExtractor={(item) => item._id}
                                 renderItem={({ item }) => (
@@ -1101,6 +1102,7 @@ function NewBoatOwnerProfile(props) {
                 
 
 <FlatList
+
                                 data={allBoats}
                                 keyExtractor={(item) => item._id}
                                 renderItem={({ item }) => (
@@ -1153,6 +1155,7 @@ function NewBoatOwnerProfile(props) {
                         tap == "prev" && (
                         
                               <FlatList
+                              style={styles.cardcotai}
                                 data={prevBoats.payload.data}
                                 keyExtractor={(item) => item._id}
                                 renderItem={({ item }) => (
@@ -1195,6 +1198,7 @@ function NewBoatOwnerProfile(props) {
                         
 
 <FlatList
+
                                 data={currBoats.payload.data}
                                 keyExtractor={(item) => item._id}
                                 renderItem={({ item }) => (
@@ -1235,6 +1239,7 @@ function NewBoatOwnerProfile(props) {
                         tap == "Swvl" && (
                      
                              <FlatList
+                          
                                 data={swvlTrips.payload.data}
                                 keyExtractor={(item) => item._id}
                                 renderItem={({ item }) => (
@@ -1314,6 +1319,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
+     
     },
 
     edit__button: {
@@ -1372,8 +1378,10 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginBottom: 15,
         elevation:20,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+     
     },
+  
     card__image: {
         width: 270,
         height: 120,
