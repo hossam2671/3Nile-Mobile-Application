@@ -534,8 +534,8 @@ console.log(state.seatReserved)
         if (action.payload.price !== undefined) {
           filtered = filtered.filter(obj => obj.price < action.payload.price);
         }
-        if (action.payload.numOfPeople !== undefined) {
-          filtered = filtered.filter(obj => obj.numberOfpeople < action.payload.numOfPeople);
+        if (action.payload.numOFPeople !== undefined) {
+          filtered = filtered.filter(obj => obj.numberOfpeople < action.payload.numOFPeople);
         }
       
         state.filteredcategoryOne = filtered;

@@ -107,9 +107,9 @@ function NewUserProfile(props) {
             aspect: [4, 3],
             quality: 1,
         });
-
+    
         console.log(result);
-
+    
         if (!result.canceled) {
             console.log("firkst")
             const uriParts = result.uri.split('.');
@@ -118,11 +118,11 @@ function NewUserProfile(props) {
             setImage(result.uri);
             const formData = new FormData();
             formData.append('img', {
-                uri: image,
-                name: `image_${timestamp}.jpeg`,
+                uri: result.uri,
+                name: `image_${timestamp}.${fileExtension}`,
                 type: `image/${fileExtension}`,
             });
-
+    
             const response = await axios.put(`http://${ip}:5000/user/editImage/${user._id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',

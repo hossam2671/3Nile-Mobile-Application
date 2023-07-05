@@ -89,7 +89,8 @@ function NewBoatOwnerProfile(props) {
     const [type, setType] = React.useState("");
     const [boatName, setBoatName] = useState("")
     const [boatDescription, setBoatDescriprionName] = useState("")
-    const [boatPrice, setBoatPrice] = useState(0)
+    const [boatPrice, setBoatPrice] = useState("")
+    const [boatNumOfPeop, setBoatNumOfPeop] = useState("")
     const [ownerReqs, setOwnerReqs] = useState([])
     const [allBoats, setAllBoats] = useState([])
     const [prevBoats, setPrevBoats] = useState([])
@@ -131,77 +132,134 @@ function NewBoatOwnerProfile(props) {
     const [editboatOwnerName, setEditboatOwnerName] = useState("")
     const [editeditboatOwnerPhone, setEditboatOwnerPhone] = useState("")
     const [image, setImage] = useState(`http://${ip}:5000/${boatOwner.img}`);
+
+    //add Boat Modal Validation
+
+    const [isFormValid, setIsFormValid] = useState(false);
+    const [boatNameError, setBoatNameError] = useState('');
+    const [boatDescriptionError, setBoatDescriptionError] = useState('');
+    const [boatPriceError, setBoatPriceError] = useState('');
+    const [boatNumOfPeopError, setBoatNumOfPeopError] = useState('');
+
+    // const handleFormValidity = () => {
+    //     setIsFormValid(!!boatName && !!boatDescription && !!boatPrice && !!boatNumOfPeop && !!selected && !!boatImages.length > 0 && !!type
+    //     );
+    //   };
+
     function namy(e) {
         setBoatName(e)
         console.log(e)
+
+        if (e.trim().length === 0) {
+            setIsFormValid(false);
+            setBoatNameError('Please enter a boat name');
+        } else {
+            setIsFormValid(true);
+            setBoatNameError('');
+        }
     }
     function price(e) {
         setBoatPrice(e)
         console.log(e)
+
+        if (e.trim().length === 0) {
+            setIsFormValid(false);
+            setBoatPriceError('Please enter a price');
+        } else {
+            setIsFormValid(true);
+            setBoatPriceError('');
+        }
     }
+
+    function numOfPeople(e) {
+        setBoatNumOfPeop(e)
+        console.log(e)
+
+        if (e.trim().length === 0) {
+            setIsFormValid(false);
+            setBoatNumOfPeopError('Please enter the number of people');
+        } else {
+            setIsFormValid(true);
+            setBoatNumOfPeopError('');
+        }
+    }
+
     function description(e) {
         setBoatDescriprionName(e)
         console.log(e)
+
+        if (e.trim().length === 0) {
+            setIsFormValid(false);
+            setBoatDescriptionError('Please enter a description');
+        } else {
+            setIsFormValid(true);
+            setBoatDescriptionError('');
+        }
     }
     async function submit() {
-        const formData = new FormData();
-        const timestamp = Date.now();
-
-        boatImages.forEach((image, index) => {
+        if (
+          boatName.trim() !== "" &&
+          boatDescription.trim() !== "" &&
+          boatPrice.trim() !== "" &&
+          boatNumOfPeop.trim() !== "" &&
+          selected.trim() !== "" &&
+          type.trim() !== "" &&
+          boatImages.length > 0
+        ) {
+          const formData = new FormData();
+          const timestamp = Date.now();
+      
+          boatImages.forEach((image, index) => {
             const uriParts = image.split('.');
             const fileExtension = uriParts[uriParts.length - 1];
             const imageName = `image_${timestamp}_${index}.${fileExtension}`;
-
+      
             formData.append('images', {
-                uri: image,
-                name: imageName,
-                type: `image/${fileExtension}`,
+              uri: image,
+              name: imageName,
+              type: `image/${fileExtension}`,
             });
-        });
-
-        formData.append('id', boatOwner._id);
-        formData.append('name', boatName);
-        formData.append('description', boatDescription);
-        formData.append('price', boatPrice);
-        formData.append('portName', selected);
-        formData.append('type', type);
-        console.log(formData)
-        try {
+          });
+      
+          formData.append('id', boatOwner._id);
+          formData.append('name', boatName);
+          formData.append('description', boatDescription);
+          formData.append('price', boatPrice);
+          formData.append('portName', selected);
+          formData.append('numberOfpeople', boatNumOfPeop);
+          formData.append('type', type);
+      
+          console.log(formData);
+      
+          try {
             let res = await axios.post(`http://${ip}:5000/boatOwner/addBoatt`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
             }).then((ress) => {
-                setAllBoats(ress.data)
-                setAddBoatModal(1)
-                setTimeout(() => {
-                    setAddBoatModal(0)
-
-                }, 3000)
+              setAllBoats(ress.data);
+              setAddBoatModal(1);
+              setTimeout(() => {
+                setAddBoatModal(0);
+              }, 3000);
             });
-
-
-
-
-            // dispatch(addBoat({id:boatOwner._id,name:boatName,description:boatDescription,price:boatPrice,portName:selected,type:type}))
-            // .then((res)=>{
-            //     dispatch(getOwnerBoats(boatOwner._id)).then((res)=>{
-            //
-            //     })
-            // })
-
+      
             setAddVisibleModal(0);
-        } catch (error) {
+          } catch (error) {
             // Handle error here
             console.error(error);
+          }
         }
-    }
+      }
+      
+
     function fire() {
         dispatch(fireSwvl({ boatId: boatId, time: time, port: swvlType, targetPlace: targetPlace, date: date, priceForTrip: swvlPrice }))
         setswVlVisibleModal(0)
     }
 
     function closeModal() {
+        console.log("Closing modal");
         setVisibleModal(false)
     }
 
@@ -259,12 +317,22 @@ function NewBoatOwnerProfile(props) {
         </View>
     );
 
+
+
     //add boat modal
 
 
     const addBoatrenderButton = (text, onPress) => (
         <View style={styles.book_fixToText}>
-            <TouchableOpacity style={styles.book_bookBtn} onPress={onPress}>
+            <TouchableOpacity
+            // style={styles.book_bookBtn}
+                style={[
+                    styles.book_bookBtn,
+                    { opacity: isFormValid ? 1 : 0.5 },
+                ]}
+                onPress={onPress}
+                disabled={!isFormValid}
+                >
                 <Text style={styles.book_btn}>{text}</Text>
                 <Icon name="arrow-right" color={'#000'} size={15} style={styles.book_arrow} />
             </TouchableOpacity>
@@ -276,11 +344,11 @@ function NewBoatOwnerProfile(props) {
             <View style={styles.select}>
                 <Text style={styles.add__boat__text}>Add Boat</Text>
 
-                {/* <Text style={styles.add__boat__close__icon} onPress={closeModal()}>X</Text> */}
+                <Text style={styles.add__boat__close__icon} onPress={() => setVisibleModal(false)}>X</Text>
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                     <TouchableOpacity
-                    style={styles.upload__image__button}
-                    onPress={() => { pickBoatImage() }}>
+                        style={styles.upload__image__button}
+                        onPress={() => { pickBoatImage() }}>
                         <Text><Icon name="upload" color={'#0c8df7'} size={15} style={styles.upload__image__icon} /> Upload Image</Text>
                     </TouchableOpacity>
                     <View style={styles.boatImages}>
@@ -305,9 +373,10 @@ function NewBoatOwnerProfile(props) {
                     placeholder="Name"
                     placeholderTextColor={'#0000006a'}
                     onChangeText={(e) => namy(e)}
-
-                    value={boatName}
                 />
+                {boatNameError ? (
+                    <Text style={styles.error__message}>{boatNameError}</Text>
+                ) : null}
 
 
                 <TextInput
@@ -316,9 +385,10 @@ function NewBoatOwnerProfile(props) {
                     placeholder="Description"
                     placeholderTextColor={'#0000006a'}
                     onChangeText={(e) => description(e)}
-
-                    value={boatDescription}
                 />
+                {boatDescriptionError ? (
+                    <Text style={styles.error__message}>{boatDescriptionError}</Text>
+                ) : null}
 
 
                 <TextInput
@@ -326,10 +396,23 @@ function NewBoatOwnerProfile(props) {
                     style={styles.modal__input}
                     placeholder="Price"
                     onChangeText={(e) => price(e)}
-
-                    value={boatPrice}
                     keyboardType="numeric"
                 />
+                {boatPriceError ? (
+                    <Text style={styles.error__message}>{boatPriceError}</Text>
+                ) : null}
+
+                <TextInput
+                    name="numberOfPeople"
+                    style={styles.modal__input}
+                    placeholder="Number Of People"
+                    onChangeText={(e) => numOfPeople(e)}
+                    value={boatNumOfPeop}
+                    keyboardType="numeric"
+                />
+                {boatNumOfPeopError ? (
+                    <Text style={styles.error__message}>{boatNumOfPeopError}</Text>
+                ) : null}
 
                 <View style={styles.modal__dropdown}>
                     <SelectList
@@ -338,10 +421,9 @@ function NewBoatOwnerProfile(props) {
                         setSelected={setSelected}
                         fontFamily='lato'
                         data={data}
-                        arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
-                        //   searchicon={<Icon name="search" size={12} color={'black'} />} 
+                        arrowicon={<Icon name="chevron-down" size={12} color={'black'} style={styles.arrowicon__style} />}
                         search={false}
-                        boxStyles={{ borderRadius: 0 }} //override default styles
+                        boxStyles={{ borderRadius: 5 }} //override default styles
                         defaultOption={{ key: 'KFC', value: 'KFC' }}   //default selected option
                     />
 
@@ -351,10 +433,9 @@ function NewBoatOwnerProfile(props) {
                         setSelected={setType}
                         fontFamily='lato'
                         data={types}
-                        arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
-                        //   searchicon={<Icon name="search" size={12} color={'black'} />} 
+                        arrowicon={<Icon name="chevron-down" size={12} color={'black'} style={styles.arrowicon__style} />}
                         search={false}
-                        boxStyles={{ borderRadius: 0 }} //override default styles
+                        boxStyles={{ borderRadius: 5 }} //override default styles
                         defaultOption={{ key: 'shera3', value: 'shera3' }}   //default selected option
                     />
                 </View>
@@ -363,6 +444,8 @@ function NewBoatOwnerProfile(props) {
             {addBoatrenderButton('Apply', submit)}
         </View>
     );
+
+
     const [editModal, setEditModal] = useState(0)
     const editInfoModal = () => (
         <View style={styles.modalContent}>
@@ -386,7 +469,6 @@ function NewBoatOwnerProfile(props) {
             <Text>Your boat has been Added successfully </Text>
         </View>
     );
-
 
     const [deleteBoatModal, setDeleteBoatModal] = useState(0)
     const DeleteBoatModal = () => (
@@ -432,7 +514,6 @@ function NewBoatOwnerProfile(props) {
                         fontFamily='lato'
                         data={data}
                         arrowicon={<Icon name="chevron-down" size={12} color={'black'} />}
-                        //   searchicon={<Icon name="search" size={12} color={'black'} />} 
                         search={false}
                         boxStyles={{ borderRadius: 0 }}
                         defaultOption={{ key: 'KFC', value: 'KFC' }}
@@ -512,8 +593,8 @@ function NewBoatOwnerProfile(props) {
             setImage(result.uri);
             const formData = new FormData();
             formData.append('img', {
-                uri: image,
-                name: `image_${timestamp}.jpeg`,
+                uri: result.uri,
+                name: `image_${timestamp}.${fileExtension}`,
                 type: `image/${fileExtension}`,
             });
 
@@ -553,30 +634,28 @@ function NewBoatOwnerProfile(props) {
     const { ownerSwvlTrip } = useSelector(state => state.UserSlice)
 
     useEffect(() => {
-
         dispatch(getOwnerBoats(boatOwner._id)).then((first) => {
-            setAllBoats(first.payload.data)
-            setTap("allBoats")
-        })
+          setAllBoats(first.payload.data);
+          setTap("allBoats");
+        });
         dispatch(getOwnerPreviousTrips(boatOwner._id)).then((first) => {
-            setPrevBoats(first)
-        })
+          setPrevBoats(first);
+        });
         dispatch(getOwnerRequests(boatOwner._id)).then((first) => {
-            console.log(first, "iiisadiiiiiiii")
-            setOwnerReqs(first)
-
-        })
+          console.log(first, "iiisadiiiiiiii");
+          setOwnerReqs(first);
+        });
         dispatch(getOwnerCurrentTrips(boatOwner._id)).then((first) => {
-            setCurrBoats(first)
-        })
+          setCurrBoats(first);
+        });
         dispatch(ownerSwvl(boatOwner._id)).then((first) => {
-            console.log(first.payload.data, "hoho@gmail.com")
-            setSwvlTrips(first)
-        })
-        console.log(ownerRequestsTrips, "checkreq")
+          console.log(first.payload.data, "hoho@gmail.com");
+          setSwvlTrips(first);
+        });
+        console.log(ownerRequestsTrips, "checkreq");
+      
+      }, []);
 
-
-    }, []);
     const TabButton = ({ currentTab, setCurrentTab, title, icon, onPress }) => {
         return (
 
@@ -1039,7 +1118,7 @@ function NewBoatOwnerProfile(props) {
                         <Icon name="camera" size={20} color="#7c7d7e" style={styles.icon__button} />
                     </TouchableOpacity>
 
-                    <View style={{marginBottom:760 , bottom: 80}}>
+                    <View style={{ marginBottom: 760, bottom: 80 }}>
                         {
                             tap == "req" && (
                                 <FlatList
@@ -1099,7 +1178,7 @@ function NewBoatOwnerProfile(props) {
 
 
                                 <FlatList
-                                style={{ marginBottom: 20 }}
+                                    style={{ marginBottom: 20 }}
                                     data={allBoats}
                                     keyExtractor={(item) => item._id}
                                     renderItem={({ item }) => (
@@ -1174,20 +1253,20 @@ function NewBoatOwnerProfile(props) {
                                             <View
 
 
-                                                        style={styles?.card__Rate}
-                                                    >
-                                                        <StarRating
+                                                style={styles?.card__Rate}
+                                            >
+                                                <StarRating
 
-                                                            key={item?._id}
-                                                            disabled={false}
-                                                            maxStars={5}
-                                                            rating={item?.rate?.rating}
-                                                            // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
-                                                            starSize={15}
-                                                            fullStarColor="orange"
-                                                            emptyStarColor="#e4e5e9"
-                                                        />
-                                                    </View>
+                                                    key={item?._id}
+                                                    disabled={false}
+                                                    maxStars={5}
+                                                    rating={item?.rate?.rating}
+                                                    // selectedStar={(rating) => handleRatingChange(item._id, rating , item.boatId._id)}
+                                                    starSize={15}
+                                                    fullStarColor="orange"
+                                                    emptyStarColor="#e4e5e9"
+                                                />
+                                            </View>
                                         </View>
                                     )}
                                 />
@@ -1320,7 +1399,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-     
+
     },
 
     edit__button: {
@@ -1384,7 +1463,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         marginBottom: 15
     },
-  
+
     card__image: {
         width: 270,
         height: 120,
@@ -1480,7 +1559,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginBottom: 20,
-        marginTop: 10,
+        marginTop: 20,
     },
     modal__dropdown__item: {
         width: 100,
@@ -1493,11 +1572,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     book_fixToText: {
-        // height: 100,
-        // width: 45,
         backgroundColor: '#0c8df7',
         borderRadius: 55,
-        marginTop: 30,
+        marginTop: 10,
     },
     book_bookBtn: {
         justifyContent: "space-between",
@@ -1525,7 +1602,8 @@ const styles = StyleSheet.create({
     add__boat__close__icon: {
         fontSize: 20,
         fontWeight: 600,
-        left: 200,
+        left: 300,
+        bottom: 30,
     },
     edit__text: {
         fontSize: 20,
@@ -1546,13 +1624,21 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginLeft: 160,
     },
-    upload__image__button:{
+    upload__image__button: {
         borderColor: '#0c8df7',
         borderWidth: 1,
         padding: 5,
-        marginTop: 15,
+        marginTop: -15,
         marginBottom: 15,
         borderRadius: 15,
+    },
+    arrowicon__style: {
+        left: 5,
+        top: 3,
+    },
+
+    error__message:{
+        color: 'red',
     }
 });
 
