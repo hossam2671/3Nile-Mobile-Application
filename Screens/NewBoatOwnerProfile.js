@@ -298,7 +298,7 @@ function NewBoatOwnerProfile(props) {
 
 
                 <TextInput style={styles.modal__input}
-                    placeholder={boatOwner.name}
+                   placeholder={"Your Name"} 
                     placeholderTextColor="#0000006a"
                     onChangeText={(e) => {
                         setEditboatOwnerName(e);
@@ -306,7 +306,7 @@ function NewBoatOwnerProfile(props) {
                     }}
                 />
                 <TextInput style={styles.modal__input}
-                    placeholder={boatOwner.phone ? boatOwner.phone : "Your Phone"}
+                  placeholder={"Your Phone"}
                     placeholderTextColor="0000006a"
                     onChangeText={(e) => setEditboatOwnerPhone(e)}
 
@@ -1616,11 +1616,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
         left: 23,
         bottom: 115,
+      
     },
     add__boat__button__style: {
         fontSize: 15,
         fontWeight: 600,
-        color: '#ffffff'
+        color:'#ffffff',
     },
     add__boat__image__button: {
         width: 85,
@@ -1699,6 +1700,7 @@ const styles = StyleSheet.create({
         fontWeight: 600,
         textAlign: 'center',
         alignItems: 'center',
+   
     },
     boatImages: {
         flexWrap: 'wrap',
