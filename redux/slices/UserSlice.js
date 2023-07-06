@@ -517,13 +517,33 @@ console.log(state.seatReserved)
         state.filteredData = filteredByPort;
     
       },
+      // filterTaps3(state, action) {
+      //   // console.log(action.payload);
+      //   let filtered = [...state.categoryThree];
+      //   let filteredByPort = [...state.categoryThree];
+      
+      //   if (action.payload.port.length !== 0) {
+      //     if(action.payload.port!=="all"){
+
+
+      //       filteredByPort = filteredByPort.filter(obj => action.payload.port.includes(obj.portName));
+      //       console.log(filteredByPort.length+1,"fillll")
+      //     }else
+      //     filteredByPort = [...state.categoryOne];
+      //   }
+        
+    
+      //   state.filteredData = filteredByPort;
+    
+      // },
         // filter cat one
       filter(state, action) {
         // console.log(action.payload);
-        let filtered = [...state.filteredData];
-        let filteredByPort = [...state.filteredData];
+        let filtered = [...state.categoryOne];
+        let filteredByPort = [...state.categoryOne];
       
-    
+        console.log(action.payload,"pay");
+        console.log(filtered,"fil");
       
         if (action.payload.type.length !== 0) {
           filtered = filteredByPort.filter(obj => action.payload.type.includes(obj.type));
@@ -534,8 +554,8 @@ console.log(state.seatReserved)
         if (action.payload.price !== undefined) {
           filtered = filtered.filter(obj => obj.price < action.payload.price);
         }
-        if (action.payload.numOFPeople !== undefined) {
-          filtered = filtered.filter(obj => obj.numberOfpeople < action.payload.numOFPeople);
+        if (action.payload.numOfPeople !== undefined) {
+          filtered = filtered.filter(obj => obj.numberOfpeople < action.payload.numOfPeople);
         }
       
         state.filteredcategoryOne = filtered;
@@ -547,6 +567,8 @@ console.log(state.seatReserved)
        filter2(state, action) {
         let filtered = [...state.categoryTwo];
         let filteredByPort = [...state.categoryTwo];
+        console.log(action.payload,"cat2");
+        console.log(filtered,"2222222222");
       
         if (action.payload.port.length !== 0) {
           filteredByPort = filteredByPort.filter(obj => action.payload.port.includes(obj.portName));

@@ -24,8 +24,10 @@ const data = [
 ];
 const data2 = [
   { key: '1', value: 'shera3' },
-  { key: '2', value: 'shra3 2' },
-  { key: '3', value: 'Cameras' },
+  { key: '2', value: 'Felucca' },
+  { key: '3', value: 'Houseboat' },
+  { key: '4', value: 'Dahabiya' },
+  { key: '5', value: 'swvl' },
 ];
 
 
@@ -158,6 +160,7 @@ export default function Filter(props) {
       dispatch(filterTaps2({  port: buttonName}))
 
     }
+
   };
 
   const defaultSpringStyles = useAnimatedStyle(() => {
