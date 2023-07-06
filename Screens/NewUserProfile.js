@@ -97,6 +97,13 @@ function NewUserProfile(props) {
         </View>
     );
 
+    const [editImageModal, setEditImageModal] = useState(0)
+    const EditImageModal = () => (
+        <View style={styles.modalContent}>
+            <Text>Your Image has Changed successfully </Text>
+        </View>
+    );
+
     //edit Image
 
     const pickImage = async () => {
@@ -107,9 +114,9 @@ function NewUserProfile(props) {
             aspect: [4, 3],
             quality: 1,
         });
-    
+
         console.log(result);
-    
+
         if (!result.canceled) {
             console.log("firkst")
             const uriParts = result.uri.split('.');
@@ -122,11 +129,65 @@ function NewUserProfile(props) {
                 name: `image_${timestamp}.${fileExtension}`,
                 type: `image/${fileExtension}`,
             });
-    
+
             const response = await axios.put(`http://${ip}:5000/user/editImage/${user._id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
+            }).then(() => {
+                setEditImageModal(1)
+                setTimeout(() => {
+                    setEditImageModal(0)
+                }, 3000)
+            });
+        }
+    };
+
+    const [editCoverModal, setEditCoverModal] = useState(0)
+    const EditCoverModal = () => (
+        <View style={styles.modalContent}>
+            <Text>Your Cover Image Changed successfully </Text>
+        </View>
+    );
+
+    //edit cover image
+
+    const [coverImage, setCoverImage] = useState(`http://${ip}:5000/${user.coverImg}`)
+
+
+    const pickCoverImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            const uriParts = result.uri.split('.');
+            const fileExtension = uriParts[uriParts.length - 1];
+            const timestamp = Date.now();
+            setCoverImage(result.uri);
+            const formData = new FormData();
+            formData.append('img', {
+                uri: result.uri,
+                name: `image_${timestamp}.${fileExtension}`,
+                type: `image/${fileExtension}`,
+            });
+
+            const response = await axios.put(`http://${ip}:5000/user/editCover/${user._id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }).then(() => {
+                setEditCoverModal(1)
+                setTimeout(() => {
+                    setEditCoverModal(0)
+
+                }, 3000)
             });
         }
     };
@@ -252,6 +313,22 @@ function NewUserProfile(props) {
                 isVisible={visibleModal === 1} style={styles.bottomModal}>
 
                 {renderModalContent()}
+            </Modal>
+
+            <Modal
+                key="modal9"
+
+                isVisible={editCoverModal === 1} style={styles.bottomModal}>
+
+                {EditCoverModal()}
+            </Modal>
+
+            <Modal
+                key="modal5"
+
+                isVisible={editImageModal === 1} style={styles.bottomModal}>
+
+                {EditImageModal()}
             </Modal>
 
             <View style={{ justifyContent: 'flex-start', padding: 15 }}>
@@ -539,7 +616,7 @@ function NewUserProfile(props) {
                         }} >
 
 
-                        <Image source={photo} style={{
+                        <Image source={{uri : coverImage}} style={{
                             width: '100%',
                             height: 150,
                             borderRadius: 20,
@@ -554,6 +631,10 @@ function NewUserProfile(props) {
                             left: 165,
                         }}></Image>
 
+                        <TouchableOpacity onPress={() => { pickCoverImage() }}>
+                            <Icon name="camera" size={20} style={styles.cover__icon__button} />
+                        </TouchableOpacity>
+
                         <TouchableOpacity
                             isVisible={visibleModal === 1}
                             onPress={() => { setVisibleModal(1) }}>
@@ -561,7 +642,7 @@ function NewUserProfile(props) {
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => { pickImage() }}>
-                            <Icon name="camera" size={20} color="#0c8df7" style={styles.icon__button} />
+                            <Icon name="camera" size={20} style={styles.icon__button} />
                         </TouchableOpacity>
 
                     </View>
@@ -571,7 +652,7 @@ function NewUserProfile(props) {
                         {
                             tap == "pending" && (
                                 <FlatList
-                                
+
                                     style={{ marginBottom: 250 }}
                                     data={daaata}
                                     keyExtractor={(item) => item._id}
@@ -801,8 +882,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     icon__button: {
-        bottom: 170,
-        left: 231,
+        bottom: 180,
+        left: 239,
+        color: 'white',
+    },
+
+    cover__icon__button: {
+        bottom: 225,
+        left: 380,
+        color: 'white',
     },
 
     card__box: {

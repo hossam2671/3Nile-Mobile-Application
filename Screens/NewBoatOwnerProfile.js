@@ -137,6 +137,7 @@ function NewBoatOwnerProfile(props) {
 
     const [isFormValid, setIsFormValid] = useState(false);
     const [boatNameError, setBoatNameError] = useState('');
+    const [checkNameError, setCheckNameError] = useState('');
     const [boatDescriptionError, setBoatDescriptionError] = useState('');
     const [boatPriceError, setBoatPriceError] = useState('');
     const [boatNumOfPeopError, setBoatNumOfPeopError] = useState('');
@@ -145,6 +146,7 @@ function NewBoatOwnerProfile(props) {
     //     setIsFormValid(!!boatName && !!boatDescription && !!boatPrice && !!boatNumOfPeop && !!selected && !!boatImages.length > 0 && !!type
     //     );
     //   };
+
 
     function namy(e) {
         setBoatName(e)
@@ -197,61 +199,77 @@ function NewBoatOwnerProfile(props) {
         }
     }
     async function submit() {
-        if (
-          boatName.trim() !== "" &&
-          boatDescription.trim() !== "" &&
-          boatPrice.trim() !== "" &&
-          boatNumOfPeop.trim() !== "" &&
-          selected.trim() !== "" &&
-          type.trim() !== "" &&
-          boatImages.length > 0
-        ) {
-          const formData = new FormData();
-          const timestamp = Date.now();
-      
-          boatImages.forEach((image, index) => {
-            const uriParts = image.split('.');
-            const fileExtension = uriParts[uriParts.length - 1];
-            const imageName = `image_${timestamp}_${index}.${fileExtension}`;
-      
-            formData.append('images', {
-              uri: image,
-              name: imageName,
-              type: `image/${fileExtension}`,
-            });
-          });
-      
-          formData.append('id', boatOwner._id);
-          formData.append('name', boatName);
-          formData.append('description', boatDescription);
-          formData.append('price', boatPrice);
-          formData.append('portName', selected);
-          formData.append('numberOfpeople', boatNumOfPeop);
-          formData.append('type', type);
-      
-          console.log(formData);
-      
-          try {
-            let res = await axios.post(`http://${ip}:5000/boatOwner/addBoatt`, formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            }).then((ress) => {
-              setAllBoats(ress.data);
-              setAddBoatModal(1);
-              setTimeout(() => {
-                setAddBoatModal(0);
-              }, 3000);
-            });
-      
-            setAddVisibleModal(0);
-          } catch (error) {
-            // Handle error here
-            console.error(error);
+        if (boatName.trim() === '') {
+            setBoatNameError('Please enter a boat name');
+            return;
           }
+          else if(boatDescription.trim() === '') {
+            setBoatDescriptionError('Please enter a boat description')
+            return;
+          }
+          else if(boatPrice.trim() === '') {
+            setBoatPriceError('Please enter a price')
+            return;
+          }
+          else if(boatNumOfPeop.trim() === '') {
+            setBoatNumOfPeopError('Please enter a number')
+            return;
+          }
+        if (
+            boatName.trim() !== "" &&
+            boatDescription.trim() !== "" &&
+            boatPrice.trim() !== "" &&
+            boatNumOfPeop.trim() !== "" &&
+            selected.trim() !== "" &&
+            type.trim() !== "" &&
+            boatImages.length > 0
+        ) {
+            const formData = new FormData();
+            const timestamp = Date.now();
+
+            boatImages.forEach((image, index) => {
+                const uriParts = image.split('.');
+                const fileExtension = uriParts[uriParts.length - 1];
+                const imageName = `image_${timestamp}_${index}.${fileExtension}`;
+
+                formData.append('images', {
+                    uri: image,
+                    name: imageName,
+                    type: `image/${fileExtension}`,
+                });
+            });
+
+            formData.append('id', boatOwner._id);
+            formData.append('name', boatName);
+            formData.append('description', boatDescription);
+            formData.append('price', boatPrice);
+            formData.append('portName', selected);
+            formData.append('numberOfpeople', boatNumOfPeop);
+            formData.append('type', type);
+
+            console.log(formData);
+
+            try {
+                let res = await axios.post(`http://${ip}:5000/boatOwner/addBoatt`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }).then((ress) => {
+                    setAllBoats(ress.data);
+                    setAddBoatModal(1);
+                    setTimeout(() => {
+                        setAddBoatModal(0);
+                    }, 3000);
+                });
+
+                setAddVisibleModal(0);
+            } catch (error) {
+                // Handle error here
+                console.error(error);
+            }
         }
-      }
-      
+    }
+
 
     function fire() {
         dispatch(fireSwvl({ boatId: boatId, time: time, port: swvlType, targetPlace: targetPlace, date: date, priceForTrip: swvlPrice }))
@@ -325,14 +343,14 @@ function NewBoatOwnerProfile(props) {
     const addBoatrenderButton = (text, onPress) => (
         <View style={styles.book_fixToText}>
             <TouchableOpacity
-            // style={styles.book_bookBtn}
+                // style={styles.book_bookBtn}
                 style={[
                     styles.book_bookBtn,
                     { opacity: isFormValid ? 1 : 0.5 },
                 ]}
                 onPress={onPress}
                 disabled={!isFormValid}
-                >
+            >
                 <Text style={styles.book_btn}>{text}</Text>
                 <Icon name="arrow-right" color={'#000'} size={15} style={styles.book_arrow} />
             </TouchableOpacity>
@@ -344,7 +362,7 @@ function NewBoatOwnerProfile(props) {
             <View style={styles.select}>
                 <Text style={styles.add__boat__text}>Add Boat</Text>
 
-                <Text style={styles.add__boat__close__icon} onPress={() => setVisibleModal(false)}>X</Text>
+                <Text style={styles.add__boat__close__icon} onPress={() => setAddVisibleModal(false)}>X</Text>
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                     <TouchableOpacity
                         style={styles.upload__image__button}
@@ -462,6 +480,13 @@ function NewBoatOwnerProfile(props) {
         </View>
     );
 
+    const [editCoverModal, setEditCoverModal] = useState(0)
+    const EditCoverModal = () => (
+        <View style={styles.modalContent}>
+            <Text>Your Cover Image Changed successfully </Text>
+        </View>
+    );
+
 
     const [addBoatModal, setAddBoatModal] = useState(0)
     const AddBoatModal = () => (
@@ -476,6 +501,15 @@ function NewBoatOwnerProfile(props) {
             <Text>Your boat has been Deleted </Text>
         </View>
     );
+
+    //error add boat Modal
+    const [errorAddBoatModal, setErrorAddBoatModal] = useState(0)
+    const ErorrAddBoatModal = () => (
+        <View style={styles.modalContent}>
+            <Text>Please Complete All data to add the boat!</Text>
+        </View>
+    );
+
     //SWVL Modal
 
     const SwvlModalContent = () => (
@@ -606,6 +640,48 @@ function NewBoatOwnerProfile(props) {
                 setEditImageModal(1)
                 setTimeout(() => {
                     setEditImageModal(0)
+                }, 3000)
+            });
+        }
+    };
+
+    //edit cover image
+
+    const [coverImage, setCoverImage] = useState(`http://${ip}:5000/${boatOwner.coverImg}`)
+
+
+    const pickCoverImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            const uriParts = result.uri.split('.');
+            const fileExtension = uriParts[uriParts.length - 1];
+            const timestamp = Date.now();
+            setCoverImage(result.uri);
+            const formData = new FormData();
+            formData.append('img', {
+                uri: result.uri,
+                name: `image_${timestamp}.${fileExtension}`,
+                type: `image/${fileExtension}`,
+            });
+
+            const response = await axios.put(`http://${ip}:5000/boatOwner/editCover/${boatOwner._id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }).then(() => {
+                // console.log("Fatma Gamila")
+                setEditCoverModal(1)
+                setTimeout(() => {
+                    setEditCoverModal(0)
 
                 }, 3000)
             });
@@ -635,26 +711,26 @@ function NewBoatOwnerProfile(props) {
 
     useEffect(() => {
         dispatch(getOwnerBoats(boatOwner._id)).then((first) => {
-          setAllBoats(first.payload.data);
-          setTap("allBoats");
+            setAllBoats(first.payload.data);
+            setTap("allBoats");
         });
         dispatch(getOwnerPreviousTrips(boatOwner._id)).then((first) => {
-          setPrevBoats(first);
+            setPrevBoats(first);
         });
         dispatch(getOwnerRequests(boatOwner._id)).then((first) => {
-          console.log(first, "iiisadiiiiiiii");
-          setOwnerReqs(first);
+            console.log(first, "iiisadiiiiiiii");
+            setOwnerReqs(first);
         });
         dispatch(getOwnerCurrentTrips(boatOwner._id)).then((first) => {
-          setCurrBoats(first);
+            setCurrBoats(first);
         });
         dispatch(ownerSwvl(boatOwner._id)).then((first) => {
-          console.log(first.payload.data, "hoho@gmail.com");
-          setSwvlTrips(first);
+            console.log(first.payload.data, "hoho@gmail.com");
+            setSwvlTrips(first);
         });
         console.log(ownerRequestsTrips, "checkreq");
-      
-      }, []);
+
+    }, []);
 
     const TabButton = ({ currentTab, setCurrentTab, title, icon, onPress }) => {
         return (
@@ -758,6 +834,15 @@ function NewBoatOwnerProfile(props) {
 
                 {DeleteBoatModal()}
             </Modal>
+
+            <Modal
+                key="modal9"
+
+                isVisible={editCoverModal === 1} style={styles.bottomModal}>
+
+                {EditCoverModal()}
+            </Modal>
+
             <View style={{ justifyContent: 'flex-start', padding: 15 }}>
                 <Image source={{ uri: image }} style={{
                     width: 60,
@@ -1085,7 +1170,7 @@ function NewBoatOwnerProfile(props) {
 
                     </TouchableOpacity>
 
-                    <Image source={photo} style={{
+                    <Image source={{uri : coverImage}} style={{
                         width: '100%',
                         height: 190,
                         borderRadius: 20,
@@ -1101,6 +1186,10 @@ function NewBoatOwnerProfile(props) {
                         bottom: 45,
                         left: 165,
                     }}></Image>
+
+                    <TouchableOpacity onPress={() => { pickCoverImage() }}>
+                        <Icon name="camera" size={20} color="#7c7d7e" style={styles.cover__icon__button} />
+                    </TouchableOpacity>
 
                     <TouchableOpacity
                         isVisible={visibleModal === 1}
@@ -1446,8 +1535,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
     },
     icon__button: {
-        bottom: 210,
-        left: 231,
+        bottom: 215,
+        left: 239,
+        color: 'white',
     },
 
     card__box: {
@@ -1635,8 +1725,13 @@ const styles = StyleSheet.create({
         top: 3,
     },
 
-    error__message:{
+    error__message: {
         color: 'red',
+    },
+    cover__icon__button:{
+        bottom: 265,
+        left: 380,
+        color: 'white',
     }
 });
 
