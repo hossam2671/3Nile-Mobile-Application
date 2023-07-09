@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import UserProfile from './Screens/UserProfile'
-import React, { useEffect } from 'react'
+import React, { useEffect,useState,useRef } from 'react'
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -36,65 +36,78 @@ import { LogBox } from 'react-native';
 
 LogBox.ignoreAllLogs()
 // For ignore Errors End
-import * as Notifications from 'expo-notifications';
 import io from 'socket.io-client';
 import ip from './config'
 
 const socket = io(`http://${ip}:5000`);
+import { Platform } from 'react-native';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 export default function App() {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
   useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
 
-    socket.on('Owner-accepted-Trip', (data) => {
-      console.log("vnxcmvnbmcxv")
-      const { message, status, _id } = data.notification;
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+    const handleOwnerAcceptedTrip = (data) => {
+      // Display the received data as a notification
 
-      Notifications.scheduleNotificationAsync({
-        content: {
-          title: "status",
-          body: "message",
-        },
-      })})
-    registerForPushNotificationsAsync();
+      sendNotification(data);
+    };
+    let id = AsyncStorage.getItem('user')
+    console.log(id,"czxcxzzcczx")
+    if(id){
+      socket.on('Owner-accepted-Trip', handleOwnerAcceptedTrip);
+      return () => {
+        socket.off('Owner-accepted-Trip', handleOwnerAcceptedTrip);
+        Notifications.removeNotificationSubscription(notificationListener.current);
+        Notifications.removeNotificationSubscription(responseListener.current);
+      };
+    }
+  
   }, []);
   
-  const registerForPushNotificationsAsync = async () => {
-    const { status } = await Notifications.getPermissionsAsync();
-    let finalStatus = status;
+  const sendNotification = async (data) => {
+    console.log(data, "Owner-accepted-Trip");
+    const content = {
+      title: 'Trip Notification',
+      body: data.notification.message,
+      AudioListener: true,
+    };
   
-    if (status !== 'granted') {
-      const { status: newStatus } = await Notifications.requestPermissionsAsync();
-      finalStatus = newStatus;
-      console.log(":dddddd")
-    }
+    await Notifications.scheduleNotificationAsync({
+      content,
+      trigger: null,
+      sound: true,
+       
+    
+    });
   
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notifications!');
-      return;
-    }
   
-    const token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token,"cxzcxvcx"); // You can save the token to your backend for later use
-  };
+  }
   const Stack = createNativeStackNavigator();
 
   return (
 
-    // <Appp />
-    
-    // <HomeCards />
-
-  //   <NavigationContainer>
-    //  <Stack.Navigator screenOptions={{
-    //     headerStyle: { backgroundColor: '#ffffff' },
-
-    //   }}>
-    //     <Stack.Screen options={{ headerShown: false }} name='splash' component={Splash} />
-    //     <Stack.Screen options={{ headerShown: false }} name='HomeCards' component={BottomNavigatTab}></Stack.Screen>
-
-    //   </Stack.Navigator>
-  // </NavigationContainer>
   
       <Provider store={Store}>
             <NavigationContainer>
@@ -124,3 +137,39 @@ export default function App() {
   ); 
 }
 
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Platform.OS === 'android') {
+    await Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync({ projectId: '948c6fa2-9315-4d14-a100-af95bf6d713b' })).data;
+    console.log(token,"Token");
+
+    // Expo Push Notification Tool 
+    // Email & Passsword --> keroloskhairyy@gmail.com
+    // Run With --> npx expo start
+    
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  return token;
+}
