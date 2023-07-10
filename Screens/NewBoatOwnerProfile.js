@@ -43,6 +43,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { set } from 'react-native-reanimated';
 import axios from 'axios';
+import Chat from './chat/Chat';
 
 
 function NewBoatOwnerProfile(props) {
@@ -361,6 +362,7 @@ function NewBoatOwnerProfile(props) {
         <View style={styles.modalContent}>
             <View style={styles.select}>
                 <Text style={styles.add__boat__text}>Add Boat</Text>
+               
 
                 <Text style={styles.add__boat__close__icon} onPress={() => setAddVisibleModal(false)}>X</Text>
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>

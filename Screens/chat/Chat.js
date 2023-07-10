@@ -37,8 +37,14 @@ const Chat = () => {
   const [activeChatId, setActiveChatId] = useState(null);
   let userId = AsyncStorage.getItem('user')
 
+
   const handleChatClick = (item) => {
-    setActiveChatId(item._id);
+    try {
+      AsyncStorage.setItem('activeChatId', item?._id);
+      setActiveChatId(item._id);
+    } catch (error) {
+      console.log('Error setting active chat ID:', error);
+    }
   };
   const handleSend = () => {
     if (inputText.trim() !== '') {
@@ -81,13 +87,9 @@ const Chat = () => {
   // scroll to bottom when Receive message
 
   const flatListRef = useRef(null);
-  useEffect(() => {
-    const combinedData = [...userMessages, ...receivedMessages];
-    if (flatListRef.current && combinedData.length > 0) {
-      flatListRef.current.scrollToEnd({ animated: true });
-    }
-  }, [userMessages, receivedMessages]);
-  
+  const flatListRef2 = useRef(null);
+  const combinedData = [...userMessages, ...RecievedMessages];
+
   // Get Rooms For User And owner , Get Updated When Any Trip Accepted Or finished
  
 
@@ -138,7 +140,7 @@ const Chat = () => {
   ;
 
   useEffect(() => {
-  
+    console.log(boatOwner?._id,"owneeerddd")
     if(boatOwner){
       setSenderImg(boatOwner?.img)  
       
@@ -183,8 +185,10 @@ const Chat = () => {
 
 
   useEffect(()=>{
+    
     let auth;
-    socket.on('receive_message', (data) => {
+    socket.on('receive_message',async (data) => {
+      let active= await AsyncStorage.getItem('activeChatId')
       console.log(data.message,"messsage")
     setIsReceived(true)
       // playSound();
@@ -192,25 +196,27 @@ const Chat = () => {
      auth=data.authorId
      if(user){
       console.log(data?.room,"datxxa?.room")
-      axios.get(`http://${ip}:5000/user/userTrip/${data?.room}`).then((res)=>{
-        console.log(res,"xxxxxxxxzvczxc")
-        setuserMessageImg(res.data.ownerData[0].img)
-        setRecieverName(res.data.ownerData[0].name)
-        setUserMessages(res?.data?.userTrip?.userMessages)
-        setRecievedMessages(res?.data?.userTrip?.boatOwnerMessages)
-        setrecieverId(res.data.ownerData[0]._id)
-      })
+    
       console.log(user?._id,"userId Old",data.to,"toxxx ")
 
       if(user?._id===data.to){
-          console.log(user?._id,"userId",data.to,"toxxx ")
-      
-        if(roomId===data?.room){
-           
+          console.log(active,"roomxx now")
+        if(active===data?.room){
+          axios.get(`http://${ip}:5000/user/userTrip/${active}`).then((res)=>{
+            console.log(res,"xxxxxxxxzvczxc")
+            setuserMessageImg(res.data.ownerData[0].img)
+            setRecieverName(res.data.ownerData[0].name)
+            setUserMessages(res?.data?.userTrip?.userMessages)
+            setRecievedMessages(res?.data?.userTrip?.boatOwnerMessages)
+            setrecieverId(res.data.ownerData[0]._id)
+            if (flatListRef2.current && RecievedMessages.length > 0) {
+              flatListRef2.current.scrollToEnd({ animated: true });
+            }
+          })
           console.log(data.message,"data.message")
           console.log(data.time,"data.time")
           console.log(RecievedMessages,"Ddddddddddddd")
-          setRecievedMessages((prevState) => [...prevState, {message:data.message,time:data.time}]);
+          // setRecievedMessages((prevState) => [...prevState, {message:data.message,time:data.time}]);
         
           console.log("DAta Was Reseeeved to user")
         }
@@ -219,14 +225,16 @@ const Chat = () => {
   
      else if(boatOwner){
   
-      axios.get(`http://${ip}:5000/user/userTrip/${data?.room}`).then((res)=>{
-        setUserMessages(res?.data?.userTrip?.boatOwnerMessages)
-        setRecievedMessages(res?.data?.userTrip?.userMessages)
-      })
-      if(boatOwner?._id===data.to){
-        if(roomId===data.room){
-           
-          setRecievedMessages((prevState) => [...prevState, {message:data.message,time:data.time}]);
+       if(boatOwner?._id===data.to){
+
+         if(active===data.room){
+
+           axios.get(`http://${ip}:5000/user/userTrip/${active}`).then((res)=>{
+             setUserMessages(res?.data?.userTrip?.userMessages)
+             setRecievedMessages(res?.data?.userTrip?.boatOwnerMessages)
+             
+           })
+          // setRecievedMessages((prevState) => [...prevState, {message:data.message,time:data.time}]);
         }
       }
        console.log("DAta Was Reseeeved to Owner")
@@ -237,12 +245,15 @@ const Chat = () => {
   
 
   const renderMessage = ({ item }) => {
+    const handleItemClick = () => {
+      // Scroll the FlatList to the end
+      flatListRef2.current.scrollToEnd({ animated: true });
+    };
     return (
 
     <TouchableOpacity onPress={() =>{
-
-
-      // setActiveRoom(item?._id)
+      handleItemClick
+      
       handleChatClick(item)
       socket.emit('join_room', item?._id);
       console.log("joined To " , item?._id);
@@ -327,7 +338,7 @@ const Chat = () => {
    
     <View style={styles.chatContainer}>
     <FlatList
-      ref={flatListRef}
+      ref={flatListRef2}
     keyExtractor={item => item._id}
     data={RecievedMessages}
     renderItem={({ item }) => (
