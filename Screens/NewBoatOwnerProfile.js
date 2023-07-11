@@ -35,7 +35,8 @@ import StarRating from 'react-native-star-rating';
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { TimePickerModal } from 'react-native-paper-dates';
 import { DatePickerModal } from 'react-native-paper-dates';
-
+import succ from '../assets/succsses.png'
+import errorImage from '../assets/error.png'
 
 
 //formik
@@ -468,8 +469,11 @@ function NewBoatOwnerProfile(props) {
 
     const [editModal, setEditModal] = useState(0)
     const editInfoModal = () => (
+        
         <View style={styles.modalContent}>
-            <Text>Your Information has Changed successfully </Text>
+        <Image source={succ} style={styles.succ} />
+
+            <Text  style={styles.text}>Your Information has Changed successfully </Text>
         </View>
     );
 
@@ -478,14 +482,18 @@ function NewBoatOwnerProfile(props) {
     const [editImageModal, setEditImageModal] = useState(0)
     const EditImageModal = () => (
         <View style={styles.modalContent}>
-            <Text>Your Image has Changed successfully </Text>
+        <Image source={succ} style={styles.succ} />
+
+            <Text style={styles.text}>Your Image has Changed successfully </Text>
         </View>
     );
 
     const [editCoverModal, setEditCoverModal] = useState(0)
     const EditCoverModal = () => (
         <View style={styles.modalContent}>
-            <Text>Your Cover Image Changed successfully </Text>
+        <Image source={succ} style={styles.succ} />
+
+            <Text style={styles.text}>Your Cover Image Changed successfully </Text>
         </View>
     );
 
@@ -493,14 +501,18 @@ function NewBoatOwnerProfile(props) {
     const [addBoatModal, setAddBoatModal] = useState(0)
     const AddBoatModal = () => (
         <View style={styles.modalContent}>
-            <Text>Your boat has been Added successfully </Text>
+        <Image source={succ} style={styles.succ} />
+
+            <Text style={styles.text}>Your boat has been Added successfully </Text>
         </View>
     );
 
     const [deleteBoatModal, setDeleteBoatModal] = useState(0)
     const DeleteBoatModal = () => (
         <View style={styles.modalContent}>
-            <Text>Your boat has been Deleted </Text>
+        <Image source={succ} style={styles.succ} />
+
+            <Text style={styles.text}>Your boat has been Deleted </Text>
         </View>
     );
 
@@ -508,7 +520,9 @@ function NewBoatOwnerProfile(props) {
     const [errorAddBoatModal, setErrorAddBoatModal] = useState(0)
     const ErorrAddBoatModal = () => (
         <View style={styles.modalContent}>
-            <Text>Please Complete All data to add the boat!</Text>
+        <Image source={errorImage} style={styles.succ} />
+
+            <Text style={styles.text}>Please Complete All data to add the boat!</Text>
         </View>
     );
 
@@ -844,6 +858,13 @@ function NewBoatOwnerProfile(props) {
 
                 {EditCoverModal()}
             </Modal>
+
+
+
+
+
+
+
 
             <View style={{ justifyContent: 'flex-start', padding: 15 }}>
                 <Image source={{ uri: image }} style={{
@@ -1511,11 +1532,12 @@ const styles = StyleSheet.create({
         color: '#ffffff',
     },
     modalContent: {
-        backgroundColor: '#fff',
+        backgroundColor: '#f8f8f8',
         padding: 20,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
+    
     },
     modal__profile__input: {
         borderWidth: 1,
@@ -1736,7 +1758,17 @@ const styles = StyleSheet.create({
         bottom: 265,
         left: 380,
         color: 'white',
-    }
+    },
+    succ:{
+        width:100,
+        height:100,
+    
+      },
+      text:{
+        fontSize:20,
+        paddingTop:20,
+      },
+    
 });
 
 export default NewBoatOwnerProfile

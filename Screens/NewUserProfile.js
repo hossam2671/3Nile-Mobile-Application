@@ -25,7 +25,8 @@ import boat from '../assets/Nile.jpg';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux";
 import { addReview, canceltrip, pendingTrips, finishedTrips, editUserInfo, acceptedTrips } from '../redux/slices/UserSlice';
-
+import succ from '../assets/succsses.png'
+import errorImage from '../assets/error.png'
 //modal
 import Modal from "react-native-modal";
 import StarRating from 'react-native-star-rating';
@@ -94,6 +95,10 @@ function NewUserProfile(props) {
                     setVisibleModal(false)
                     console.log(res.payload.data, "ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
                     setUserState(res.payload.data)
+                    setEditModal(1)
+                    setTimeout(() => {
+                        setEditModal(0)
+                    }, 3000)
                 })
             })}
 
@@ -103,7 +108,9 @@ function NewUserProfile(props) {
     const [editImageModal, setEditImageModal] = useState(0)
     const EditImageModal = () => (
         <View style={styles.modalContent}>
-            <Text>Your Image has Changed successfully </Text>
+        <Image source={succ} style={styles.succ} />
+
+            <Text style={styles.text}>Your Image has Changed successfully </Text>
         </View>
     );
 
@@ -146,10 +153,27 @@ function NewUserProfile(props) {
         }
     };
 
+    // edit info start 
+
+
+    const [editModal, setEditModal] = useState(0)
+    const editInfoModal = () => (
+        
+        <View style={styles.modalContent}>
+        <Image source={succ} style={styles.succ} />
+
+            <Text style={styles.text}>Your Information has Changed successfully </Text>
+        </View>
+    );
+
+    // edit info end 
+
     const [editCoverModal, setEditCoverModal] = useState(0)
     const EditCoverModal = () => (
         <View style={styles.modalContent}>
-            <Text>Your Cover Image Changed successfully </Text>
+        <Image source={succ} style={styles.succ} />
+
+            <Text style={styles.text}>Your Cover Image Changed successfully </Text>
         </View>
     );
 
@@ -338,7 +362,13 @@ function NewUserProfile(props) {
 
                 {EditCoverModal()}
             </Modal>
+            <Modal
+            key="modal4"
 
+            isVisible={editModal === 1} style={styles.bottomModal}>
+
+            {editInfoModal()}
+        </Modal>
             <Modal
                 key="modal5"
 
@@ -888,11 +918,12 @@ const styles = StyleSheet.create({
         color: '#fff'
     },
     modalContent: {
-        backgroundColor: '#fff',
+        backgroundColor: '#f8f8f8',
         padding: 20,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
+ 
     },
     modal__input: {
         width: 300,
@@ -1029,7 +1060,16 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         marginTop: 20,
         marginLeft: 160,
-    }
+    },
+    succ:{
+        width:100,
+        height:100,
+    
+      },
+      text:{
+        fontSize:20,
+        paddingTop:20,
+      },
 });
 
 export default NewUserProfile
