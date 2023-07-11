@@ -499,7 +499,7 @@ console.log(state.seatReserved)
     
       },
       filterTaps2(state, action) {
-        // console.log(action.payload);
+        console.log(action.payload,"actionaaaaadsdas");
         let filtered = [...state.categoryTwo];
         let filteredByPort = [...state.categoryTwo];
       
@@ -513,29 +513,32 @@ console.log(state.seatReserved)
           filteredByPort = [...state.categoryOne];
         }
         
-    
+        state.filteredcategoryTwo = filteredByPort;
         state.filteredData = filteredByPort;
     
       },
-      // filterTaps3(state, action) {
-      //   // console.log(action.payload);
-      //   let filtered = [...state.categoryThree];
-      //   let filteredByPort = [...state.categoryThree];
-      
-      //   if (action.payload.port.length !== 0) {
-      //     if(action.payload.port!=="all"){
+      filterTaps3(state, action) {
+        // state.categoryThree=state.filteredswvl
+        let data =  [... state.filteredcategoryThree]
+        let originalData =  [... state.filteredcategoryThree]
+        console.log(action.payload,"actionaaaaadsdas");
+        let filteredByPort = [...data];
 
+        if (action.payload.port.length !== 0) {
+          if(action.payload.port!=="all"){
+            console.log(filteredByPort[0],"ddddddddddt")
 
-      //       filteredByPort = filteredByPort.filter(obj => action.payload.port.includes(obj.portName));
-      //       console.log(filteredByPort.length+1,"fillll")
-      //     }else
-      //     filteredByPort = [...state.categoryOne];
-      //   }
+            filteredByPort = filteredByPort.filter(obj => action.payload.port.includes(obj.port));
+            console.log(filteredByPort.length,"fillll")
+          }else
+          filteredByPort = [...originalData];
+        }
         
+        state.filteredswvl = filteredByPort;
+        state.filteredData = filteredByPort;
     
-      //   state.filteredData = filteredByPort;
-    
-      // },
+      },
+     
         // filter cat one
       filter(state, action) {
         // console.log(action.payload);
@@ -554,8 +557,8 @@ console.log(state.seatReserved)
         if (action.payload.price !== undefined) {
           filtered = filtered.filter(obj => obj.price < action.payload.price);
         }
-        if (action.payload.numOfPeople !== undefined) {
-          filtered = filtered.filter(obj => obj.numberOfpeople < action.payload.numOfPeople);
+        if (action.payload.numberOfpeople !== undefined) {
+          filtered = filtered.filter(obj => obj.numberOfpeople < action.payload.numberOfpeople);
         }
       
         state.filteredcategoryOne = filtered;
@@ -583,8 +586,8 @@ console.log(state.seatReserved)
         if (action.payload.price !== undefined) {
           filtered = filtered.filter(obj => obj.price < action.payload.price);
         }
-        if (action.payload.numOfPeople !== undefined) {
-          filtered = filtered.filter(obj => obj.numberOfpeople < action.payload.numOfPeople);
+        if (action.payload.numberOfpeople !== undefined) {
+          filtered = filtered.filter(obj => obj.numberOfpeople < action.payload.numberOfpeople);
         }
       
         state.filteredcategoryTwo = filtered;
@@ -811,7 +814,7 @@ console.log(state.seatReserved)
         [getSwvl.fulfilled]:(state,action) =>{
           state.swvl = action.payload.data;
           state.filteredswvl = action.payload.data;
-          // state.filteredcategoryThree = action.payload.data
+          state.filteredcategoryThree = action.payload.data
         },
 // /////////////////////////////////////////////////////////
         [finishedTrips.fulfilled]:(state,action) => {
@@ -882,7 +885,7 @@ console.log(state.seatReserved)
 })
 
 
-export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt , filter , filter2 ,filterTaps,filterTaps2, search,seatResearv,notify} = UserSlice.actions;
+export const { getcategoryboats,add ,change , changeTypeOne , changeTypeTwo , changeTypeThree ,changeTwo , changeThree , changePeopleOne , changePeopleTwo , changePeopleThree, changePortOne , changePortTwo , changePortThree , logoutt , filter , filter2 ,filterTaps,filterTaps2,filterTaps3, search,seatResearv,notify} = UserSlice.actions;
 
 export default UserSlice.reducer;
 

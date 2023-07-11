@@ -31,6 +31,9 @@ import Modal from "react-native-modal";
 import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { formatDate, formatTime } from '../functions';
+import io from 'socket.io-client';
+
+const socket = io(`http://${ip}:5000`);
 
 function NewUserProfile(props) {
     //get user data
@@ -206,7 +209,7 @@ function NewUserProfile(props) {
     const closeButtonOffset = useRef(new Animated.Value(0)).current;
 
 
-    const [tap, setTap] = useState("accepted")
+    const [tap, setTap] = useState("Pending")
     const [daaata, setData] = useState([])
     const { accepted } = useSelector(state => state.UserSlice)
     const { finished } = useSelector(state => state.UserSlice)
@@ -216,18 +219,31 @@ function NewUserProfile(props) {
     console.log(accepted, "axxcc");
     useEffect(() => {
 
+        socket.on('trip-request-accepted', (data) => {
+            dispatch(acceptedTrips({ id: user._id }))
+            dispatch(pendingTrips({ id: user._id }))
+            dispatch(finishedTrips({ id: user._id }))
+
+        })
+        socket.on('Owner-finished-Trip', (data) => {
+            dispatch(acceptedTrips({ id: user._id }))
+
+            dispatch(finishedTrips({ id: user._id }))
 
 
+        })
+
+        if(tap===null || tap === "Pending" || tap === ""){
+            setTap("Pending");
+        }
         dispatch(finishedTrips({ id: user._id }))
 
 
         dispatch(acceptedTrips({ id: user._id }))
-        dispatch(pendingTrips({ id: user._id })).then(() => {
-            setTap("pending")
-        })
-        console.log(pending)
+        dispatch(pendingTrips({ id: user._id }))
+        // console.log(pending)
 
-    }, []);
+    }, [currentTab,tap]);
     const TabButton = ({ currentTab, setCurrentTab, title, icon, onPress }) => {
         return (
 
@@ -647,14 +663,20 @@ function NewUserProfile(props) {
 
                     </View>
 
-                    <View style={{ paddingTop: 0 }}>
+                    
+
+                    <View style={{ marginBottom: 350 }}>
 
                         {
-                            tap == "pending" && (
+                            tap === "pending" && (
+
+
+                                
+
                                 <FlatList
 
                                     style={{ marginBottom: 250 }}
-                                    data={daaata}
+                                    data={pending}
                                     keyExtractor={(item) => item._id}
                                     renderItem={({ item }) => (
                                         <View style={styles.card__box}>
@@ -670,7 +692,7 @@ function NewUserProfile(props) {
                                                 <IIcon name="date-range" size={13} />
                                                 <Text style={styles.card__date}>{formatDate(item.startTime)}  At   {formatTime(item.startTime)} </Text>
 
-                                                <Text style={styles.card__price}>{item.price}$</Text>
+                                                <Text style={styles.card__price}>{item.price} LE</Text>
                                                 <TouchableOpacity onPress={() =>
 
 
@@ -692,7 +714,7 @@ function NewUserProfile(props) {
                                     style={{
                                         marginBottom: 250
                                     }}
-                                    data={daaata}
+                                    data={finished}
                                     keyExtractor={(item) => item?._id}
                                     renderItem={({ item }) => (
                                         <View style={styles?.card__box}>
@@ -707,7 +729,7 @@ function NewUserProfile(props) {
                                                 {/* <Text style={styles?.card__location}>{item.boatId.portName}</Text> */}
                                                 <IIcon name="date-range" size={13} />
                                                 <Text style={styles.card__date}>{formatDate(item.startTime)}  At   {formatTime(item.startTime)} </Text>
-                                                <Text style={styles?.card__price}>{item?.price}$</Text>
+                                                <Text style={styles?.card__price}>{item?.price}LE</Text>
 
                                             </View>
                                             {
@@ -764,7 +786,7 @@ function NewUserProfile(props) {
                                     style={{
                                         marginBottom: 250
                                     }}
-                                    data={daaata}
+                                    data={accepted}
                                     renderItem={({ item }) => (
                                         <View style={styles.card__box}>
                                             <View style={styles.card__image}>
@@ -778,7 +800,7 @@ function NewUserProfile(props) {
                                                 <Text style={styles.card__location}>{item.boatId.portName}</Text>
                                                 <IIcon name="date-range" size={13} />
                                                 <Text style={styles.card__date}>{formatDate(item.startTime)}  At   {formatTime(item.startTime)} </Text>
-                                                <Text style={styles.card__price}>{item.price}$</Text>
+                                                <Text style={styles.card__price}>{item.price}LE</Text>
                                                 {/* <TouchableOpacity onPress={() => {cancel(item.id)}}>
                         <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Finish</Text></View>
                     </TouchableOpacity> */}

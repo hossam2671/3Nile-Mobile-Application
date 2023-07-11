@@ -7,7 +7,7 @@ import { MultipleSelectList } from 'react-native-dropdown-select-list';
 import Slider from '@react-native-community/slider';
 import { useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategoryOne, getCategoryTwo, filter, filter2,filterTaps,filterTaps2, getSwvl, search } from '../redux/slices/UserSlice';
+import { getCategoryOne, getCategoryTwo, filter, filter2,filterTaps,filterTaps2, getSwvl, search, filterTaps3 } from '../redux/slices/UserSlice';
 import Icon from "react-native-vector-icons/FontAwesome"
 import ip from '../config'
 import { withTiming } from 'react-native-reanimated';
@@ -128,10 +128,10 @@ export default function Filter(props) {
         <View style={styles?.book_fixToText}>
           <TouchableOpacity style={styles?.book_bookBtn} onPress={() => {
             if (num === 1) {
-              dispatch(filter({ type: selectedItems1, port: selectedItems, numOFPeople: sliderValue, price: sliderValue1 }))
+              dispatch(filter({ type: selectedItems1, port: selectedItems, numberOfpeople: sliderValue, price: sliderValue1 }))
             }
             else if (num === 2) {
-              dispatch(filter2({ type: selectedItems1, port: selectedItems, numOFPeople: sliderValue, price: sliderValue1 }))
+              dispatch(filter2({ type: selectedItems1, port: selectedItems, numberOfpeople: sliderValue, price: sliderValue1 }))
             }
             ; setVisibleModal(null)
           }}>
@@ -156,8 +156,8 @@ export default function Filter(props) {
       dispatch(filterTaps({  port: buttonName}))
 
     }
-    else if(num==2){
-      dispatch(filterTaps2({  port: buttonName}))
+    else if(num==3){
+      dispatch(filterTaps3({  port: buttonName}))
 
     }
 
@@ -208,17 +208,17 @@ export default function Filter(props) {
                 }
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles?.kfc, activeButton === 'Mac' && styles?.activeButton]}
+                style={[styles?.kfc, activeButton === 'MAC' && styles?.activeButton]}
                 onPress={() => 
                   {
 
-                    handlePress('Mac')
+                    handlePress('MAC')
                   
                   }
                   }
               >
                 {
-                  activeButton === 'Mac' ? (<>
+                  activeButton === 'MAC' ? (<>
 
                     <Animated.View style={[styles?.div]}>
                       <Text style={styles?.Mac_btnActive}>{'Mac'}</Text>
@@ -233,18 +233,18 @@ export default function Filter(props) {
 
 
               <TouchableOpacity
-                style={[styles?.kfc, activeButton === 'El-mahata' && styles?.activeButton]}
-                onPress={() => handlePress('El-mahata')}
+                style={[styles?.kfc, activeButton === 'Mahata' && styles?.activeButton]}
+                onPress={() => handlePress('Mahata')}
               >
                 {
-                  activeButton === 'El-mahata' ? (<>
+                  activeButton === 'Mahata' ? (<>
 
                     <Animated.View style={styles?.div}> 
-                      <Text style={styles?.mahata_btnActive}>{'El-mahata'}</Text>
+                      <Text style={styles?.mahata_btnActive}>{'Mahata'}</Text>
                     </Animated.View>
 
                   </>) : (
-                    <Text style={styles?.mahata_btn}>{'El-mahata'}</Text>
+                    <Text style={styles?.mahata_btn}>{'Mahata'}</Text>
 
                   )
                 }
@@ -466,6 +466,7 @@ export default function Filter(props) {
                         <View style={styles?.card_con_info}>
                           <View style={styles?.card_con_info_row}>
                             <Text style={styles?.card_con_info_row_name}>{item?.boat?.name}</Text>
+                            <Text style={styles?.card_con_info_row_name}>{item?.port}</Text>
                           </View>
                           <View style={styles?.card_con_info_row}>
                             <Text style={styles?.card_con_info_row_price}>{item?.priceForTrip}L.E/ Hour</Text>

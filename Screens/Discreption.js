@@ -21,10 +21,11 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { TextInput } from 'react-native-paper';
 
 import ip from '../config'
-import { bookTrip } from '../redux/slices/UserSlice';
+import { bookTrip, pendingTrips } from '../redux/slices/UserSlice';
 import { Root, Popup } from 'popup-ui'
 import { PopupDialog } from 'react-native-popup-dialog';
 import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const renderPagination = (index, total, context) => {
     return (
@@ -82,14 +83,15 @@ console.log(formattedTime,"Te4eeeee2");
     }, [setOpen]);
 
     const onConfirmSingle = React.useCallback(
-        (params) => {
+     async (params) =>  {
+            
             setOpen(false);
-            setDate(params.date);
+            setDate(params?.date);
             console.log(params)
             setDateisPicked(true)
-            // const datepi=[...params?.date?.toString().split(" ")[1]," ",...params?.date?.toString().split(" ")[2]," ",...params.date.toString().split(" ")[3]].join("")
+            const datepi= [...params?.date?.toString().split(" ")[1]," ",...params?.date?.toString().split(" ")[2]," ",...params.date.toString().split(" ")[3]].join("")
         
-            // setdateOnly(datepi)
+            setdateOnly(datepi)
             console.log(dateOnly,"dateOnlydateOnly")
         },
         [setOpen, setDate]
@@ -144,17 +146,20 @@ console.log(formattedTime,"Te4eeeee2");
             boatId: data._id,
             clientId: user._id,
         })).then((res) => {
+         
             console.log(res);
             if (res?.payload?.status === 200) {
+                setVisibleModal(null)
                 SetBookStatus(true)
-            //   openSuccussfullModal();
-              SetBookMessage(res?.payload?.message);
-              setTimeout(() => {
-               
-                // succussfullmodalClose();
-                setModalVisible(false)
-                SetBookStatus(null)
-              }, 2500);
+                //   openSuccussfullModal();
+                SetBookMessage(res?.payload?.message);
+                setTimeout(() => {
+                    
+                    // succussfullmodalClose();
+                    setModalVisible(false)
+                    SetBookStatus(null)
+                    
+                }, 2500);
               console.log(bookMessage,"(bookMessage)")
             }
               else if (res?.payload?.status === 201) {
@@ -179,7 +184,9 @@ console.log(formattedTime,"Te4eeeee2");
                 }, 2500);
                
               }
-         
+
+              dispatch(pendingTrips({ id: user._id }))
+              
         })
 
 
@@ -377,8 +384,12 @@ console.log(formattedTime,"Te4eeeee2");
                     <Text style={styles?.cardTitle}>{data?.name}</Text>
                     <Text style={styles?.cardItemsRate}>{data?.rate}</Text>
                 </View>
+                <ScrollView 
+                style={styles?.cardDescView}
+                >
 
                 <Text style={styles?.cardText}>{data?.description}</Text>
+                </ScrollView>
 
                 <View style={styles?.itemContainer}>
                     <View style={styles?.item}>
@@ -425,6 +436,26 @@ console.log(formattedTime,"Te4eeeee2");
                     initialRegion={{
                         latitude: 24.09541698251378,
                         longitude: 32.89688121883719,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                >
+                    <Marker
+                        coordinate={{ latitude: 24.09541698251378, longitude: 32.89688121883719 }}
+                        title="Marker Title"
+                        description="Marker Description"
+                    />
+                </MapView>
+            </View>
+                }
+                {
+                    data?.portName == "Mahata" &&
+            <View style={styles.map}>
+                <MapView
+                    style={{ flex: 1, height: 180, }}
+                    initialRegion={{
+                        latitude: 24.0998701,
+                        longitude: 32.902257,
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}
@@ -496,16 +527,17 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        paddingBottom:20
     },
     cardTitle: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 10,
+        paddingLeft:10,
+        
     },
     cardItems: {
         fontSize: 15,
         fontWeight: 'bold',
-        // marginBottom: 10
     },
     cardItemsVlaue: {
         fontSize: 15,
@@ -519,8 +551,13 @@ const styles = StyleSheet.create({
     cardText: {
         fontSize: 16,
         // marginTop: 10,
-        marginBottom: 15,
     },
+    cardDescView:{
+    marginBottom: 10
+
+
+    }
+    ,
     itemContainer: {
         height: 100,
         flexDirection: 'row',
