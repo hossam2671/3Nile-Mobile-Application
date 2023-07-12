@@ -143,11 +143,7 @@ function NewBoatOwnerProfile(props) {
     const [boatDescriptionError, setBoatDescriptionError] = useState('');
     const [boatPriceError, setBoatPriceError] = useState('');
     const [boatNumOfPeopError, setBoatNumOfPeopError] = useState('');
-
-    // const handleFormValidity = () => {
-    //     setIsFormValid(!!boatName && !!boatDescription && !!boatPrice && !!boatNumOfPeop && !!selected && !!boatImages.length > 0 && !!type
-    //     );
-    //   };
+    const [boatImageError, setBoatImageError] = useState(false);
 
 
     function namy(e) {
@@ -204,19 +200,23 @@ function NewBoatOwnerProfile(props) {
         if (boatName.trim() === '') {
             setBoatNameError('Please enter a boat name');
             return;
-          }
-          else if(boatDescription.trim() === '') {
+        }
+        else if (boatDescription.trim() === '') {
             setBoatDescriptionError('Please enter a boat description')
             return;
-          }
-          else if(boatPrice.trim() === '') {
+        }
+        else if (boatPrice.trim() === '') {
             setBoatPriceError('Please enter a price')
             return;
-          }
-          else if(boatNumOfPeop.trim() === '') {
+        }
+        else if (boatNumOfPeop.trim() === '') {
             setBoatNumOfPeopError('Please enter a number')
             return;
-          }
+        }
+        else if(boatImages.length === 0){
+            setBoatImageError('Please add images for your boat')
+            return;
+        }
         if (
             boatName.trim() !== "" &&
             boatDescription.trim() !== "" &&
@@ -283,63 +283,104 @@ function NewBoatOwnerProfile(props) {
         setVisibleModal(false)
     }
 
+    const [nameError, setNameError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
+    const [isboatFormValid, setIsboatFormValid] = useState(false);
+
     const renderButton = (text, onPress) => (
         <View style={styles.book_fixToText}>
-            <TouchableOpacity style={styles.book_bookBtn} onPress={onPress}>
+            <TouchableOpacity
+                style={[
+                    styles.book_bookBtn,
+                    { opacity: isboatFormValid ? 1 : 0.5 },
+                ]}
+                disabled={!isboatFormValid}
+                onPress={onPress}>
                 <Text style={styles.book_btn}>{text}</Text>
                 <Icon name="arrow-right" color={'#000'} size={15} style={styles.book_arrow} />
             </TouchableOpacity>
         </View>
     );
 
-    const renderModalContent = () => (
-        <View style={styles.modalContent}>
-            <View style={styles.select}>
-
-                <Text style={styles.edit__text}>Edit your Details</Text>
-
-
-                <TextInput style={styles.modal__input}
-                   placeholder={"Your Name"} 
-                    placeholderTextColor="#0000006a"
-                    onChangeText={(e) => {
-                        setEditboatOwnerName(e);
-                        console.log(editboatOwnerName)
-                    }}
-                />
-                <TextInput style={styles.modal__input}
-                  placeholder={"Your Phone"}
-                    placeholderTextColor="0000006a"
-                    onChangeText={(e) => setEditboatOwnerPhone(e)}
-
-                />
-
-
-            </View>
-
-
-
-
-            {renderButton('Apply', () => {
-
-
-                dispatch(ownerUpdateInfo({ boatOwnerId: boatOwner._id, name: editboatOwnerName, phone: editeditboatOwnerPhone })).then((res) => {
-                    setVisibleModal(false)
-                    console.log(res.payload.data, "ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
-                    setboatOwnerState(res.payload.data)
-                    setEditModal(1)
+    const renderModalContent = () => {
+        const handleUpdate = () => {
+            if (editboatOwnerName.trim() === '') {
+                setNameError('Please enter your name');
+                setIsboatFormValid(false);
+                return;
+            }
+            if (editeditboatOwnerPhone.trim() === '') {
+                setPhoneError('Please enter your phone number');
+                setIsboatFormValid(false);
+                return;
+            }
+            dispatch(ownerUpdateInfo({ boatOwnerId: boatOwner._id, name: editboatOwnerName, phone: editeditboatOwnerPhone })).then(
+                (res) => {
+                    setVisibleModal(false);
+                    console.log(res.payload.data, "ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd");
+                    setboatOwnerState(res.payload.data);
+                    setEditModal(1);
                     setTimeout(() => {
-                        setEditModal(0)
-                    }, 3000)
-                })
-            })}
+                        setEditModal(0);
+                    }, 3000);
+                }
+            );
+        };
 
-        </View>
-    );
+        return (
+            <View style={styles.modalContent}>
+                <View style={styles.select}>
+                    <Text style={styles.edit__text}>Edit your Details</Text>
+                    <Text style={styles.edit__close__icon} onPress={() => setVisibleModal(false)}>
+                        X
+                    </Text>
+                    <TextInput
+                        style={styles.modal__input}
+                        placeholder={boatOwner.name}
+                        placeholderTextColor="#0000006a"
+                        onChangeText={(e) => {
+                            setEditboatOwnerName(e);
+                            if (e.trim().length === 0) {
+                                setIsboatFormValid(false);
+                                setNameError('Please enter your name');
+                            } else {
+                                setIsboatFormValid(true);
+                                setNameError('');
+                            }
+                        }}
+                    />
+                    {nameError ? (
+                        <Text style={styles.error__message}>{nameError}</Text>
+                    ) : null}
+                    <TextInput
+                        style={styles.modal__input}
+                        placeholder={boatOwner.phone}
+                        placeholderTextColor="#0000006a"
+                        onChangeText={(e) => {
+                            setEditboatOwnerPhone(e);
+                            if (e.trim().length === 0) {
+                                setIsboatFormValid(false);
+                                setPhoneError('Please enter your phone number');
+                            } else {
+                                setIsboatFormValid(true);
+                                setPhoneError('');
+                            }
+                        }}
+                    />
+                    {phoneError ? (
+                        <Text style={styles.error__message}>{phoneError}</Text>
+                    ) : null}
+                </View>
+                {renderButton('Apply', isboatFormValid ? handleUpdate : undefined)}
+            </View>
+        );
+    };
 
 
 
     //add boat modal
+
+
 
 
     const addBoatrenderButton = (text, onPress) => (
@@ -363,7 +404,7 @@ function NewBoatOwnerProfile(props) {
         <View style={styles.modalContent}>
             <View style={styles.select}>
                 <Text style={styles.add__boat__text}>Add Boat</Text>
-               
+
 
                 <Text style={styles.add__boat__close__icon} onPress={() => setAddVisibleModal(false)}>X</Text>
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -372,6 +413,7 @@ function NewBoatOwnerProfile(props) {
                         onPress={() => { pickBoatImage() }}>
                         <Text><Icon name="upload" color={'#0c8df7'} size={15} style={styles.upload__image__icon} /> Upload Image</Text>
                     </TouchableOpacity>
+                    {boatImageError && boatImages.length === 0 && <Text style={styles.error__message}>{boatImageError}</Text>}
                     <View style={styles.boatImages}>
                         {boatImages &&
                             boatImages.map((item, index) => (
@@ -469,11 +511,10 @@ function NewBoatOwnerProfile(props) {
 
     const [editModal, setEditModal] = useState(0)
     const editInfoModal = () => (
-        
-        <View style={styles.modalContent}>
-        <Image source={succ} style={styles.succ} />
 
-            <Text  style={styles.text}>Your Information has Changed successfully </Text>
+        <View style={styles.modalContent}>
+            <Image source={succ} style={styles.succ} />
+            <Text style={styles.text}>Your Information Changed successfully</Text>
         </View>
     );
 
@@ -482,16 +523,16 @@ function NewBoatOwnerProfile(props) {
     const [editImageModal, setEditImageModal] = useState(0)
     const EditImageModal = () => (
         <View style={styles.modalContent}>
-        <Image source={succ} style={styles.succ} />
+            <Image source={succ} style={styles.succ} />
 
-            <Text style={styles.text}>Your Image has Changed successfully </Text>
+            <Text style={styles.text}>Your Image Changed successfully </Text>
         </View>
     );
 
     const [editCoverModal, setEditCoverModal] = useState(0)
     const EditCoverModal = () => (
         <View style={styles.modalContent}>
-        <Image source={succ} style={styles.succ} />
+            <Image source={succ} style={styles.succ} />
 
             <Text style={styles.text}>Your Cover Image Changed successfully </Text>
         </View>
@@ -501,28 +542,18 @@ function NewBoatOwnerProfile(props) {
     const [addBoatModal, setAddBoatModal] = useState(0)
     const AddBoatModal = () => (
         <View style={styles.modalContent}>
-        <Image source={succ} style={styles.succ} />
+            <Image source={succ} style={styles.succ} />
 
-            <Text style={styles.text}>Your boat has been Added successfully </Text>
+            <Text style={styles.text}>Your boat Added successfully </Text>
         </View>
     );
 
     const [deleteBoatModal, setDeleteBoatModal] = useState(0)
     const DeleteBoatModal = () => (
         <View style={styles.modalContent}>
-        <Image source={succ} style={styles.succ} />
+            <Image source={succ} style={styles.succ} />
 
-            <Text style={styles.text}>Your boat has been Deleted </Text>
-        </View>
-    );
-
-    //error add boat Modal
-    const [errorAddBoatModal, setErrorAddBoatModal] = useState(0)
-    const ErorrAddBoatModal = () => (
-        <View style={styles.modalContent}>
-        <Image source={errorImage} style={styles.succ} />
-
-            <Text style={styles.text}>Please Complete All data to add the boat!</Text>
+            <Text style={styles.text}>Your boat Deleted successfully </Text>
         </View>
     );
 
@@ -1193,7 +1224,7 @@ function NewBoatOwnerProfile(props) {
 
                     </TouchableOpacity>
 
-                    <Image source={{uri : coverImage}} style={{
+                    <Image source={{ uri: coverImage }} style={{
                         width: '100%',
                         height: 190,
                         borderRadius: 20,
@@ -1537,7 +1568,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
-    
+
     },
     modal__profile__input: {
         borderWidth: 1,
@@ -1640,12 +1671,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#0c8df7',
         left: 23,
         bottom: 115,
-      
+
     },
     add__boat__button__style: {
         fontSize: 15,
         fontWeight: 600,
-        color:'#ffffff',
+        color: '#ffffff',
     },
     add__boat__image__button: {
         width: 85,
@@ -1724,7 +1755,7 @@ const styles = StyleSheet.create({
         fontWeight: 600,
         textAlign: 'center',
         alignItems: 'center',
-   
+
     },
     boatImages: {
         flexWrap: 'wrap',
@@ -1751,24 +1782,30 @@ const styles = StyleSheet.create({
         top: 3,
     },
 
+    edit__close__icon: {
+        bottom: 27,
+        left: 300,
+        fontSize: 20,
+        fontWeight: 600,
+    },
     error__message: {
         color: 'red',
     },
-    cover__icon__button:{
+    cover__icon__button: {
         bottom: 265,
         left: 380,
         color: 'white',
     },
-    succ:{
-        width:100,
-        height:100,
-    
-      },
-      text:{
-        fontSize:20,
-        paddingTop:20,
-      },
-    
+    succ: {
+        width: 100,
+        height: 100,
+
+    },
+    text: {
+        fontSize: 20,
+        paddingTop: 20,
+    },
+
 });
 
 export default NewBoatOwnerProfile

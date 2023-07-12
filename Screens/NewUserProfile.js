@@ -50,67 +50,111 @@ function NewUserProfile(props) {
     const [editPhone, setPhone] = useState("")
     const [image, setImage] = useState(`http://${ip}:5000/${user.img}`);
 
-    const renderButton = (text, onPress) => (
+    const [isFormValid, setIsFormValid] = useState(false);
+    const [nameError, setNameError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
+
+    const handleUpdate = () => {
+
+        if (editName.trim() === '') {
+            setNameError('Please enter your name');
+            return;
+          }
+        
+        if (editPhone.trim() === '') {
+            setPhoneError('Please enter your phone number');
+            return;
+          }
+      
+        const updatedUser = {
+          name: editName || userState.name,
+          phone: editPhone || userState.phone,
+          id: user._id,
+        };
+      
+        dispatch(editUserInfo({ updatedUser })).then((res) => {
+          setVisibleModal(false);
+          console.log(res.payload.data, "ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd");
+          setUserState(res.payload.data);
+        });
+      };
+      
+      const renderButton = (text) => (
         <View style={styles.book_fixToText}>
-            <TouchableOpacity style={styles.book_bookBtn} onPress={onPress}>
-                <Text style={styles.book_btn}>{text}</Text>
-                <Icon name="arrow-right" color={'#000'} size={15} style={styles.book_arrow} />
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.book_bookBtn,
+              { opacity: isFormValid ? 1 : 0.5 },
+            ]}
+            disabled={!isFormValid}
+            onPress={handleUpdate}
+          >
+            <Text style={styles.book_btn}>{text}</Text>
+            <Icon name="arrow-right" color={"#000"} size={15} style={styles.book_arrow} />
+          </TouchableOpacity>
         </View>
-    );
-
-    const renderModalContent = () => (
+      );
+      
+      const renderModalContent = () => (
         <View style={styles.modalContent}>
-            <View style={styles.select}>
+          <View style={styles.select}>
+            <Text style={styles.edit__text}>Edit your Details</Text>
+            <Text style={styles.edit__close__icon} onPress={() => setVisibleModal(false)}>
+              X
+            </Text>
+      
+            <TextInput
+              style={styles.modal__input}
+              placeholder={user.name}
+              placeholderTextColor="#0000006a"
+              onChangeText={(e) => {
+                if (e.trim().length === 0) {
+                    setIsFormValid(false);
+                    setNameError('Please enter your name');
+                } else {
+                    setIsFormValid(true);
+                    setNameError('');
+                }
+              
+                
+                setName(e)}
+            }
+            />
+            {nameError ? (
+                    <Text style={styles.error__message}>{nameError}</Text>
+                ) : null}
 
-                <Text style={styles.edit__text}>Edit your Details</Text>
-
-
-                <TextInput style={styles.modal__input}
-                    placeholder='Your Name'
-                    placeholderTextColor="#0000006a"
-                    onChangeText={(e) => { setName(e); console.log(editName) }}
-                />
-                <TextInput style={styles.modal__input}
-                    placeholder='Your Phone'
-                    placeholderTextColor="#0000006a"
-                    onChangeText={(e) => setPhone(e)}
-
-                />
-
-
-            </View>
-
-
-
-
-            {renderButton('Apply', () => {
-                const updatedUser = {
-                    name: editName || userState.name,
-                    phone: editPhone || userState.phone,
-                    id: user._id
-                };
-
-                dispatch(editUserInfo({ updatedUser })).then((res) => {
-                    setVisibleModal(false)
-                    console.log(res.payload.data, "ggfdfhfdhhsfdfhdfhdsfhdfhdfhdsfhdsfhd")
-                    setUserState(res.payload.data)
-                    setEditModal(1)
-                    setTimeout(() => {
-                        setEditModal(0)
-                    }, 3000)
-                })
-            })}
-
+            <TextInput
+              style={styles.modal__input}
+              placeholder={user.phone}
+              placeholderTextColor="#0000006a"
+              onChangeText={(e) =>{ 
+                if (e.trim().length === 0) {
+                    setIsFormValid(false);
+                    setPhoneError('Please enter your phone');
+                } else {
+                    setIsFormValid(true);
+                    setPhoneError('');
+                }
+                
+                setPhone(e)}
+              }
+            />
+            {phoneError ? (
+                    <Text style={styles.error__message}>{phoneError}</Text>
+                ) : null}
+          </View>
+      
+          {renderButton("Apply")}
         </View>
-    );
+      );
 
     const [editImageModal, setEditImageModal] = useState(0)
     const EditImageModal = () => (
         <View style={styles.modalContent}>
         <Image source={succ} style={styles.succ} />
 
-            <Text style={styles.text}>Your Image has Changed successfully </Text>
+            <Text style={styles.text}>Your Image Changed successfully </Text>
         </View>
     );
 
@@ -162,7 +206,7 @@ function NewUserProfile(props) {
         <View style={styles.modalContent}>
         <Image source={succ} style={styles.succ} />
 
-            <Text style={styles.text}>Your Information has Changed successfully </Text>
+            <Text style={styles.text}>Your Information Changed successfully </Text>
         </View>
     );
 
@@ -279,7 +323,7 @@ function NewUserProfile(props) {
                         paddingVertical: 8,
                         backgroundColor: currentTab === title ? "white" : "transparent",
                         paddingLeft: 13,
-                        paddingRight: 35,
+                        paddingRight: 75,
                         borderRadius: 8,
                         marginTop: 15,
                     }}
@@ -404,7 +448,7 @@ function NewUserProfile(props) {
                         // Tab Bar Buttons....
                     }
 
-                    <TabButton
+                    {/* <TabButton
                         currentTab={currentTab}
                         setCurrentTab={setCurrentTab}
                         title="Home"
@@ -437,47 +481,7 @@ function NewUserProfile(props) {
                             setShowMenu(!showMenu);
 
                         }}
-                    />
-                    <TabButton
-                        currentTab={currentTab}
-                        setCurrentTab={setCurrentTab}
-                        title="Accepted"
-                        icon={accept}
-                        onPress={() => {
-                            dispatch(acceptedTrips({ id: user._id })).then((res) => {
-                                console.log(res.payload.data, "dsadsadcxz");
-                                setData(res.payload.data)
-                            })
-                            setTap("accepted")
-                            console.log(tap)
-                            setCurrentTab("Accept")
-
-                            Animated.timing(scaleValue, {
-                                toValue: showMenu ? 1 : 1,
-                                duration: 300,
-                                useNativeDriver: true
-                            })
-                                .start()
-
-                            Animated.timing(offsetValue, {
-                                // YOur Random Value...
-                                toValue: showMenu ? 0 : 200,
-                                duration: 300,
-                                useNativeDriver: true
-                            })
-                                .start()
-                            Animated.timing(closeButtonOffset, {
-                                // YOur Random Value...
-                                toValue: !showMenu ? -30 : 0,
-                                duration: 300,
-                                useNativeDriver: true
-                            })
-                                .start()
-
-                            setShowMenu(!showMenu);
-
-                        }}
-                    />
+                    /> */}
                     <TabButton
                         currentTab={currentTab}
                         setCurrentTab={setCurrentTab}
@@ -520,6 +524,48 @@ function NewUserProfile(props) {
 
                         }}
                     />
+
+                    <TabButton
+                        currentTab={currentTab}
+                        setCurrentTab={setCurrentTab}
+                        title="Accepted"
+                        icon={accept}
+                        onPress={() => {
+                            dispatch(acceptedTrips({ id: user._id })).then((res) => {
+                                console.log(res.payload.data, "dsadsadcxz");
+                                setData(res.payload.data)
+                            })
+                            setTap("accepted")
+                            console.log(tap)
+                            setCurrentTab("Accept")
+
+                            Animated.timing(scaleValue, {
+                                toValue: showMenu ? 1 : 1,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+
+                            Animated.timing(offsetValue, {
+                                // YOur Random Value...
+                                toValue: showMenu ? 0 : 200,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+                            Animated.timing(closeButtonOffset, {
+                                // YOur Random Value...
+                                toValue: !showMenu ? -30 : 0,
+                                duration: 300,
+                                useNativeDriver: true
+                            })
+                                .start()
+
+                            setShowMenu(!showMenu);
+
+                        }}
+                    />
+                    
                     <TabButton
                         currentTab={currentTab}
                         setCurrentTab={setCurrentTab}
@@ -657,8 +703,6 @@ function NewUserProfile(props) {
                             width: '100%',
                             height: 200,
                             marginBottom: 50
-
-
                         }} >
 
 
@@ -1070,6 +1114,15 @@ const styles = StyleSheet.create({
         fontSize:20,
         paddingTop:20,
       },
+      edit__close__icon:{
+        bottom: 27,
+        left: 300,
+        fontSize: 20,
+        fontWeight: 600,
+    },
+    error__message: {
+        color: 'red',
+    },
 });
 
 export default NewUserProfile

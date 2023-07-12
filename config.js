@@ -1,2 +1,2 @@
- const  ip  = "192.168.1.8"
+ const  ip  = "10.171.241.23"
 export default ip
