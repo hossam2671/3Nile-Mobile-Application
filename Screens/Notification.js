@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity ,StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/AntDesign';
 import ip from '../config'
@@ -14,6 +14,7 @@ const socket = io(`http://${ip}:5000`);
 
 const Notification= () => {
   const dispatch = useDispatch();
+  const [showFlash, setShowFlash] = useState(false);
 
   const [notifications, setNotifications] = useState([]);
   const [notificnotifyColor, setnotificnotifyColor] = useState(notify);
@@ -55,8 +56,8 @@ const Notification= () => {
             const isNewNotification = notifications.find(notification => notification._id === _id) === undefined;        
           
           if(isNewNotification){
-            
-         
+            setShowFlash(true);
+
               if (!notifications.some(notification => notification._id === data.notification._id)) {
                 setNotifications(prevState => [...prevState, data.notification]);
               }
@@ -69,11 +70,18 @@ const Notification= () => {
       });
         console.log(notifications,"noooot");
 
-    },[notificnotifyColor])
+    },[notificnotifyColor,socket])
   return (
     <View>
       <TouchableOpacity onPress={toggleModal}>
-      <Icon name="notification" size={24}  color={notifications?"#333":"#871616"}/>
+      <View style={styles.iconContainer}>
+          {
+            notifications.length >0 ? <Icon name="notification" size={24} color={"#871616"} />
+            :
+            <Icon name="notification" size={24} color={"#252222"} />
+          }
+       
+      </View>
       </TouchableOpacity>
 
       <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
@@ -88,7 +96,7 @@ notifications.length >0  ?
                 
                 axios.put(`http://${ip}:5000/user/notifications/${item._id}/mark-as-read`).then((res)=>{
                   console.log(res,"readed");
-                
+
 
                 })
               }
@@ -118,12 +126,19 @@ notifications.length >0  ?
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     marginRight:30,
-//     // top:50,
-//     // left:360,
-//   },
-// });
+const styles = StyleSheet.create({
+  iconContainer: {
+    marginRight: 30,
+    // Add other styles for the container if needed
+  },
+  flashAnimation: {
+    position: 'absolute',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Adjust the background color and opacity as desired
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+});
 
 export default Notification;

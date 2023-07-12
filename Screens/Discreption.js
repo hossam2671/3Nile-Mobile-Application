@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View, Dimensions, Image, Button, Alert, TouchableOpacity, FlatList, TIME } from 'react-native';
+import { ScrollView,Platform, StyleSheet, Text, View, Dimensions, Image, Button, Alert, TouchableOpacity, FlatList, TIME } from 'react-native';
 import Swiper from 'react-native-swiper'
 const { width } = Dimensions.get('window')
 import MapView, { Marker } from 'react-native-maps';
@@ -26,6 +26,7 @@ import { Root, Popup } from 'popup-ui'
 import { PopupDialog } from 'react-native-popup-dialog';
 import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 const renderPagination = (index, total, context) => {
     return (
@@ -149,7 +150,6 @@ console.log(formattedTime,"Te4eeeee2");
          
             console.log(res);
             if (res?.payload?.status === 200) {
-                setVisibleModal(null)
                 SetBookStatus(true)
                 //   openSuccussfullModal();
                 SetBookMessage(res?.payload?.message);
@@ -226,7 +226,7 @@ console.log(formattedTime,"Te4eeeee2");
                     
                     
                     
-                    } uppercase={false} colortheme={'red'} mode="outlined" title='start time' style={styles.timeBtn}>
+                    } uppercase={false} mode="outlined" title='start time'   style={[styles.timeBtn]}>
 
                     {
                         isPicked ? <Text style={styles.time} >{timey}</Text> : <Text style={styles.time} >Start Time</Text>
@@ -266,16 +266,21 @@ console.log(formattedTime,"Te4eeeee2");
             {/* </TouchableOpacity> */}
             <SafeAreaProvider>
                 <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center',color:"#fdfdfd" }}>
-
+     
                     <TimePickerModal
+
+
                         visible={visible}
                         use24HourClock={true}
-                        animationType='slide'
+                        animationType='fade'
 
                         onDismiss={onDismiss}
                         onConfirm={onConfirm}
                         minutes={14}
+                        
+
                     />
+               
                 </View>
             </SafeAreaProvider>
             {/* Time Picker  End*/}
@@ -291,6 +296,7 @@ console.log(formattedTime,"Te4eeeee2");
                         onDismiss={onDismissSingle}
                         date={date}
                         onConfirm={onConfirmSingle}
+                        
                     />
                 </View>
             </SafeAreaProvider>

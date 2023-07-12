@@ -1,24 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import UserProfile from './Screens/UserProfile'
 import React, { useEffect,useState,useRef } from 'react'
-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-
 import Icon from 'react-native-vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
-
 import {createNativeStackNavigator} from "@react-navigation/native-stack"
 import HomeCards from './Screens/HomeCards';
-
-
-
 import {Discreption} from './Screens/Discreption'
-
 import LoginSignUp from './Screens/LoginSignUpScreen/LoginSignUp';
 import Filter from './Screens/Filter';
 import OnboardingScreen from './Screens/OnboardingScreen';
-
 import { NavigationContainer } from '@react-navigation/native';
 import BoatOwnerProfile from './Screens/BoatOwnerProfile';
 import ContactUs from './Screens/ContactUs';
@@ -26,25 +18,35 @@ import { Provider } from 'react-redux'
 import { Store } from './redux/Store';
 import { Modals } from  './Screens/modals/Modals';
 import Swvl from './Screens/Swvl';
-
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
 import BottomNavBar from './BottomNavBar'
 import NewBoatOwnerProfile from './Screens/NewBoatOwnerProfile';
 // For ignore Errors
 import { LogBox } from 'react-native';
-
 LogBox.ignoreAllLogs()
 // For ignore Errors End
 import io from 'socket.io-client';
 import ip from './config'
-
 const socket = io(`http://${ip}:5000`);
 import { Platform } from 'react-native';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+const theme = {
+...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    myOwnProperty: true,
+    primary: '#0c8df7',
+    backdrop: '#fbfbfb87',
+    secondaryContainer:'#0c8df737',
+    onPrimaryContainer: "#0c8df7",
+    surface: "rgb(255, 255, 255)",
+    onSurface: "#0c8df7",
+    onSecondaryContainer: "#ffffff",
+    surfaceVariant:"#0c8df720", 
+  },
+};
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -108,7 +110,11 @@ export default function App() {
 
   return (
 
-  
+    <PaperProvider theme={theme}>
+      
+     
+
+
       <Provider store={Store}>
             <NavigationContainer>
             <Stack.Navigator screenOptions={{
@@ -133,6 +139,7 @@ export default function App() {
             <StatusBar style='dark' />
             </NavigationContainer>
       </Provider>
+      </PaperProvider>  
 
   ); 
 }

@@ -358,9 +358,12 @@ const Chat = () => {
     data={userMessages}
     renderItem={({ item }) => (
       <View style={styles.rightMessage}>
+     <View style={styles.messageText}>
+  <Text style={styles.message}>{item.message}</Text>
+  <Text style={styles.timeText}>{formatTime(item.time)}</Text>
+</View>
+        {/* <Text style={styles.messageText_time}>{formatTime(item.time)}</Text> */}
         <Image style={styles.logo} source={{ uri: `http://${ip}:5000/${user?.img}` }} />
-        <Text style={styles.messageText}>{item.message}</Text>
-        <Text style={styles.messageText}>{formatTime(item.time)}</Text>
       </View>
     )}
     contentContainerStyle={styles.chat}
@@ -407,53 +410,48 @@ const Chat = () => {
 };
 
 const styles = StyleSheet.create({
-  chatContainer: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  rightMessage: {
-    flex: 1,
-    alignItems: 'flex-end',
-    marginVertical: 5,
-    paddingHorizontal: 10,
-  },
-  leftMessage: {
-    flex: 1,
-    alignItems: 'flex-start',
-    marginVertical: 5,
-    paddingHorizontal: 10,
-  },
   container: {
     flex: 1,
     backgroundColor: '#f0f0f0',
   },
-  chat: {
-    flexGrow: 1,
-    padding: 10,
+  chatContainer: {
+    flex: 1,
+    flexDirection: 'row',
   },
   leftMessage: {
+    flex: 1,
+    alignItems: 'flex-end',
+    marginVertical: 7,
+    paddingHorizontal: 0,
+ 
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
+    justifyContent:"flex-end",
+    
   },
   rightMessage: {
-    // flexDirection: 'row-reverse',
-
-    // alignItems: 'center',
-   marginBottom: 10,
-   width:150
+    flex: 1,
+    alignItems: 'flex-end',
+    marginVertical: 7,
+    paddingHorizontal: 0,
+ 
+    flexDirection: 'row',
+    justifyContent:"flex-end",
   },
   logo: {
     width: 50,
     height: 50,
     borderRadius: 25,
     marginRight: 10,
+    backgroundColor: '#8f0101',
   },
-  messageText: {
-    backgroundColor: '#fff',
+
+  messageText_time: {
+    // backgroundColor: '#ffffff',
     borderRadius: 20,
-    padding: 10,
-    maxWidth: '80%',
+    maxWidth: '100%',
+    padding:10,
+//  top:35,
+   
   },
   inputContainer: {
     flexDirection: 'row',
@@ -481,34 +479,47 @@ const styles = StyleSheet.create({
   },
   chatRooms: {
     width: 150,
-    // height: 100,
     backgroundColor: '#fff',
     margin: 5,
   },
-  chatRoomsCont:{
-    flexDirection:'row',
-    justifyContent:'space-between',
-    alignItems:'center',
-  
+  chatRoomsCont: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  tripTimeEnd:{
-
-  },
-  tripTime:{},
-  tripName:{
+  tripTimeEnd: {},
+  tripTime: {},
+  tripName: {
     fontSize: 20,
     color: '#000',
-
-  },tripLogo:{
+  },
+  tripLogo: {
     width: 70,
     height: 70,
     borderRadius: 35,
     marginLeft: 30,
-  }
-,
-ActiveChat:{
-  backgroundColor: '#0c8df7',
-}
+  },
+  ActiveChat: {
+    backgroundColor: '#0c8df7',
+  },
+  messageText: {
+    backgroundColor: '#ffffffff',
+    borderRadius: 20,
+    padding: 6,
+    maxWidth: '100%',// Replace with your desired background color
+  right:5,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'flex-end',
+  },
+  timeText: {
+    fontSize: 10,
+    paddingLeft: 5,
+  },
+  message: {
+    fontSize: 16, // Replace with your desired font size for the message
+
+  },
 });
 
 export default Chat;

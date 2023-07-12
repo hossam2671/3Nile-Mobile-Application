@@ -1296,7 +1296,7 @@ function NewBoatOwnerProfile(props) {
                                                     }); console.log("first")
 
                                                 }}>
-                                                    <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>Accept</Text></View>
+                                                    <View style={styles.cancel__button_acc}><Text style={styles.cancel__button__text}>Accept</Text></View>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity onPress={() => {
                                                     dispatch(ownerCancelTrip(item._id)).then((res) => {
@@ -1306,7 +1306,7 @@ function NewBoatOwnerProfile(props) {
                                                     }); console.log("first")
 
                                                 }}>
-                                                    <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>cancel</Text></View>
+                                                    <View style={styles.cancel__button_acc}><Text style={styles.cancel__button__text}>cancel</Text></View>
                                                 </TouchableOpacity>
                                             </View>
                                         </View>
@@ -1651,7 +1651,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#0c8df7',
         left: 180,
-        bottom: 50,
+        // bottom: 50,
+        lineHeight: 45,
+        marginBottom: 10
+
+    },
+    cancel__button_acc: {
+        width: 100,
+        height: 40,
+        borderRadius: 150,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#0c8df7',
+        left: 160,
+        bottom: 90,
         lineHeight: 45,
         marginBottom: 10
 
@@ -1796,6 +1809,7 @@ const styles = StyleSheet.create({
         left: 380,
         color: 'white',
     },
+<<<<<<< Updated upstream
     succ: {
         width: 100,
         height: 100,
@@ -1806,6 +1820,19 @@ const styles = StyleSheet.create({
         paddingTop: 20,
     },
 
+=======
+    succ:{
+        width:100,
+        height:100,
+    
+      },
+      text:{
+        fontSize:20,
+        paddingTop:20,
+      },
+
+    
+>>>>>>> Stashed changes
 });
 
 export default NewBoatOwnerProfile
