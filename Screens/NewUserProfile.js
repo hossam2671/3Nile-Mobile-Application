@@ -105,7 +105,7 @@ function NewUserProfile(props) {
       
             <TextInput
               style={styles.modal__input}
-              placeholder={user.name}
+              placeholder="Your Name"
               placeholderTextColor="#0000006a"
               onChangeText={(e) => {
                 if (e.trim().length === 0) {
@@ -126,7 +126,7 @@ function NewUserProfile(props) {
 
             <TextInput
               style={styles.modal__input}
-              placeholder={user.phone}
+              placeholder="Your Phone"
               placeholderTextColor="#0000006a"
               onChangeText={(e) =>{ 
                 if (e.trim().length === 0) {
@@ -144,6 +144,7 @@ function NewUserProfile(props) {
                     <Text style={styles.error__message}>{phoneError}</Text>
                 ) : null}
           </View>
+
       
           {renderButton("Apply")}
         </View>

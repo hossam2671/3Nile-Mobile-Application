@@ -562,7 +562,7 @@ function NewBoatOwnerProfile(props) {
     const SwvlModalContent = () => (
         <View style={styles.modalContent}>
             <View style={styles.select}>
-                <Text style={styles.add__boat__text}>Add Boat</Text>
+                <Text style={styles.add__boat__text}>Add Trip</Text>
                 {/* <Text style={styles.add__boat__close__icon} onPress={closeModal()}>X</Text> */}
 
                 <TextInput
@@ -1107,7 +1107,7 @@ function NewBoatOwnerProfile(props) {
                     <TabButton
                         currentTab={currentTab}
                         setCurrentTab={setCurrentTab}
-                        title="Swvl Details"
+                        title="3Nile Bus Details"
                         icon={swvlI}
                         onPress={() => {
                             setTap("Swvl")
@@ -1265,6 +1265,8 @@ function NewBoatOwnerProfile(props) {
                         {
                             tap == "req" && (
                                 <FlatList
+                         
+                                style={{ marginBottom: 60 }}
                                     data={ownerReqs.payload.data}
                                     // contentContainerStyle={{ paddingBottom: 200 }}
                                     keyExtractor={(item) => item._id}
@@ -1321,7 +1323,8 @@ function NewBoatOwnerProfile(props) {
 
 
                                 <FlatList
-                                    style={{ marginBottom: 20 }}
+                                style={{ marginBottom: 60 }}
+                                
                                     data={allBoats}
                                     keyExtractor={(item) => item._id}
                                     renderItem={({ item }) => (
@@ -1361,7 +1364,7 @@ function NewBoatOwnerProfile(props) {
                                                     setswVlVisibleModal(1)
                                                     setBoatId(item._id)
                                                 }}>
-                                                    <View style={styles.cancel__button}><Text style={styles.cancel__button__text}>+ Add swvl</Text></View>
+                                                    <View style={styles.cancel__button_swvl}><Text style={styles.cancel__button__text}>Add Bus Trip</Text></View>
                                                 </TouchableOpacity>
                                             }
                                         </View>
@@ -1375,6 +1378,7 @@ function NewBoatOwnerProfile(props) {
                             tap == "prev" && (
 
                                 <FlatList
+                                style={{ marginBottom: 60 }}
                                     data={prevBoats.payload.data}
                                     keyExtractor={(item) => item._id}
                                     renderItem={({ item }) => (
@@ -1422,6 +1426,7 @@ function NewBoatOwnerProfile(props) {
 
 
                                 <FlatList
+                                style={{ marginBottom: 60 }}
                                     data={currBoats.payload.data}
                                     keyExtractor={(item) => item._id}
                                     renderItem={({ item }) => (
@@ -1463,6 +1468,7 @@ function NewBoatOwnerProfile(props) {
                             tap == "Swvl" && (
 
                                 <FlatList
+                                style={{ marginBottom: 60 }}
                                     data={swvlTrips.payload.data}
                                     keyExtractor={(item) => item._id}
                                     renderItem={({ item }) => (
@@ -1809,7 +1815,6 @@ const styles = StyleSheet.create({
         left: 380,
         color: 'white',
     },
-<<<<<<< Updated upstream
     succ: {
         width: 100,
         height: 100,
@@ -1819,20 +1824,19 @@ const styles = StyleSheet.create({
         fontSize: 20,
         paddingTop: 20,
     },
+    cancel__button_swvl:{
+        width: 100,
+        height: 45,
+        borderRadius: 150,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#0c8df7',
+        left: 180,
+        bottom: 110,
+        lineHeight: 45,
+        marginBottom: 10
+    },
 
-=======
-    succ:{
-        width:100,
-        height:100,
-    
-      },
-      text:{
-        fontSize:20,
-        paddingTop:20,
-      },
-
-    
->>>>>>> Stashed changes
 });
 
 export default NewBoatOwnerProfile

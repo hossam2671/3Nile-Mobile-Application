@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity ,StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/Ionicons';
 import ip from '../config'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import io from 'socket.io-client';
@@ -76,7 +76,7 @@ const Notification= () => {
       <TouchableOpacity onPress={toggleModal}>
       <View style={styles.iconContainer}>
           {
-            notifications.length >0 ? <Icon name="notification" size={24} color={"#871616"} />
+            notifications.length >0 ? <Icon name="md-notifications" size={24} color={ '#0378ee'} />
             :
             <Icon name="notification" size={24} color={"#252222"} />
           }
@@ -85,12 +85,12 @@ const Notification= () => {
       </TouchableOpacity>
 
       <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
-        <View style={{ backgroundColor: 'white', padding: 50,borderRadius:30,bottom:30, }}>
+        <View style={{ backgroundColor: 'white', padding: 20,borderRadius:60,bottom:30,width:280,left:60, }}>
           {
 notifications.length >0  ?
            notifications.map((item,index) => {
             console.log(item,"iteeeem");
-            return <Text key={index}>1{item.message}<TouchableOpacity
+            return <Text style={{color:'#535252',fontSize:20, }} key={index}>1{item.message}<TouchableOpacity
               onPressIn={()=>{
                 remove(index)
                 

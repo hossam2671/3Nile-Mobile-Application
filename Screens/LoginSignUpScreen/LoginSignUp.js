@@ -178,7 +178,7 @@ const LoginSignUp = (props) => {
           imagePosition.value = 0;
           
           setModalVisible(false)
-        },3000)
+        },2000)
       }
       else if (res.payload.status===200){
         SetLoginStatus(true)
@@ -191,7 +191,7 @@ const LoginSignUp = (props) => {
           }
           // closeSuccussfullmodal() 
           setModalVisible(false)
-        },3000)
+        },2000)
      
       }
      
@@ -257,7 +257,7 @@ const LoginSignUp = (props) => {
             
           
 
-          },3000)
+          },1000)
         }
   
     }).catch((error)=>{

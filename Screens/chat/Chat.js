@@ -327,6 +327,7 @@ const Chat = () => {
    
     <View>
     <FlatList
+    
       horizontal
       data={chats}
       renderItem={renderMessage}
@@ -343,10 +344,14 @@ const Chat = () => {
     data={RecievedMessages}
     renderItem={({ item }) => (
       <View style={styles.leftMessage}>
-        <Image style={styles.logo} source={{ uri: `http://${ip}:5000/${userMessageImg}` }} />
-        <Text style={styles.messageText}>{item.message}</Text>
-        <Text style={styles.messageText}>{recieverName}</Text>
-        <Text style={styles.messageText}>{formatTime(item.time)}</Text>
+         <Image style={styles.logo} source={{ uri: `http://${ip}:5000/${userMessageImg}` }} />
+
+        <View style={styles.messageText2}>
+  <Text style={styles.message2}>{item.message}</Text>
+  <Text style={styles.timeText}>{formatTime(item.time)}</Text>
+</View>
+
+   
       </View>
     )}
     contentContainerStyle={styles.chat}
@@ -363,7 +368,7 @@ const Chat = () => {
   <Text style={styles.timeText}>{formatTime(item.time)}</Text>
 </View>
         {/* <Text style={styles.messageText_time}>{formatTime(item.time)}</Text> */}
-        <Image style={styles.logo} source={{ uri: `http://${ip}:5000/${user?.img}` }} />
+        {/* <Image style={styles.logo} source={{ uri: `http://${ip}:5000/${user?.img}` }} /> */}
       </View>
     )}
     contentContainerStyle={styles.chat}
@@ -412,7 +417,7 @@ const Chat = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#ececec',
   },
   chatContainer: {
     flex: 1,
@@ -438,21 +443,21 @@ const styles = StyleSheet.create({
     justifyContent:"flex-end",
   },
   logo: {
-    width: 50,
-    height: 50,
+    width: 30,
+    height: 30,
     borderRadius: 25,
     marginRight: 10,
-    backgroundColor: '#8f0101',
+    // backgroundColor: '#8f0101',
   },
 
-  messageText_time: {
-    // backgroundColor: '#ffffff',
-    borderRadius: 20,
-    maxWidth: '100%',
-    padding:10,
-//  top:35,
+//   messageText_time: {
+//     backgroundColor: '#a92f2f',
+//     borderRadius: 20,
+//     maxWidth: '100%',
+//     padding:10,
+// //  top:35,
    
-  },
+//   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -468,7 +473,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   sendButton: {
-    backgroundColor: 'blue',
+    backgroundColor: '#0c8df7',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 20,
@@ -478,32 +483,46 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   chatRooms: {
-    width: 150,
+    width: 210,
     backgroundColor: '#fff',
     margin: 5,
+    height:70,
+borderRadius:50,
+flexDirection: 'row',
+justifyContent: 'space-between',
   },
   chatRoomsCont: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+left:-38,
+top:45,
   },
-  tripTimeEnd: {},
-  tripTime: {},
+  tripTimeEnd: {
+    color: '#000000',
+fontSize:10,
+  
+  },
+  tripTime: {
+    color: '#000000',
+    fontSize:10,
+  },
   tripName: {
     fontSize: 20,
-    color: '#000',
+    color: '#000000',
+  left:30,
+  top:10,
   },
   tripLogo: {
-    width: 70,
-    height: 70,
+    width: 50,
+    height: 50,
     borderRadius: 35,
-    marginLeft: 30,
+    marginLeft: 10,
+    marginTop:10,
   },
   ActiveChat: {
-    backgroundColor: '#0c8df7',
+    backgroundColor: '#0c8df7ff',
   },
   messageText: {
-    backgroundColor: '#ffffffff',
+    backgroundColor: '#0c8df7',
     borderRadius: 20,
     padding: 6,
     maxWidth: '100%',// Replace with your desired background color
@@ -511,14 +530,31 @@ const styles = StyleSheet.create({
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'flex-end',
+  color:'#f3f3f3',
+  },
+  messageText2: {
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: 6,
+    maxWidth: '100%',// Replace with your desired background color
+  right:5,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'flex-end',
+ 
   },
   timeText: {
     fontSize: 10,
     paddingLeft: 5,
+    color:'#c4c4c4ff',
   },
   message: {
     fontSize: 16, // Replace with your desired font size for the message
-
+    color:'#ffffffff',
+  },
+  message2: {
+    fontSize: 16, // Replace with your desired font size for the message
+    color:'#000000',
   },
 });
 

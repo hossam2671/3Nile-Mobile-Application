@@ -135,6 +135,7 @@ console.log(formattedTime,"Te4eeeee2");
         </TouchableOpacity>
     );
     const [modalVisible, setModalVisible] = useState(false);
+    const [errmodalVisible, setErrModalVisible] = useState(false);
     const handleSubmit = () => {
         console.log('timetime:', timey);
         console.log('Date:', date);
@@ -150,38 +151,33 @@ console.log(formattedTime,"Te4eeeee2");
          
             console.log(res);
             if (res?.payload?.status === 200) {
-                SetBookStatus(true)
-                //   openSuccussfullModal();
-                SetBookMessage(res?.payload?.message);
+                setModalVisible(true)
                 setTimeout(() => {
-                    
-                    // succussfullmodalClose();
+                  
                     setModalVisible(false)
-                    SetBookStatus(null)
-                    
-                }, 2500);
-              console.log(bookMessage,"(bookMessage)")
+                    setVisibleModal(null)   
+                    }, 2500);
+            
             }
               else if (res?.payload?.status === 201) {
-                SetBookStatus(false)
-                // openErrorModal();
-                SetBookMessage(res?.payload?.message);    
-                            setTimeout(() => {
-                //   closeErrorModal();
-                setModalVisible(false)
-                SetBookStatus(null)
-                }, 2500);
-                console.log(bookMessage,"  console.log(bookMessage)")
+                setErrModalVisible(true)
+
+                
+                setTimeout(() => {
+                  
+                     setErrModalVisible(false)
+                     
+                     }, 3000);
               }
               else if (res?.payload?.status === 202) {
-                SetBookStatus(false)
-                // openErrorModal();
-                SetBookMessage(res?.payload?.message);    
-                            setTimeout(() => {
-                //   closeErrorModal();
-                setModalVisible(false)
-                SetBookStatus(null)
-                }, 2500);
+                setErrModalVisible(true)
+
+                
+           setTimeout(() => {
+             
+               
+               setErrModalVisible(false)
+        }, 3000);
                
               }
 
@@ -197,7 +193,7 @@ console.log(formattedTime,"Te4eeeee2");
 
 
             console.log("d")
-            setModalVisible(true)
+            // setModalVisible(true)
        
     };
 
@@ -308,53 +304,41 @@ console.log(formattedTime,"Te4eeeee2");
                 </TouchableOpacity>
             </View> 
 {/* ///////////////////////////////////////////////////// */}
-         
+        {/*  successfully Booked Modal */}
 <Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
       <View style={styles.modalContainer}>
         {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
         <View style={styles?.modalContainer_card_con}>
         <IconButton
         icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
-        
-        
         style={{marginLeft:-330}}
         onPress={() => setModalVisible(false)}
       />
-       <Image source={bookStatus?succ:errorImage} style={styles?.succ} />
-         <Text style={styles?.modaltitle}>{bookMessage}</Text>
-       
-
-  
-      
-         
-    
+       <Image source={succ} style={styles?.succ} />
+         <Text style={styles?.modaltitle}>Your Trip Has Been Booked successfully</Text>
         </View>
       </View>
     </Modal>
 
-       
-    <Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
-      <View style={styles?.modalContainer}>
+         {/*  Error Booked Modal */}
+
+         <Modal visible={errmodalVisible} transparent={true} onRequestClose={() => setErrModalVisible(false)}>
+      <View style={styles.modalContainer}>
         {/* <Text>BarCode :{swvlRecit.TripDetails.bookingBarcode}</Text> */}
         <View style={styles?.modalContainer_card_con}>
         <IconButton
         icon={() => <Iconnnnnn name="close" size={25} color="#999999" style={{marginLeft:20,zIndex:1000}} />}
-        
-        
         style={{marginLeft:-330}}
-        onPress={() => setModalVisible(false)}
+        onPress={() => setErrModalVisible(false)}
       />
-       <Image  source={bookStatus?succ:errorImage} style={styles?.succ} />
-         <Text style={styles?.modaltitle}>{bookMessage}</Text>
-       
-
-  
-      
-         
-    
+       <Image source={errorImage} style={styles?.succ} />
+         <Text style={styles?.modaltitle}>The boat is already booked during the specified period. Please choose a different time</Text>
         </View>
       </View>
     </Modal>
+
+         {/*  Error Booked Modal End*/}
+
             {/* {renderButton('Apply', () => setVisibleModal(null))} */}
  
         </View>

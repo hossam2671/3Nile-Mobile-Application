@@ -160,6 +160,10 @@ export default function Filter(props) {
       dispatch(filterTaps3({  port: buttonName}))
 
     }
+    else if(num==2){
+      dispatch(filterTaps2({  port: buttonName}))
+
+    }
 
   };
 
